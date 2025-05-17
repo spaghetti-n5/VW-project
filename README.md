@@ -15,7 +15,7 @@ I decided to use Vite for these main reasons:
 - It handles CSS modules, PostCSS, and SCSS with minimal setup, streamlining styling workflows.
 - Vite is lightweight and avoids the bloat of older tools, reducing dependency overhead and simplifying project maintenance.
 
-To run the project locally: 
+To run the project locally:
 `npm install`: install dependencies
 `npm run dev`: start the local development server
 
@@ -33,11 +33,9 @@ Eslint scripts:
 `npm run lint`: checks for issues without modifying files.
 `npm run lint:fix`: checks and applies fixes where possible. It runs ESLint with the `--fix` flag to automatically correct fixable linting issues (e.g., formatting, simple React errors) in the project’s source files.
 
-
 Prettier scripts:
 `npm run format`: it scans specified files and automatically formats them according to Prettier’s rules (defined in .prettierrc or defaults)
 `npm run check-format`: it scans specified files and checks if they conform to Prettier’s formatting rules without modifying them. It outputs a report in the terminal displaying a lists of files that deviate from the expected format and it exits with a non-zero status code if any files are incorrectly formatted, making it ideal for CI/CD.
-
 
 ## Jest and React testing library
 
@@ -57,6 +55,7 @@ React Testing Library is a lightweight library for testing React components by s
 Triggers: Runs on push and pull requests to main.
 
 The job `build-and-test` performs the following steps:
+
 - Checkout code: Uses `actions/checkout@v4` to fetch the repository code.
 - Set up Node.js: Uses `actions/setup-node@v4` to configure Node.js version 20 with npm caching.
 - Install dependencies: Runs `npm ci` for a clean dependency installation.
@@ -65,7 +64,6 @@ The job `build-and-test` performs the following steps:
 - Run tests: Runs `npm test -- --ci` for CI-specific testing.
 - Build the app: Executes `npm run build` to compile the application.
 
-
 The `deploy.yml` GitHub Actions workflow, named `Deploy to GitHub Pages`, automates deploying the React + Vite app to GitHub Pages whenever code is pushed to the main branch.
 
 Triggers: Runs on push to main.
@@ -73,6 +71,7 @@ Permissions: Grants read access to repository contents, write access to GitHub P
 Environment: Configures a github-pages environment, capturing the deployment URL.
 
 The job `build-and-deploy` performs the following steps:
+
 - Checks out code (actions/checkout@v4).
 - Sets up Node.js 20 (actions/setup-node@v4).
 - Installs dependencies (npm ci).
