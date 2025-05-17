@@ -1,7 +1,27 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "types": ["jest", "node"],
+    "target": "ESNext", // Modern JS target
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Include browser types
+    "allowJs": false, // Do not allow plain JS files
+    "skipLibCheck": true, // Skip type checking libraries
+    "esModuleInterop": true, // Fix for default imports
+    "allowSyntheticDefaultImports": true,
+    "strict": true, // Enable strict mode
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext", // Required by Vite
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true, // Required for Vite HMR
+    "noEmit": true, // Don't output JS files
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src",
+    "vite.config.ts",
+    "jest.config.ts",
+    "jest.setup.ts",
+    "__mocks__/fileMock.ts"
+  ],
+  "exclude": ["dist", "node_modules"]
 }
