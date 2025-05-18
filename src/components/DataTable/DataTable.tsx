@@ -82,17 +82,17 @@ const DataTable: React.FC = () => {
       {
         accessorKey: 'id',
         header: 'ID',
-        enableSorting: false,
+        enableSorting: true,
       },
       {
         accessorKey: 'title',
         header: 'Title',
-        enableSorting: false,
+        enableSorting: true,
       },
       {
         accessorKey: 'body',
         header: 'Body',
-        enableSorting: false,
+        enableSorting: true,
         cell: ({ getValue }) => <span className="body-text">{getValue<string>()}</span>,
       },
       {
@@ -185,7 +185,54 @@ const DataTable: React.FC = () => {
           </tbody>
         </table>
       </div>
-
+     {filteredData.length > 0 ? (
+        <div className="pagination">
+          <button
+            className="outline small"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            First
+          </button>
+          <button
+            className="outline small"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </button>
+          <span>
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </span>
+          <button
+            className="outline small"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </button>
+          <button
+            className="outline small"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            Last
+          </button>
+          <select
+            className="outline small"
+            value={table.getState().pagination.pageSize}
+            onChange={e => {
+              table.setPageSize(Number(e.target.value));
+            }}
+          >
+            {[10, 20, 30, 40, 50].map(pageSize => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}
