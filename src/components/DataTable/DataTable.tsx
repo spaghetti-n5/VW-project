@@ -32,8 +32,8 @@ const DataTable: React.FC = () => {
   // Global search filter
   const filteredData = useMemo(() => {
     if (!searchText) return data;
-    return data.filter(post =>
-      Object.values(post).some(val =>
+    return data.filter((post) =>
+      Object.values(post).some((val) =>
         String(val).toLowerCase().includes(searchText.toLowerCase())
       )
     );
@@ -151,11 +151,11 @@ const DataTable: React.FC = () => {
           </button>
         </div>
       ) : null}
-            <input
+      <input
         type="search"
         placeholder="Search by any field..."
         value={searchText}
-        onChange={e => setSearchText(e.target.value)}
+        onChange={(e) => setSearchText(e.target.value)}
         className="search-input"
       />
       <button className="outline small primary" onClick={() => openModal(ModalType.ADD)}>
@@ -185,7 +185,7 @@ const DataTable: React.FC = () => {
           </tbody>
         </table>
       </div>
-     {filteredData.length > 0 ? (
+      {filteredData.length > 0 ? (
         <div className="pagination">
           <button
             className="outline small"
@@ -221,11 +221,11 @@ const DataTable: React.FC = () => {
           <select
             className="outline small"
             value={table.getState().pagination.pageSize}
-            onChange={e => {
+            onChange={(e) => {
               table.setPageSize(Number(e.target.value));
             }}
           >
-            {[10, 20, 30, 40, 50].map(pageSize => (
+            {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
               </option>

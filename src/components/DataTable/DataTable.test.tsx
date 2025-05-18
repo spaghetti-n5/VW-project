@@ -53,3 +53,18 @@ test('search filters the table', async () => {
   expect(screen.queryByText('Post 1')).not.toBeInTheDocument();
   expect(screen.queryByText('Post 2')).not.toBeInTheDocument();
 });
+
+test('sorting by ID descending', async () => {
+  render(<DataTable />);
+
+  await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
+
+  const idHeader = screen.getByRole('columnheader', { name: /ID/i });
+  fireEvent.click(idHeader);
+
+  await waitFor(() => expect(screen.getByText('Post 11')).toBeInTheDocument());
+
+  expect(screen.getByText('Post 11')).toBeInTheDocument();
+  expect(screen.getByText('Post 2')).toBeInTheDocument();
+  expect(screen.queryByText('Post 1')).not.toBeInTheDocument();
+});
