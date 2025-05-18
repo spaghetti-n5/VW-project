@@ -134,6 +134,24 @@ button.outline.small.danger:hover {
   color: #fff;
 }
 
+.search-input {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+  font-size: 0.9rem;
+  background: var(--background);
+  color: var(--text-color);
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
 /* Block background scrolling when modal is open */
 body:has(.modal[open]) {
   overflow: hidden;

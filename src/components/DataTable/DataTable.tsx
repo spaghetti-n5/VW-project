@@ -18,6 +18,7 @@ const DataTable: React.FC = () => {
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
   const [modalType, setModalType] = useState<ModalType>(ModalType.VIEW);
   const [error, setError] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState('');
 
   // improvement loading state
 
@@ -27,6 +28,16 @@ const DataTable: React.FC = () => {
       .then((posts) => setData(posts))
       .catch(() => setError('Failed to fetch posts. Please try again.'));
   }, []);
+
+  // Global search filter
+  const filteredData = useMemo(() => {
+    if (!searchText) return data;
+    return data.filter(post =>
+      Object.values(post).some(val =>
+        String(val).toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }, [data, searchText]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -115,7 +126,7 @@ const DataTable: React.FC = () => {
 
   // Table instance creation
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -126,6 +137,8 @@ const DataTable: React.FC = () => {
       },
     },
   });
+
+  // TODO implement empty state
 
   return (
     <div className="container">
@@ -138,6 +151,13 @@ const DataTable: React.FC = () => {
           </button>
         </div>
       ) : null}
+            <input
+        type="search"
+        placeholder="Search by any field..."
+        value={searchText}
+        onChange={e => setSearchText(e.target.value)}
+        className="search-input"
+      />
       <button className="outline small primary" onClick={() => openModal(ModalType.ADD)}>
         Add Post
       </button>
