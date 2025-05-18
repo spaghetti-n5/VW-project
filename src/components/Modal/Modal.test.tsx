@@ -9,6 +9,9 @@ beforeEach(() => {
   jest
     .spyOn(api, 'editPost')
     .mockResolvedValue({ id: 1, title: 'Updated Post', body: 'Updated Body', userId: 1 });
+  jest
+    .spyOn(api, 'addPost')
+    .mockResolvedValue({ id: 101, title: 'New Post', body: 'New Body', userId: 1 });
 });
 
 afterEach(() => {
@@ -57,4 +60,41 @@ test('edit modal opens and submits updated post', async () => {
     id: 1,
     userId: 1,
   });
+});
+
+test('add modal opens and submits new post at the top', async () => {
+  render(<DataTable />);
+
+  await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
+
+  const addButton = screen.getByRole('button', { name: /Add Post/i });
+  fireEvent.click(addButton);
+
+  await waitFor(() => {
+    const modal = screen.getByRole('dialog');
+    expect(modal).toBeInTheDocument();
+    expect(within(modal).getByText('Add Post')).toBeInTheDocument();
+  });
+
+  const titleInput = screen.getByLabelText('Title');
+  const bodyInput = screen.getByLabelText('Body');
+  const createButton = screen.getByRole('button', { name: /Create/i });
+
+  fireEvent.change(titleInput, { target: { value: 'New Post' } });
+  fireEvent.change(bodyInput, { target: { value: 'New Body' } });
+  fireEvent.click(createButton);
+
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+  expect(api.addPost).toHaveBeenCalledWith({
+    title: 'New Post',
+    body: 'New Body',
+    userId: 1,
+    id: 0,
+  });
+
+  // Verify the new post appears at the top (first row)
+  const firstRow = screen.getAllByRole('row')[1]; // Skip header row
+  expect(within(firstRow).getByText('New Post')).toBeInTheDocument();
+  expect(within(firstRow).getByText('New Body')).toBeInTheDocument();
 });

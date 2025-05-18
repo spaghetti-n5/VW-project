@@ -49,6 +49,7 @@ h1 {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   background: var(--background);
+  margin-top: 0.75rem;
 }
 
 .data-table {
@@ -111,6 +112,16 @@ button.outline.small {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+button.outline.small.primary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+button.outline.small.primary:hover {
+  background: var(--primary-color);
+  color: #fff;
 }
 
 button.outline.small.danger {

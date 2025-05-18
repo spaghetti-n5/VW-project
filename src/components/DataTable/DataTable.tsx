@@ -8,7 +8,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 import { Post, ModalType } from '../../types/shared';
-import { fetchPosts, deletePost, editPost } from '../../utils/api';
+import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
 import './DataTable.css';
 import Modal from '../Modal/Modal';
 
@@ -48,15 +48,20 @@ const DataTable: React.FC = () => {
 
   const handleModalSubmit = async (post: Post) => {
     try {
-      if (modalType === ModalType.EDIT) {
+      if (modalType === ModalType.ADD) {
+        const newPost = await addPost({ ...post, userId: 1 });
+        setData([{ ...newPost, id: data.length + 101 }, ...data]);
+      } else if (modalType === ModalType.EDIT) {
         const updatedPost = await editPost(post.id, { ...post, userId: 1 });
         setData(data.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
       }
       setIsModalOpen(false);
       setCurrentPost({ id: 0, title: '', body: '' });
     } catch (error) {
-      console.error('Error updating post:', error);
-      setError('Failed to update post. Please try again');
+      console.error(`Error ${modalType === ModalType.ADD ? 'adding' : 'updating'} post:`, error);
+      setError(
+        `Failed to ${modalType === ModalType.ADD ? 'add' : 'update'} post. Please try again.`
+      );
     }
   };
 
@@ -133,6 +138,9 @@ const DataTable: React.FC = () => {
           </button>
         </div>
       ) : null}
+      <button className="outline small primary" onClick={() => openModal(ModalType.ADD)}>
+        Add Post
+      </button>
       <div className="table-wrapper">
         <table className="data-table striped">
           <thead>

@@ -15,12 +15,18 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
     await onSubmit(post);
   };
 
-  if (!isOpen || !modalType) return null;
+  if (!isOpen) return null;
 
   return (
     <dialog open={isOpen} className="modal">
       <article>
-        <h2>{modalType === ModalType.EDIT ? 'Edit Post' : 'Post Details'}</h2>
+        <h2>
+          {modalType === ModalType.ADD
+            ? 'Add Post'
+            : modalType === ModalType.EDIT
+              ? 'Edit Post'
+              : 'Post Details'}
+        </h2>
         {modalType === ModalType.VIEW ? (
           <div>
             <h3>{post.title}</h3>
@@ -50,7 +56,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
         <footer>
           {modalType !== ModalType.VIEW && (
             <button className="outline small primary" onClick={handleSubmit}>
-              Update
+              {modalType === ModalType.ADD ? 'Create' : 'Update'}
             </button>
           )}
           <button className="outline small" onClick={onClose}>
