@@ -8,6 +8,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 import { Post } from '../../types/post';
+import './DataTable.css';
 
 const fetchPosts = async (): Promise<Post[]> => {
   const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -39,7 +40,7 @@ const DataTable: React.FC = () => {
         accessorKey: 'body',
         header: 'Body',
         enableSorting: false,
-        cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+        cell: ({ getValue }) => <span className="body-text">{getValue<string>()}</span>,
       },
     ],
     []
@@ -60,10 +61,10 @@ const DataTable: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className="container">
       <h1>DataTable</h1>
-      <div>
-        <table>
+      <div className="table-wrapper">
+        <table className="data-table striped">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
