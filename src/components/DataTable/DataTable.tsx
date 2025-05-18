@@ -10,6 +10,7 @@ import {
 import { Post } from '../../types/post';
 import { fetchPosts, deletePost } from '../../utils/api';
 import './DataTable.css';
+import Modal from '../Modal/Modal';
 
 const DataTable: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
@@ -28,6 +29,12 @@ const DataTable: React.FC = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  // Modal handler
+  const openModal = (post: Post = { id: 0, title: '', body: '' }) => {
+    setCurrentPost(post);
+    setIsModalOpen(true);
   };
 
   // Define columns of the table
@@ -81,12 +88,6 @@ const DataTable: React.FC = () => {
     },
   });
 
-  // Modal handler
-  const openModal = (post: Post = { id: 0, title: '', body: '' }) => {
-    setCurrentPost(post);
-    setIsModalOpen(true);
-  };
-
   return (
     <div className="container">
       <h1>DataTable</h1>
@@ -115,21 +116,7 @@ const DataTable: React.FC = () => {
         </table>
       </div>
 
-      {/* can be extracted to a separate component */}
-      <dialog open={isModalOpen} className="modal">
-        <article>
-          <h2>Post Details</h2>
-          <div>
-            <h3>{currentPost.title}</h3>
-            <p>{currentPost.body}</p>
-          </div>
-          <footer>
-            <button className="outline small" onClick={() => setIsModalOpen(false)}>
-              Close
-            </button>
-          </footer>
-        </article>
-      </dialog>
+      <Modal isOpen={isModalOpen} post={currentPost} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

@@ -1,0 +1,43 @@
+.modal {
+  max-width: 400px;
+  width: 90vw;
+  border: none;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  margin: auto;
+  color: var(--text-color);
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal article {
+  padding: 1rem;
+  background: var(--background);
+}
+
+.modal h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.modal h3 {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.modal p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.modal footer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  background: var(--background);
+  padding: 0.5rem 1rem;
+}
