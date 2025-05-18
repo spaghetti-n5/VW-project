@@ -13,6 +13,8 @@ import './DataTable.css';
 
 const DataTable: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
 
   // Fetch data on mount
   useMemo(() => {
@@ -52,6 +54,9 @@ const DataTable: React.FC = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="action-buttons">
+            <button className="outline small" onClick={() => openModal(row.original)}>
+              View
+            </button>
             <button className="outline small danger" onClick={() => handleDelete(row.original.id)}>
               Delete
             </button>
@@ -75,6 +80,12 @@ const DataTable: React.FC = () => {
       },
     },
   });
+
+  // Modal handler
+  const openModal = (post: Post = { id: 0, title: '', body: '' }) => {
+    setCurrentPost(post);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="container">
@@ -103,6 +114,22 @@ const DataTable: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      {/* can be extracted to a separate component */}
+      <dialog open={isModalOpen} className="modal">
+        <article>
+          <h2>Post Details</h2>
+          <div>
+            <h3>{currentPost.title}</h3>
+            <p>{currentPost.body}</p>
+          </div>
+          <footer>
+            <button className="outline small" onClick={() => setIsModalOpen(false)}>
+              Close
+            </button>
+          </footer>
+        </article>
+      </dialog>
     </div>
   );
 };
