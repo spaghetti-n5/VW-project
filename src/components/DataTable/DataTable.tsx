@@ -7,8 +7,8 @@ import {
   ColumnDef,
   flexRender,
 } from '@tanstack/react-table';
-import { Post } from '../../types/post';
-import { fetchPosts, deletePost } from '../../utils/api';
+import { Post, ModalType } from '../../types/shared';
+import { fetchPosts, deletePost, editPost } from '../../utils/api';
 import './DataTable.css';
 import Modal from '../Modal/Modal';
 
@@ -16,10 +16,16 @@ const DataTable: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
+  const [modalType, setModalType] = useState<ModalType>(ModalType.VIEW);
+  const [error, setError] = useState<string | null>(null);
+
+  // improvement loading state
 
   // Fetch data on mount
   useMemo(() => {
-    fetchPosts().then((posts) => setData(posts));
+    fetchPosts()
+      .then((posts) => setData(posts))
+      .catch(() => setError('Failed to fetch posts. Please try again.'));
   }, []);
 
   const handleDelete = async (id: number) => {
@@ -27,14 +33,31 @@ const DataTable: React.FC = () => {
       await deletePost(id);
       setData((prevData) => prevData.filter((post) => post.id !== id));
     } catch (error) {
-      console.error(error);
+      console.error('Error deleting post:', error);
+      setError('Failed to delete post. Please try again.');
     }
   };
 
   // Modal handler
-  const openModal = (post: Post = { id: 0, title: '', body: '' }) => {
+  const openModal = (type: ModalType, post: Post = { id: 0, title: '', body: '' }) => {
+    setModalType(type);
     setCurrentPost(post);
     setIsModalOpen(true);
+    setError(null);
+  };
+
+  const handleModalSubmit = async (post: Post) => {
+    try {
+      if (modalType === ModalType.EDIT) {
+        const updatedPost = await editPost(post.id, { ...post, userId: 1 });
+        setData(data.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
+      }
+      setIsModalOpen(false);
+      setCurrentPost({ id: 0, title: '', body: '' });
+    } catch (error) {
+      console.error('Error updating post:', error);
+      setError('Failed to update post. Please try again');
+    }
   };
 
   // Define columns of the table
@@ -61,9 +84,20 @@ const DataTable: React.FC = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="action-buttons">
-            <button className="outline small" onClick={() => openModal(row.original)}>
+            <button
+              className="outline small"
+              onClick={() => openModal(ModalType.VIEW, row.original)}
+            >
               View
             </button>
+
+            <button
+              className="outline small primary"
+              onClick={() => openModal(ModalType.EDIT, row.original)}
+            >
+              Edit
+            </button>
+
             <button className="outline small danger" onClick={() => handleDelete(row.original.id)}>
               Delete
             </button>
@@ -91,6 +125,14 @@ const DataTable: React.FC = () => {
   return (
     <div className="container">
       <h1>DataTable</h1>
+      {error ? (
+        <div className="error-alert">
+          <span>{error}</span>
+          <button className="outline small danger" onClick={() => setError(null)}>
+            Dismiss
+          </button>
+        </div>
+      ) : null}
       <div className="table-wrapper">
         <table className="data-table striped">
           <thead>
@@ -116,7 +158,17 @@ const DataTable: React.FC = () => {
         </table>
       </div>
 
-      <Modal isOpen={isModalOpen} post={currentPost} onClose={() => setIsModalOpen(false)} />
+      <Modal
+        modalType={modalType}
+        isOpen={isModalOpen}
+        post={currentPost}
+        onClose={() => {
+          setIsModalOpen(false);
+          setCurrentPost({ id: 0, title: '', body: '' });
+        }}
+        onSubmit={handleModalSubmit}
+        onChange={setCurrentPost}
+      />
     </div>
   );
 };
