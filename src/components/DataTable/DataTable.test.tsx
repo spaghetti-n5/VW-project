@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import DataTable from './DataTable';
 import * as api from '../../utils/api';
 
@@ -50,4 +50,20 @@ test('delete post removes it from the table', async () => {
   expect(screen.queryByText('Post 1')).not.toBeInTheDocument();
   expect(screen.getByText('Post 2')).toBeInTheDocument();
   expect(api.deletePost).toHaveBeenCalledWith(1);
+});
+
+test('view modal opens correctly', async () => {
+  render(<DataTable />);
+
+  await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
+
+  const viewButtons = screen.getAllByRole('button', { name: /View/i });
+  fireEvent.click(viewButtons[0]);
+
+  await waitFor(() => expect(screen.getByText('Post Details')).toBeInTheDocument());
+
+  const modal = screen.getByRole('dialog');
+  const modalScope = within(modal); // Use within to scope the search to the modal
+  expect(modalScope.getByText('Post 1')).toBeInTheDocument();
+  expect(modalScope.getByText('Body 1')).toBeInTheDocument();
 });
