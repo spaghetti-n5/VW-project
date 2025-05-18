@@ -8,7 +8,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 import { Post, ModalType } from '../../types/shared';
-import { fetchPosts, deletePost, editPost } from '../../utils/api';
+import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
 import './DataTable.css';
 import Modal from '../Modal/Modal';
 
@@ -18,6 +18,7 @@ const DataTable: React.FC = () => {
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
   const [modalType, setModalType] = useState<ModalType>(ModalType.VIEW);
   const [error, setError] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState('');
 
   // improvement loading state
 
@@ -27,6 +28,16 @@ const DataTable: React.FC = () => {
       .then((posts) => setData(posts))
       .catch(() => setError('Failed to fetch posts. Please try again.'));
   }, []);
+
+  // Global search filter
+  const filteredData = useMemo(() => {
+    if (!searchText) return data;
+    return data.filter((post) =>
+      Object.values(post).some((val) =>
+        String(val).toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }, [data, searchText]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -48,15 +59,20 @@ const DataTable: React.FC = () => {
 
   const handleModalSubmit = async (post: Post) => {
     try {
-      if (modalType === ModalType.EDIT) {
+      if (modalType === ModalType.ADD) {
+        const newPost = await addPost({ ...post, userId: 1 });
+        setData([{ ...newPost, id: data.length + 101 }, ...data]);
+      } else if (modalType === ModalType.EDIT) {
         const updatedPost = await editPost(post.id, { ...post, userId: 1 });
         setData(data.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
       }
       setIsModalOpen(false);
       setCurrentPost({ id: 0, title: '', body: '' });
     } catch (error) {
-      console.error('Error updating post:', error);
-      setError('Failed to update post. Please try again');
+      console.error(`Error ${modalType === ModalType.ADD ? 'adding' : 'updating'} post:`, error);
+      setError(
+        `Failed to ${modalType === ModalType.ADD ? 'add' : 'update'} post. Please try again.`
+      );
     }
   };
 
@@ -66,17 +82,17 @@ const DataTable: React.FC = () => {
       {
         accessorKey: 'id',
         header: 'ID',
-        enableSorting: false,
+        enableSorting: true,
       },
       {
         accessorKey: 'title',
         header: 'Title',
-        enableSorting: false,
+        enableSorting: true,
       },
       {
         accessorKey: 'body',
         header: 'Body',
-        enableSorting: false,
+        enableSorting: true,
         cell: ({ getValue }) => <span className="body-text">{getValue<string>()}</span>,
       },
       {
@@ -110,7 +126,7 @@ const DataTable: React.FC = () => {
 
   // Table instance creation
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -121,6 +137,8 @@ const DataTable: React.FC = () => {
       },
     },
   });
+
+  // TODO implement empty state
 
   return (
     <div className="container">
@@ -133,6 +151,16 @@ const DataTable: React.FC = () => {
           </button>
         </div>
       ) : null}
+      <input
+        type="search"
+        placeholder="Search by any field..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        className="search-input"
+      />
+      <button className="outline small primary" onClick={() => openModal(ModalType.ADD)}>
+        Add Post
+      </button>
       <div className="table-wrapper">
         <table className="data-table striped">
           <thead>
@@ -157,7 +185,54 @@ const DataTable: React.FC = () => {
           </tbody>
         </table>
       </div>
-
+      {filteredData.length > 0 ? (
+        <div className="pagination">
+          <button
+            className="outline small"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            First
+          </button>
+          <button
+            className="outline small"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </button>
+          <span>
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </span>
+          <button
+            className="outline small"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </button>
+          <button
+            className="outline small"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            Last
+          </button>
+          <select
+            className="outline small"
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value));
+            }}
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}

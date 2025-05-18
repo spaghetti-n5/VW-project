@@ -8,4 +8,5 @@ export interface Post {
 export enum ModalType {
   EDIT = 'edit',
   VIEW = 'view',
+  ADD = 'add',
 }

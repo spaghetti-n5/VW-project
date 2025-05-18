@@ -49,6 +49,7 @@ h1 {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   background: var(--background);
+  margin-top: 0.75rem;
 }
 
 .data-table {
@@ -113,6 +114,16 @@ button.outline.small {
   justify-content: center;
 }
 
+button.outline.small.primary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+button.outline.small.primary:hover {
+  background: var(--primary-color);
+  color: #fff;
+}
+
 button.outline.small.danger {
   border-color: var(--danger-color);
   color: var(--danger-color);
@@ -121,6 +132,53 @@ button.outline.small.danger {
 button.outline.small.danger:hover {
   background: var(--danger-color);
   color: #fff;
+}
+
+.search-input {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+  font-size: 0.9rem;
+  background: var(--background);
+  color: var(--text-color);
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination span {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.pagination button:hover {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.pagination select {
+  padding: 0.3rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: var(--background);
+  color: var(--text-color);
+  min-width: 100px;
+  cursor: pointer;
 }
 
 /* Block background scrolling when modal is open */

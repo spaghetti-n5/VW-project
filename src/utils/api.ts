@@ -54,3 +54,23 @@ export async function editPost(id: number, post: Omit<Post, 'id'>): Promise<Post
     throw error;
   }
 }
+
+/**
+ * Creates a new post.
+ * @param post - The post data (title, body, userId).
+ * @returns A Promise resolving to the created post.
+ */
+
+export const addPost = async (post: Omit<Post, 'id'>): Promise<Post> => {
+  try {
+    const response = await fetch(POSTS_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(post),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error adding post:', error);
+    throw error;
+  }
+};
