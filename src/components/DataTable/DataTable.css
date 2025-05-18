@@ -6,6 +6,7 @@
   --hover-bg: #f5f5f5;
   --header-bg: #fafafa;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --danger-color: #ff4d4f;
 }
 
 .container {
@@ -61,4 +62,38 @@
 
 .body-text {
   display: block;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+button.outline.small {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-color);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.outline.small.danger {
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+}
+
+button.outline.small.danger:hover {
+  background: var(--danger-color);
+  color: #fff;
 }

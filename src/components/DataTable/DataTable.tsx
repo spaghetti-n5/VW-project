@@ -8,12 +8,8 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 import { Post } from '../../types/post';
+import { fetchPosts, deletePost } from '../../utils/api';
 import './DataTable.css';
-
-const fetchPosts = async (): Promise<Post[]> => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-  return response.json();
-};
 
 const DataTable: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
@@ -22,6 +18,15 @@ const DataTable: React.FC = () => {
   useMemo(() => {
     fetchPosts().then((posts) => setData(posts));
   }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deletePost(id);
+      setData((prevData) => prevData.filter((post) => post.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Define columns of the table
   const columns = useMemo<ColumnDef<Post>[]>(
@@ -41,6 +46,17 @@ const DataTable: React.FC = () => {
         header: 'Body',
         enableSorting: false,
         cell: ({ getValue }) => <span className="body-text">{getValue<string>()}</span>,
+      },
+      {
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row }) => (
+          <div className="action-buttons">
+            <button className="outline small danger" onClick={() => handleDelete(row.original.id)}>
+              Delete
+            </button>
+          </div>
+        ),
       },
     ],
     []
