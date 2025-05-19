@@ -5,14 +5,17 @@ import {
   getSortedRowModel,
   getPaginationRowModel,
   ColumnDef,
-  flexRender,
 } from '@tanstack/react-table';
 import { Post, ModalType } from '../../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
 import './DataTable.css';
-import Modal from '../Modal/Modal';
+import Modal from './Modal';
+import TableComponent from './TableComponent';
+import SearchBar from '../shared/SearchBar';
+import ErrorAlert from '../shared/ErrorAlert';
+import Button from '../shared/Button';
 
-const DataTable: React.FC = () => {
+const DataTableContainer: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
@@ -100,23 +103,23 @@ const DataTable: React.FC = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="action-buttons">
-            <button
-              className="outline small"
+            <Button
+              variant="outline"
+              size="small"
               onClick={() => openModal(ModalType.VIEW, row.original)}
             >
               View
-            </button>
-
-            <button
-              className="outline small primary"
+            </Button>
+            <Button
+              variant="primary"
+              size="small"
               onClick={() => openModal(ModalType.EDIT, row.original)}
             >
               Edit
-            </button>
-
-            <button className="outline small danger" onClick={() => handleDelete(row.original.id)}>
+            </Button>
+            <Button variant="danger" size="small" onClick={() => handleDelete(row.original.id)}>
               Delete
-            </button>
+            </Button>
           </div>
         ),
       },
@@ -138,101 +141,23 @@ const DataTable: React.FC = () => {
     },
   });
 
-  // TODO implement empty state
-
   return (
     <div className="container">
       <h1>DataTable</h1>
       {error ? (
-        <div className="error-alert">
-          <span>{error}</span>
-          <button className="outline small danger" onClick={() => setError(null)}>
-            Dismiss
-          </button>
-        </div>
+        <ErrorAlert message={error} onRetry={fetchPosts} onDismiss={() => setError(null)} />
       ) : null}
-      <input
-        type="search"
-        placeholder="Search by any field..."
+      <SearchBar
         value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        className="search-input"
+        onChange={setSearchText}
+        label="Search Posts"
+        name="search"
+        hideLabel
       />
-      <button className="outline small primary" onClick={() => openModal(ModalType.ADD)}>
+      <Button variant="primary" size="small" onClick={() => openModal(ModalType.ADD)}>
         Add Post
-      </button>
-      <div className="table-wrapper">
-        <table className="data-table striped">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} onClick={header.column.getToggleSortingHandler()}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {filteredData.length > 0 ? (
-        <div className="pagination">
-          <button
-            className="outline small"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            First
-          </button>
-          <button
-            className="outline small"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </button>
-          <span>
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-          </span>
-          <button
-            className="outline small"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </button>
-          <button
-            className="outline small"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            Last
-          </button>
-          <select
-            className="outline small"
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value));
-            }}
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-      ) : null}
+      </Button>
+      <TableComponent table={table} isEmpty={filteredData.length === 0} />
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}
@@ -248,4 +173,4 @@ const DataTable: React.FC = () => {
   );
 };
 
-export default DataTable;
+export default DataTableContainer;

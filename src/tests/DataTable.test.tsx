@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import DataTable from './DataTable';
-import * as api from '../../utils/api';
-import { samplePosts } from '../../utils/samplePost';
+import DataTableContainer from '../components/DataTable/DataTableContainer';
+import * as api from '../utils/api';
+import { samplePosts } from '../utils/samplePost';
 
 beforeEach(() => {
   jest.spyOn(api, 'fetchPosts').mockResolvedValue(samplePosts);
@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 test('renders DataTable component', async () => {
-  render(<DataTable />);
+  render(<DataTableContainer />);
 
   await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
 
@@ -25,7 +25,7 @@ test('renders DataTable component', async () => {
 });
 
 test('delete post removes it from the table', async () => {
-  render(<DataTable />);
+  render(<DataTableContainer />);
 
   await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
 
@@ -40,7 +40,7 @@ test('delete post removes it from the table', async () => {
 });
 
 test('search filters the table', async () => {
-  render(<DataTable />);
+  render(<DataTableContainer />);
 
   await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
 
@@ -55,7 +55,7 @@ test('search filters the table', async () => {
 });
 
 test('sorting by ID descending', async () => {
-  render(<DataTable />);
+  render(<DataTableContainer />);
 
   await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
 

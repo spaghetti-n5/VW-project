@@ -40,8 +40,15 @@ h1 {
   color: var(--text-color);
 }
 
-.error-alert button {
-  margin-left: 0.5rem;
+.error-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #666;
 }
 
 /* Scrollable table wrapper */
@@ -96,73 +103,55 @@ h1 {
   align-items: center;
 }
 
-button.outline.small {
-  padding: 0.3rem 0.75rem;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-color);
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
-  min-width: 44px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.search-bar-wrapper {
+  margin-bottom: 20px;
 }
 
-button.outline.small.primary {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
+.search-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
 }
 
-button.outline.small.primary:hover {
-  background: var(--primary-color);
-  color: #fff;
-}
-
-button.outline.small.danger {
-  border-color: var(--danger-color);
-  color: var(--danger-color);
-}
-
-button.outline.small.danger:hover {
-  background: var(--danger-color);
-  color: #fff;
+.visually-hidden {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
 }
 
 .search-input {
-  margin-bottom: 1rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
   width: 100%;
-  max-width: 300px;
-  font-size: 0.9rem;
-  background: var(--background);
-  color: var(--text-color);
-  transition: border-color 0.2s;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.search-input:focus {
-  border-color: var(--primary-color);
-  outline: none;
-}
+/* Pagination styles */
 
 .pagination {
-  display: flex;
   gap: 0.5rem;
   align-items: center;
   margin-top: 1rem;
   flex-wrap: wrap;
 }
 
+.pagination div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .pagination span {
   font-size: 0.9rem;
   color: var(--text-color);
+}
+
+.pagination button {
+  margin-right: 0.3rem;
 }
 
 .pagination button:hover {
@@ -184,4 +173,79 @@ button.outline.small.danger:hover {
 /* Block background scrolling when modal is open */
 body:has(.modal[open]) {
   overflow: hidden;
+}
+
+/* Modal styles */
+
+.modal {
+  max-width: 400px;
+  width: 90vw;
+  border: none;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  margin: auto;
+  color: var(--text-color);
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal article {
+  padding: 1rem;
+  background: var(--background);
+}
+
+.modal h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.modal h3 {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.modal p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.modal label {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.modal-input,
+.modal-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  background: var(--background);
+  color: var(--text-color);
+  transition: border-color 0.2s;
+}
+
+.modal-input:focus,
+.modal-textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.modal-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modal footer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  background: var(--background);
+  padding: 0.5rem 1rem;
 }

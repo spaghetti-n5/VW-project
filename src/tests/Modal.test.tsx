@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
-import DataTable from './../DataTable/DataTable';
-import { samplePosts } from '../../utils/samplePost';
-import * as api from '../../utils/api';
+import DataTable from '../components/DataTable/DataTableContainer';
+import { samplePosts } from '../utils/samplePost';
+import * as api from '../utils/api';
 
 beforeEach(() => {
   jest.spyOn(api, 'fetchPosts').mockResolvedValue(samplePosts);
