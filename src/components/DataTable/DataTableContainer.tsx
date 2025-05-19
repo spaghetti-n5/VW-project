@@ -38,6 +38,7 @@ const DataTableContainer: React.FC = () => {
         const posts = await fetchPosts();
         setData(posts);
       } catch (error) {
+        console.error('Error fetching posts:', error);
         setError('Failed to fetch posts. Please try again.');
       } finally {
         setLoading(false);
@@ -223,18 +224,18 @@ const DataTableContainer: React.FC = () => {
         loading={loading}
         isMobile={isMobile}
       />
-<Suspense fallback={<LoadingSpinner />}>
-      <Modal
-        modalType={modalType}
-        isOpen={isModalOpen}
-        post={currentPost}
-        onClose={() => {
-          setIsModalOpen(false);
-          setCurrentPost({ id: 0, title: '', body: '' });
-        }}
-        onSubmit={handleModalSubmit}
-        onChange={setCurrentPost}
-      />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Modal
+          modalType={modalType}
+          isOpen={isModalOpen}
+          post={currentPost}
+          onClose={() => {
+            setIsModalOpen(false);
+            setCurrentPost({ id: 0, title: '', body: '' });
+          }}
+          onSubmit={handleModalSubmit}
+          onChange={setCurrentPost}
+        />
       </Suspense>
     </main>
   );
