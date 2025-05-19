@@ -1,32 +1,17 @@
 :root {
-  --primary-color: #1677ff;
   --danger-color: #ff4d4f;
-  --background: #ffffff;
   --text-color: #1a1a1a;
-  --border-color: #d9d9d9;
-  --hover-bg: #f5f5f5;
-  --header-bg: #fafafa;
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --error-bg: #fff1f0;
-}
-
-.container {
-  padding: 1.5rem;
-  background: var(--background);
-  max-width: 1200px;
-  margin: 0 auto;
-  border-radius: 6px;
-  box-shadow: var(--shadow);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 h1 {
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   color: var(--text-color);
   font-weight: 500;
 }
 
+/* Error alert styling */
 .error-alert {
   display: flex;
   justify-content: space-between;
@@ -45,57 +30,20 @@ h1 {
   gap: 10px;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-}
-
-/* Scrollable table wrapper */
+/* Table wrapper for overflow handling */
 .table-wrapper {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  background: var(--background);
-  margin-top: 0.75rem;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--background);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.data-table th,
-.data-table td {
-  padding: 0.75rem;
-  text-align: left;
+  margin-bottom: 1rem;
   font-size: 0.9rem;
-  color: var(--text-color);
-  background: var(--background);
 }
 
-.data-table th {
-  background: var(--header-bg);
-  font-weight: 500;
-  border-bottom: 1px solid var(--border-color);
-  cursor: pointer;
-}
-
-.data-table td {
-  border-bottom: 1px solid var(--border-color);
-}
-
-.data-table tr:hover {
-  background: var(--hover-bg);
-}
-
+/* Truncation for body text in table and cards could be added 
 .body-text {
-  display: block;
-}
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} */
 
 .action-buttons {
   display: flex;
@@ -103,10 +51,16 @@ h1 {
   align-items: center;
 }
 
-.search-bar-wrapper {
-  margin-bottom: 20px;
+/* Layout for controls (SearchBar and Add Post button) */
+.controls {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
+/* SearchBar styles */
 .search-label {
   display: block;
   margin-bottom: 8px;
@@ -125,77 +79,12 @@ h1 {
 }
 
 .search-input {
-  width: 100%;
-  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-/* Pagination styles */
-
-.pagination {
-  gap: 0.5rem;
-  align-items: center;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
-
-.pagination div {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.pagination span {
-  font-size: 0.9rem;
-  color: var(--text-color);
-}
-
-.pagination button {
-  margin-right: 0.3rem;
-}
-
-.pagination button:hover {
-  background: var(--primary-color);
-  color: #fff;
-}
-
-.pagination select {
-  padding: 0.3rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  font-size: 0.85rem;
-  background: var(--background);
-  color: var(--text-color);
-  min-width: 100px;
-  cursor: pointer;
-}
-
-/* Block background scrolling when modal is open */
-body:has(.modal[open]) {
-  overflow: hidden;
+  margin: 0 !important; /* override default margin */
 }
 
 /* Modal styles */
-
-.modal {
-  max-width: 400px;
-  width: 90vw;
-  border: none;
-  border-radius: 4px;
-  box-shadow: var(--shadow);
-  margin: auto;
-  color: var(--text-color);
-}
-
-.modal::backdrop {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.modal article {
-  padding: 1rem;
-  background: var(--background);
-}
-
 .modal h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
@@ -204,7 +93,7 @@ body:has(.modal[open]) {
 }
 
 .modal h3 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-color);
 }
 
@@ -220,32 +109,81 @@ body:has(.modal[open]) {
 
 .modal-input,
 .modal-textarea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
   font-size: 0.9rem;
-  margin-bottom: 0.5rem;
   background: var(--background);
   color: var(--text-color);
-  transition: border-color 0.2s;
 }
 
-.modal-input:focus,
-.modal-textarea:focus {
-  border-color: var(--primary-color);
-  outline: none;
-}
-
-.modal-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.modal footer {
+/* Pagination styles */
+.pagination {
   display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-  background: var(--background);
-  padding: 0.5rem 1rem;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  margin-right: 0.3rem;
+}
+
+.pagination select {
+  padding: 0.3rem;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+/* Mobile card layout (below 992px) */
+@media screen and (max-width: 991px) {
+  .table-view {
+    display: none;
+  }
+  .card-view {
+    display: block;
+  }
+  .card {
+    margin-bottom: 1rem;
+  }
+  .card-field {
+    margin-bottom: 0.5rem;
+  }
+  .card-field strong {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .card-field span.body-text {
+    max-width: 100%;
+    white-space: normal;
+  }
+  .card-field [role='group'] {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+/* Desktop table layout (992px and above) */
+@media screen and (min-width: 992px) {
+  .table-view {
+    display: block;
+  }
+  .card-view {
+    display: none;
+  }
+}
+
+/* Block background scrolling when modal is open */
+body:has(.modal[open]) {
+  overflow: hidden;
 }
