@@ -40,8 +40,15 @@ h1 {
   color: var(--text-color);
 }
 
-.error-alert button {
-  margin-left: 0.5rem;
+.error-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #666;
 }
 
 /* Scrollable table wrapper */
@@ -134,22 +141,32 @@ button.outline.small.danger:hover {
   color: #fff;
 }
 
-.search-input {
-  margin-bottom: 1rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  width: 100%;
-  max-width: 300px;
-  font-size: 0.9rem;
-  background: var(--background);
-  color: var(--text-color);
-  transition: border-color 0.2s;
+.search-bar-wrapper {
+  margin-bottom: 20px;
 }
 
-.search-input:focus {
-  border-color: var(--primary-color);
-  outline: none;
+.search-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.visually-hidden {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .pagination {
@@ -184,4 +201,79 @@ button.outline.small.danger:hover {
 /* Block background scrolling when modal is open */
 body:has(.modal[open]) {
   overflow: hidden;
+}
+
+/* Modal styles */
+
+.modal {
+  max-width: 400px;
+  width: 90vw;
+  border: none;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  margin: auto;
+  color: var(--text-color);
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal article {
+  padding: 1rem;
+  background: var(--background);
+}
+
+.modal h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.modal h3 {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.modal p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.modal label {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.modal-input,
+.modal-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  background: var(--background);
+  color: var(--text-color);
+  transition: border-color 0.2s;
+}
+
+.modal-input:focus,
+.modal-textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.modal-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modal footer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  background: var(--background);
+  padding: 0.5rem 1rem;
 }

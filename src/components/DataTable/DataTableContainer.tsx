@@ -5,14 +5,16 @@ import {
   getSortedRowModel,
   getPaginationRowModel,
   ColumnDef,
-  flexRender,
 } from '@tanstack/react-table';
 import { Post, ModalType } from '../../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
 import './DataTable.css';
-import Modal from '../Modal/Modal';
+import Modal from './Modal';
+import TableComponent from './TableComponent';
+import SearchBar from '../shared/SearchBar';
+import ErrorAlert from '../shared/ErrorAlert';
 
-const DataTable: React.FC = () => {
+const DataTableContainer: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
@@ -138,53 +140,23 @@ const DataTable: React.FC = () => {
     },
   });
 
-  // TODO implement empty state
-
   return (
     <div className="container">
       <h1>DataTable</h1>
-      {error ? (
-        <div className="error-alert">
-          <span>{error}</span>
-          <button className="outline small danger" onClick={() => setError(null)}>
-            Dismiss
-          </button>
-        </div>
-      ) : null}
-      <input
-        type="search"
-        placeholder="Search by any field..."
+      {error && (
+        <ErrorAlert message={error} onRetry={fetchPosts} onDismiss={() => setError(null)} />
+      )}
+      <SearchBar
         value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        className="search-input"
+        onChange={setSearchText}
+        label="Search Posts"
+        name="search"
+        hideLabel
       />
       <button className="outline small primary" onClick={() => openModal(ModalType.ADD)}>
         Add Post
       </button>
-      <div className="table-wrapper">
-        <table className="data-table striped">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} onClick={header.column.getToggleSortingHandler()}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <TableComponent table={table} isEmpty={filteredData.length === 0} />
       {filteredData.length > 0 ? (
         <div className="pagination">
           <button
@@ -248,4 +220,4 @@ const DataTable: React.FC = () => {
   );
 };
 
-export default DataTable;
+export default DataTableContainer;

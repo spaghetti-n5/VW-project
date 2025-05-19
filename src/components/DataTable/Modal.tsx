@@ -1,5 +1,5 @@
 import { ModalType, Post } from '../../types/shared';
-import './Modal.css';
+import './DataTable.css';
 
 interface ModalProps {
   isOpen: boolean;
