@@ -6,35 +6,58 @@ import './DataTable.css';
 interface TableComponentProps {
   table: Table<Post>;
   isEmpty: boolean;
+  loading: boolean;
 }
 
-const TableComponent: React.FC<TableComponentProps> = ({ table, isEmpty }) => (
-  <div className="table-wrapper">
-    {isEmpty ? <div className="empty-state">No posts available.</div> : null}
-    <table className="data-table striped">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id} onClick={header.column.getToggleSortingHandler()}>
-                {flexRender(header.column.columnDef.header, header.getContext())}
-              </th>
+const TableComponent: React.FC<TableComponentProps> = ({ table, isEmpty, loading }) => {
+  if (loading) {
+    return <div>Loading posts...</div>;
+  }
+  if (isEmpty) {
+    return <p className="empty-state">No posts available.</p>;
+  }
+
+  return (
+    <div className="table-wrapper">
+      <div className="table-view" data-testid="table-view">
+        <table>
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id} onClick={header.column.getToggleSortingHandler()}>
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="card-view" data-testid="card-view">
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+          <article key={row.id} className="card" aria-label="card">
             {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              <div key={cell.id} className="card-field">
+                <span>{flexRender(cell.column.columnDef.cell, cell.getContext())}</span>
+              </div>
             ))}
-          </tr>
+          </article>
         ))}
-      </tbody>
-    </table>
-    <Pagination table={table} />
-  </div>
-);
+      </div>
+      <Pagination table={table} />
+    </div>
+  );
+};
 
 export default TableComponent;

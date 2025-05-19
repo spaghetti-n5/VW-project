@@ -12,10 +12,10 @@ const ErrorAlert: React.FC<ErrorAlertProps> = ({ message, onRetry, onDismiss }) 
     <div className="error-alert">
       <span>{message}</span>
       <div className="error-actions">
-        <Button variant="primary" size="small" onClick={onRetry}>
+        <Button variant="outline" onClick={onRetry}>
           Retry
         </Button>
-        <Button variant="danger" size="small" onClick={onDismiss}>
+        <Button variant="outline danger" onClick={onDismiss}>
           Dismiss
         </Button>
       </div>

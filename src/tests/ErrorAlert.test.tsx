@@ -32,6 +32,6 @@ test('applies correct classes to buttons', () => {
   render(<ErrorAlert message="Test error" onRetry={() => {}} onDismiss={() => {}} />);
   const retryButton = screen.getByRole('button', { name: /Retry/i });
   const dismissButton = screen.getByRole('button', { name: /Dismiss/i });
-  expect(retryButton).toHaveClass('button--primary');
-  expect(dismissButton).toHaveClass('button--danger');
+  expect(retryButton).toHaveClass('outline');
+  expect(dismissButton).toHaveClass('button outline danger');
 });

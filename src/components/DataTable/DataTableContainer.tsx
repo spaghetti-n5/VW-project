@@ -22,14 +22,14 @@ const DataTableContainer: React.FC = () => {
   const [modalType, setModalType] = useState<ModalType>(ModalType.VIEW);
   const [error, setError] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
-
-  // improvement loading state
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Fetch data on mount
   useMemo(() => {
     fetchPosts()
       .then((posts) => setData(posts))
-      .catch(() => setError('Failed to fetch posts. Please try again.'));
+      .catch(() => setError('Failed to fetch posts. Please try again.'))
+      .finally(() => setLoading(false));
   }, []);
 
   // Global search filter
@@ -103,21 +103,13 @@ const DataTableContainer: React.FC = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="action-buttons">
-            <Button
-              variant="outline"
-              size="small"
-              onClick={() => openModal(ModalType.VIEW, row.original)}
-            >
+            <Button variant="outline" onClick={() => openModal(ModalType.VIEW, row.original)}>
               View
             </Button>
-            <Button
-              variant="primary"
-              size="small"
-              onClick={() => openModal(ModalType.EDIT, row.original)}
-            >
+            <Button variant="secondary" onClick={() => openModal(ModalType.EDIT, row.original)}>
               Edit
             </Button>
-            <Button variant="danger" size="small" onClick={() => handleDelete(row.original.id)}>
+            <Button variant="contrast" onClick={() => handleDelete(row.original.id)}>
               Delete
             </Button>
           </div>
@@ -142,22 +134,24 @@ const DataTableContainer: React.FC = () => {
   });
 
   return (
-    <div className="container">
+    <main className="container">
       <h1>DataTable</h1>
       {error ? (
         <ErrorAlert message={error} onRetry={fetchPosts} onDismiss={() => setError(null)} />
       ) : null}
-      <SearchBar
-        value={searchText}
-        onChange={setSearchText}
-        label="Search Posts"
-        name="search"
-        hideLabel
-      />
-      <Button variant="primary" size="small" onClick={() => openModal(ModalType.ADD)}>
-        Add Post
-      </Button>
-      <TableComponent table={table} isEmpty={filteredData.length === 0} />
+      <div className="controls">
+        <SearchBar
+          value={searchText}
+          onChange={setSearchText}
+          label="Search Posts"
+          name="search"
+          hideLabel
+        />
+        <Button variant="secondary" onClick={() => openModal(ModalType.ADD)}>
+          Add Post
+        </Button>
+      </div>
+      <TableComponent table={table} isEmpty={!filteredData.length} loading={loading} />
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}
@@ -169,7 +163,7 @@ const DataTableContainer: React.FC = () => {
         onSubmit={handleModalSubmit}
         onChange={setCurrentPost}
       />
-    </div>
+    </main>
   );
 };
 

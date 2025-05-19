@@ -12,7 +12,6 @@ const Pagination = <T,>({ table }: PaginationProps<T>) => {
       <div>
         <Button
           variant="outline"
-          size="small"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
@@ -20,7 +19,6 @@ const Pagination = <T,>({ table }: PaginationProps<T>) => {
         </Button>
         <Button
           variant="outline"
-          size="small"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
@@ -28,7 +26,6 @@ const Pagination = <T,>({ table }: PaginationProps<T>) => {
         </Button>
         <Button
           variant="outline"
-          size="small"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
@@ -36,7 +33,6 @@ const Pagination = <T,>({ table }: PaginationProps<T>) => {
         </Button>
         <Button
           variant="outline"
-          size="small"
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >

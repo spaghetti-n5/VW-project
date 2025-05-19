@@ -18,7 +18,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   hideLabel = false,
 }) => {
   return (
-    <div className="search-bar-wrapper">
+    <div>
       {label ? (
         <label htmlFor={name} className={`search-label ${hideLabel ? 'visually-hidden' : ''}`}>
           {label}
