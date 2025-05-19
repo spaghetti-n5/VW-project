@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within, cleanup } from '@testing-library/react';
 import DataTableContainer from '../components/DataTable/DataTableContainer';
 import * as api from '../utils/api';
 import { samplePosts } from '../utils/samplePost';
@@ -14,8 +14,16 @@ beforeEach(() => {
   jest.spyOn(api, 'deletePost').mockResolvedValue();
 });
 
+// cleanup mocks and ensure the DOM is reset after each test
 afterEach(() => {
   jest.clearAllMocks();
+  cleanup();
+});
+
+test('displays loading state initially', async () => {
+  render(<DataTableContainer />);
+  expect(screen.getByText('Loading posts...')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
 });
 
 test('renders DataTable component', async () => {
@@ -104,7 +112,8 @@ test('renders card layout on mobile', async () => {
   expect(within(firstCard).getByRole('button', { name: /Delete/i })).toBeInTheDocument();
 });
 
-test('displays error message on failed delete post', async () => {
+test('displays error message on failed delete post on desktop', async () => {
+  window.innerWidth = 1200;
   jest.spyOn(api, 'deletePost').mockRejectedValueOnce(new Error('API error'));
 
   render(<DataTableContainer />);
@@ -127,4 +136,64 @@ test('displays error message on failed delete post', async () => {
   fireEvent.click(dismissButton);
 
   expect(screen.queryByText('Failed to delete post. Please try again.')).not.toBeInTheDocument();
+});
+
+test('sorting by ID descending on desktop', async () => {
+  window.innerWidth = 1200;
+  render(<DataTableContainer />);
+
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+  const tableView = screen.getByTestId('table-view');
+  await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
+
+  const idHeader = within(tableView).getByRole('columnheader', { name: /ID/i });
+  fireEvent.click(idHeader);
+
+  await waitFor(() => expect(within(tableView).getByText('Post 11')).toBeInTheDocument());
+
+  expect(within(tableView).getByText('Post 11')).toBeInTheDocument();
+  expect(within(tableView).getByText('Post 2')).toBeInTheDocument();
+  expect(within(tableView).queryByText('Post 1')).not.toBeInTheDocument();
+});
+
+test('sorting by ID descending on mobile', async () => {
+  window.innerWidth = 600;
+  render(<DataTableContainer />);
+
+  await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
+  const cardView = screen.getByTestId('card-view');
+  await waitFor(() => expect(within(cardView).getByText('Post 1')).toBeInTheDocument());
+
+  const sortIdButton = screen.getByRole('button', { name: /Sort by ID/i });
+  fireEvent.click(sortIdButton);
+
+  await waitFor(() => expect(within(cardView).getByText('Post 11')).toBeInTheDocument());
+
+  expect(within(cardView).getByText('Post 11')).toBeInTheDocument();
+  expect(within(cardView).getByText('Post 2')).toBeInTheDocument();
+  expect(within(cardView).queryByText('Post 1')).not.toBeInTheDocument();
+});
+
+test('sort buttons visible on mobile', async () => {
+  window.innerWidth = 600;
+  render(<DataTableContainer />);
+
+  await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
+  await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
+
+  expect(screen.getByRole('button', { name: /Sort by ID/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Sort by Title/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Sort by Body/i })).toBeInTheDocument();
+});
+
+test('sort buttons hidden on desktop', async () => {
+  window.innerWidth = 1200;
+  render(<DataTableContainer />);
+
+  await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+
+  expect(screen.queryByRole('button', { name: /Sort by ID/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /Sort by Title/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /Sort by Body/i })).not.toBeInTheDocument();
 });

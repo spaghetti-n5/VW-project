@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
   getPaginationRowModel,
   ColumnDef,
+  SortingState,
 } from '@tanstack/react-table';
 import { Post, ModalType } from '../../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
@@ -23,9 +24,11 @@ const DataTableContainer: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
+  const isMobile = window.innerWidth <= 991;
   // Fetch data on mount
-  useMemo(() => {
+  useEffect(() => {
     fetchPosts()
       .then((posts) => setData(posts))
       .catch(() => setError('Failed to fetch posts. Please try again.'))
@@ -123,6 +126,10 @@ const DataTableContainer: React.FC = () => {
   const table = useReactTable({
     data: filteredData,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -151,7 +158,53 @@ const DataTableContainer: React.FC = () => {
           Add Post
         </Button>
       </div>
-      <TableComponent table={table} isEmpty={!filteredData.length} loading={loading} />
+      {isMobile ? (
+        <div className="sort-buttons">
+          {/* Non-null assertion used as 'id', 'title', 'body' are guaranteed to exist in columns */}
+          <Button
+            variant="outline primary"
+            onClick={() => table.getColumn('id')!.toggleSorting()}
+            aria-pressed={table.getColumn('id')!.getIsSorted() !== false}
+          >
+            Sort by ID{' '}
+            {table.getColumn('id')!.getIsSorted() === 'asc'
+              ? '↑'
+              : table.getColumn('id')!.getIsSorted() === 'desc'
+                ? '↓'
+                : ''}
+          </Button>
+          <Button
+            variant="outline primary"
+            onClick={() => table.getColumn('title')!.toggleSorting()}
+            aria-pressed={table.getColumn('title')!.getIsSorted() !== false}
+          >
+            Sort by Title{' '}
+            {table.getColumn('title')!.getIsSorted() === 'asc'
+              ? '↑'
+              : table.getColumn('title')!.getIsSorted() === 'desc'
+                ? '↓'
+                : ''}
+          </Button>
+          <Button
+            variant="outline primary"
+            onClick={() => table.getColumn('body')!.toggleSorting()}
+            aria-pressed={table.getColumn('body')!.getIsSorted() !== false}
+          >
+            Sort by Body{' '}
+            {table.getColumn('body')!.getIsSorted() === 'asc'
+              ? '↑'
+              : table.getColumn('body')!.getIsSorted() === 'desc'
+                ? '↓'
+                : ''}
+          </Button>
+        </div>
+      ) : null}
+      <TableComponent
+        table={table}
+        isEmpty={!filteredData.length}
+        loading={loading}
+        isMobile={isMobile}
+      />
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}
