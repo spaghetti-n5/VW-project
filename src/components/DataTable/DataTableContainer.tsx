@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,11 +10,14 @@ import {
 import { Post, ModalType } from '../../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
 import './DataTable.css';
-import Modal from './Modal';
 import TableComponent from './TableComponent';
 import SearchBar from '../shared/SearchBar';
-import ErrorAlert from '../shared/ErrorAlert';
 import Button from '../shared/Button';
+import LoadingSpinner from '../shared/LoadingSpinner';
+
+// Lazy load components
+const Modal = lazy(() => import('./Modal'));
+const ErrorAlert = lazy(() => import('../shared/ErrorAlert'));
 
 const DataTableContainer: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
@@ -27,12 +30,21 @@ const DataTableContainer: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const isMobile = window.innerWidth <= 991;
+
   // Fetch data on mount
   useEffect(() => {
-    fetchPosts()
-      .then((posts) => setData(posts))
-      .catch(() => setError('Failed to fetch posts. Please try again.'))
-      .finally(() => setLoading(false));
+    const loadPosts = async () => {
+      try {
+        const posts = await fetchPosts();
+        setData(posts);
+      } catch (error) {
+        setError('Failed to fetch posts. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPosts();
   }, []);
 
   // Global search filter
@@ -144,7 +156,13 @@ const DataTableContainer: React.FC = () => {
     <main className="container">
       <h1>DataTable</h1>
       {error ? (
-        <ErrorAlert message={error} onRetry={fetchPosts} onDismiss={() => setError(null)} />
+        <Suspense fallback={<LoadingSpinner />}>
+          <ErrorAlert
+            message={error}
+            onRetry={() => fetchPosts()}
+            onDismiss={() => setError(null)}
+          />
+        </Suspense>
       ) : null}
       <div className="controls">
         <SearchBar
@@ -205,6 +223,7 @@ const DataTableContainer: React.FC = () => {
         loading={loading}
         isMobile={isMobile}
       />
+<Suspense fallback={<LoadingSpinner />}>
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}
@@ -216,6 +235,7 @@ const DataTableContainer: React.FC = () => {
         onSubmit={handleModalSubmit}
         onChange={setCurrentPost}
       />
+      </Suspense>
     </main>
   );
 };
