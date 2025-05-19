@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
   getPaginationRowModel,
   ColumnDef,
+  SortingState,
 } from '@tanstack/react-table';
 import { Post, ModalType } from '../../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
@@ -22,14 +23,16 @@ const DataTableContainer: React.FC = () => {
   const [modalType, setModalType] = useState<ModalType>(ModalType.VIEW);
   const [error, setError] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  // improvement loading state
-
+  const isMobile = window.innerWidth <= 991;
   // Fetch data on mount
-  useMemo(() => {
+  useEffect(() => {
     fetchPosts()
       .then((posts) => setData(posts))
-      .catch(() => setError('Failed to fetch posts. Please try again.'));
+      .catch(() => setError('Failed to fetch posts. Please try again.'))
+      .finally(() => setLoading(false));
   }, []);
 
   // Global search filter
@@ -103,21 +106,13 @@ const DataTableContainer: React.FC = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="action-buttons">
-            <Button
-              variant="outline"
-              size="small"
-              onClick={() => openModal(ModalType.VIEW, row.original)}
-            >
+            <Button variant="outline" onClick={() => openModal(ModalType.VIEW, row.original)}>
               View
             </Button>
-            <Button
-              variant="primary"
-              size="small"
-              onClick={() => openModal(ModalType.EDIT, row.original)}
-            >
+            <Button variant="secondary" onClick={() => openModal(ModalType.EDIT, row.original)}>
               Edit
             </Button>
-            <Button variant="danger" size="small" onClick={() => handleDelete(row.original.id)}>
+            <Button variant="contrast" onClick={() => handleDelete(row.original.id)}>
               Delete
             </Button>
           </div>
@@ -131,6 +126,10 @@ const DataTableContainer: React.FC = () => {
   const table = useReactTable({
     data: filteredData,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -142,22 +141,70 @@ const DataTableContainer: React.FC = () => {
   });
 
   return (
-    <div className="container">
+    <main className="container">
       <h1>DataTable</h1>
       {error ? (
         <ErrorAlert message={error} onRetry={fetchPosts} onDismiss={() => setError(null)} />
       ) : null}
-      <SearchBar
-        value={searchText}
-        onChange={setSearchText}
-        label="Search Posts"
-        name="search"
-        hideLabel
+      <div className="controls">
+        <SearchBar
+          value={searchText}
+          onChange={setSearchText}
+          label="Search Posts"
+          name="search"
+          hideLabel
+        />
+        <Button variant="secondary" onClick={() => openModal(ModalType.ADD)}>
+          Add Post
+        </Button>
+      </div>
+      {isMobile ? (
+        <div className="sort-buttons">
+          {/* Non-null assertion used as 'id', 'title', 'body' are guaranteed to exist in columns */}
+          <Button
+            variant="outline primary"
+            onClick={() => table.getColumn('id')!.toggleSorting()}
+            aria-pressed={table.getColumn('id')!.getIsSorted() !== false}
+          >
+            Sort by ID{' '}
+            {table.getColumn('id')!.getIsSorted() === 'asc'
+              ? '↑'
+              : table.getColumn('id')!.getIsSorted() === 'desc'
+                ? '↓'
+                : ''}
+          </Button>
+          <Button
+            variant="outline primary"
+            onClick={() => table.getColumn('title')!.toggleSorting()}
+            aria-pressed={table.getColumn('title')!.getIsSorted() !== false}
+          >
+            Sort by Title{' '}
+            {table.getColumn('title')!.getIsSorted() === 'asc'
+              ? '↑'
+              : table.getColumn('title')!.getIsSorted() === 'desc'
+                ? '↓'
+                : ''}
+          </Button>
+          <Button
+            variant="outline primary"
+            onClick={() => table.getColumn('body')!.toggleSorting()}
+            aria-pressed={table.getColumn('body')!.getIsSorted() !== false}
+          >
+            Sort by Body{' '}
+            {table.getColumn('body')!.getIsSorted() === 'asc'
+              ? '↑'
+              : table.getColumn('body')!.getIsSorted() === 'desc'
+                ? '↓'
+                : ''}
+          </Button>
+        </div>
+      ) : null}
+      <TableComponent
+        table={table}
+        isEmpty={!filteredData.length}
+        loading={loading}
+        isMobile={isMobile}
       />
-      <Button variant="primary" size="small" onClick={() => openModal(ModalType.ADD)}>
-        Add Post
-      </Button>
-      <TableComponent table={table} isEmpty={filteredData.length === 0} />
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}
@@ -169,7 +216,7 @@ const DataTableContainer: React.FC = () => {
         onSubmit={handleModalSubmit}
         onChange={setCurrentPost}
       />
-    </div>
+    </main>
   );
 };
 

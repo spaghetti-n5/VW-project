@@ -56,15 +56,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
         )}
         <footer>
           {modalType === ModalType.VIEW ? (
-            <Button variant="outline" size="small" onClick={onClose}>
+            <Button variant="outline" onClick={onClose}>
               Close
             </Button>
           ) : (
             <>
-              <Button variant="primary" size="small" onClick={handleSubmit}>
+              <Button variant="outline primary" onClick={handleSubmit}>
                 {modalType === 'add' ? 'Create' : 'Update'}
               </Button>
-              <Button variant="danger" size="small" onClick={onClose}>
+              <Button variant="secondary" onClick={onClose}>
                 Cancel
               </Button>
             </>

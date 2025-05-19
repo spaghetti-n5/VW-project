@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
-import DataTable from '../components/DataTable/DataTableContainer';
+import DataTableContainer from '../components/DataTable/DataTableContainer';
 import { samplePosts } from '../utils/samplePost';
 import * as api from '../utils/api';
 
@@ -19,27 +19,31 @@ afterEach(() => {
 });
 
 test('view modal opens correctly', async () => {
-  render(<DataTable />);
+  render(<DataTableContainer />);
 
-  await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+  const tableView = screen.getByTestId('table-view');
+  await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
 
-  const viewButtons = screen.getAllByRole('button', { name: /View/i });
+  const viewButtons = within(tableView).getAllByRole('button', { name: /View/i });
   fireEvent.click(viewButtons[0]);
 
   await waitFor(() => expect(screen.getByText('Post Details')).toBeInTheDocument());
 
   const modal = screen.getByRole('dialog');
-  const modalScope = within(modal); // Use within to scope the search to the modal
+  const modalScope = within(modal);
   expect(modalScope.getByText('Post 1')).toBeInTheDocument();
   expect(modalScope.getByText('Body 1')).toBeInTheDocument();
 });
 
 test('edit modal opens and submits updated post', async () => {
-  render(<DataTable />);
+  render(<DataTableContainer />);
 
-  await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+  const tableView = screen.getByTestId('table-view');
+  await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
 
-  const editButtons = screen.getAllByRole('button', { name: /Edit/i });
+  const editButtons = within(tableView).getAllByRole('button', { name: /Edit/i });
   fireEvent.click(editButtons[0]);
 
   await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
@@ -63,9 +67,11 @@ test('edit modal opens and submits updated post', async () => {
 });
 
 test('add modal opens and submits new post at the top', async () => {
-  render(<DataTable />);
+  render(<DataTableContainer />);
 
-  await waitFor(() => expect(screen.getByText('Post 1')).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+  const tableView = screen.getByTestId('table-view');
+  await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
 
   const addButton = screen.getByRole('button', { name: /Add Post/i });
   fireEvent.click(addButton);
@@ -93,8 +99,7 @@ test('add modal opens and submits new post at the top', async () => {
     id: 0,
   });
 
-  // Verify the new post appears at the top (first row)
-  const firstRow = screen.getAllByRole('row')[1]; // Skip header row
+  const firstRow = within(tableView).getAllByRole('row')[1];
   expect(within(firstRow).getByText('New Post')).toBeInTheDocument();
   expect(within(firstRow).getByText('New Body')).toBeInTheDocument();
 });
