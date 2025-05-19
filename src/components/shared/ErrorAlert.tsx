@@ -1,4 +1,5 @@
-import './../DataTable/DataTable.css';
+import Button from './Button';
+import '../DataTable/DataTable.css';
 
 interface ErrorAlertProps {
   message: string;
@@ -11,12 +12,12 @@ const ErrorAlert: React.FC<ErrorAlertProps> = ({ message, onRetry, onDismiss }) 
     <div className="error-alert">
       <span>{message}</span>
       <div className="error-actions">
-        <button className="outline small primary" onClick={onRetry}>
+        <Button variant="primary" size="small" onClick={onRetry}>
           Retry
-        </button>
-        <button className="outline small danger" onClick={onDismiss}>
+        </Button>
+        <Button variant="danger" size="small" onClick={onDismiss}>
           Dismiss
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -22,7 +22,9 @@ test('renders SearchBar with visible label', () => {
 });
 
 test('renders SearchBar with hidden label', () => {
-  render(<SearchBar value="" onChange={() => {}} label="Search Posts" name="search" hideLabel={true} />);
+  render(
+    <SearchBar value="" onChange={() => {}} label="Search Posts" name="search" hideLabel={true} />
+  );
   const label = screen.getByText('Search Posts');
   expect(label).toHaveClass('visually-hidden');
 });

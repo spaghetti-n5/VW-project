@@ -13,6 +13,7 @@ import Modal from './Modal';
 import TableComponent from './TableComponent';
 import SearchBar from '../shared/SearchBar';
 import ErrorAlert from '../shared/ErrorAlert';
+import Button from '../shared/Button';
 
 const DataTableContainer: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
@@ -102,23 +103,23 @@ const DataTableContainer: React.FC = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className="action-buttons">
-            <button
-              className="outline small"
+            <Button
+              variant="outline"
+              size="small"
               onClick={() => openModal(ModalType.VIEW, row.original)}
             >
               View
-            </button>
-
-            <button
-              className="outline small primary"
+            </Button>
+            <Button
+              variant="primary"
+              size="small"
               onClick={() => openModal(ModalType.EDIT, row.original)}
             >
               Edit
-            </button>
-
-            <button className="outline small danger" onClick={() => handleDelete(row.original.id)}>
+            </Button>
+            <Button variant="danger" size="small" onClick={() => handleDelete(row.original.id)}>
               Delete
-            </button>
+            </Button>
           </div>
         ),
       },
@@ -143,9 +144,9 @@ const DataTableContainer: React.FC = () => {
   return (
     <div className="container">
       <h1>DataTable</h1>
-      {error && (
+      {error ? (
         <ErrorAlert message={error} onRetry={fetchPosts} onDismiss={() => setError(null)} />
-      )}
+      ) : null}
       <SearchBar
         value={searchText}
         onChange={setSearchText}
@@ -153,58 +154,10 @@ const DataTableContainer: React.FC = () => {
         name="search"
         hideLabel
       />
-      <button className="outline small primary" onClick={() => openModal(ModalType.ADD)}>
+      <Button variant="primary" size="small" onClick={() => openModal(ModalType.ADD)}>
         Add Post
-      </button>
+      </Button>
       <TableComponent table={table} isEmpty={filteredData.length === 0} />
-      {filteredData.length > 0 ? (
-        <div className="pagination">
-          <button
-            className="outline small"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            First
-          </button>
-          <button
-            className="outline small"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </button>
-          <span>
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-          </span>
-          <button
-            className="outline small"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </button>
-          <button
-            className="outline small"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            Last
-          </button>
-          <select
-            className="outline small"
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value));
-            }}
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-      ) : null}
       <Modal
         modalType={modalType}
         isOpen={isModalOpen}

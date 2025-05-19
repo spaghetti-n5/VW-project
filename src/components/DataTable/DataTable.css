@@ -103,44 +103,6 @@ h1 {
   align-items: center;
 }
 
-button.outline.small {
-  padding: 0.3rem 0.75rem;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-color);
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
-  min-width: 44px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-button.outline.small.primary {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-}
-
-button.outline.small.primary:hover {
-  background: var(--primary-color);
-  color: #fff;
-}
-
-button.outline.small.danger {
-  border-color: var(--danger-color);
-  color: var(--danger-color);
-}
-
-button.outline.small.danger:hover {
-  background: var(--danger-color);
-  color: #fff;
-}
-
 .search-bar-wrapper {
   margin-bottom: 20px;
 }
@@ -169,17 +131,27 @@ button.outline.small.danger:hover {
   border-radius: 4px;
 }
 
+/* Pagination styles */
+
 .pagination {
-  display: flex;
   gap: 0.5rem;
   align-items: center;
   margin-top: 1rem;
   flex-wrap: wrap;
 }
 
+.pagination div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .pagination span {
   font-size: 0.9rem;
   color: var(--text-color);
+}
+
+.pagination button {
+  margin-right: 0.3rem;
 }
 
 .pagination button:hover {

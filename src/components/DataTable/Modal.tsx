@@ -1,4 +1,5 @@
 import { ModalType, Post } from '../../types/shared';
+import Button from '../shared/Button';
 import './DataTable.css';
 
 interface ModalProps {
@@ -11,11 +12,11 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalType, onSubmit }) => {
+  if (!isOpen) return null;
+
   const handleSubmit = async () => {
     await onSubmit(post);
   };
-
-  if (!isOpen) return null;
 
   return (
     <dialog open={isOpen} className="modal">
@@ -54,14 +55,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
           </div>
         )}
         <footer>
-          {modalType !== ModalType.VIEW && (
-            <button className="outline small primary" onClick={handleSubmit}>
-              {modalType === ModalType.ADD ? 'Create' : 'Update'}
-            </button>
+          {modalType === ModalType.VIEW ? (
+            <Button variant="outline" size="small" onClick={onClose}>
+              Close
+            </Button>
+          ) : (
+            <>
+              <Button variant="primary" size="small" onClick={handleSubmit}>
+                {modalType === 'add' ? 'Create' : 'Update'}
+              </Button>
+              <Button variant="danger" size="small" onClick={onClose}>
+                Cancel
+              </Button>
+            </>
           )}
-          <button className="outline small" onClick={onClose}>
-            Close
-          </button>
         </footer>
       </article>
     </dialog>

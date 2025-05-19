@@ -1,5 +1,6 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import { Post } from '../../types/shared';
+import Pagination from '../shared/Pagination';
 import './DataTable.css';
 
 interface TableComponentProps {
@@ -32,6 +33,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ table, isEmpty }) => (
         ))}
       </tbody>
     </table>
+    <Pagination table={table} />
   </div>
 );
 
