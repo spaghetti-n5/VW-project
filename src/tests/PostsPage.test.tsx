@@ -1,7 +1,15 @@
 import { render, screen, fireEvent, waitFor, within, cleanup } from '@testing-library/react';
-import TablePage from '../pages/TablePage';
+import PostsPage from '../pages/PostsPage';
 import * as api from '../utils/api';
 import { samplePosts } from '../utils/samplePost';
+import { MemoryRouter } from 'react-router-dom';
+import { usePostStore } from '../store/postStore';
+
+// Mock Zustand store
+jest.mock('../store/postStore', () => ({
+  usePostStore: jest.fn(),
+}));
+const mockUsePostStore = usePostStore as unknown as jest.Mock;
 
 beforeEach(() => {
   jest.spyOn(api, 'fetchPosts').mockResolvedValue(samplePosts);
@@ -12,6 +20,14 @@ beforeEach(() => {
     .spyOn(api, 'editPost')
     .mockResolvedValue({ id: 1, title: 'Updated Post', body: 'Updated Body', userId: 1 });
   jest.spyOn(api, 'deletePost').mockResolvedValue();
+
+  // Mock Zustand store
+  mockUsePostStore.mockReturnValue({
+    favorites: [],
+    toggleFavorite: jest.fn(),
+    searchText: '',
+    setSearchText: jest.fn(),
+  });
 });
 
 afterEach(() => {
@@ -19,16 +35,24 @@ afterEach(() => {
   cleanup();
 });
 
-describe('TablePage Component', () => {
+describe('PostsPage Component', () => {
   describe('Initial Rendering and Loading', () => {
-    test('displays loading state initially', async () => {
-      render(<TablePage />);
+    test('displays loading state initially on All Posts', async () => {
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       expect(screen.getByText('Loading posts...')).toBeInTheDocument();
       await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
     });
 
-    test('renders TablePage with posts and UI elements', async () => {
-      render(<TablePage />);
+    test('renders All Posts page with posts and UI elements', async () => {
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
       const tableView = screen.getByTestId('table-view');
       await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
@@ -40,11 +64,39 @@ describe('TablePage Component', () => {
       expect(within(tableView).queryByText('Post 11')).not.toBeInTheDocument();
       expect(api.fetchPosts).toHaveBeenCalled();
     });
+
+    test('renders Favorites page without Add Post button', async () => {
+      mockUsePostStore.mockReturnValue({
+        favorites: [1, 2],
+        toggleFavorite: jest.fn(),
+        searchText: '',
+        setSearchText: jest.fn(),
+      });
+      render(
+        <MemoryRouter initialEntries={['/VW-project/favorites']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
+      await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+      const tableView = screen.getByTestId('table-view');
+      await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
+
+      expect(screen.getByText('Favorites posts')).toBeInTheDocument();
+      expect(within(tableView).getByText('Post 1')).toBeInTheDocument();
+      expect(within(tableView).getByText('Post 2')).toBeInTheDocument();
+      expect(within(tableView).queryByText('Post 3')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /Add Post/i })).not.toBeInTheDocument();
+      expect(api.fetchPosts).toHaveBeenCalled();
+    });
   });
 
   describe('Post Actions', () => {
-    test('delete post removes it from the table', async () => {
-      render(<TablePage />);
+    test('delete post removes it from the table on All Posts', async () => {
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
       const tableView = screen.getByTestId('table-view');
       await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
@@ -61,7 +113,11 @@ describe('TablePage Component', () => {
     test('displays error message on failed delete post on desktop', async () => {
       window.innerWidth = 1200;
       jest.spyOn(api, 'deletePost').mockRejectedValueOnce(new Error('API error'));
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
       const tableView = screen.getByTestId('table-view');
       await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
@@ -86,7 +142,11 @@ describe('TablePage Component', () => {
   describe('Sorting', () => {
     test('sorting by ID descending with column header on desktop', async () => {
       window.innerWidth = 1200;
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
       const tableView = screen.getByTestId('table-view');
       await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
@@ -102,7 +162,11 @@ describe('TablePage Component', () => {
 
     test('sorting by ID descending on mobile', async () => {
       window.innerWidth = 600;
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
       const cardView = screen.getByTestId('card-view');
       await waitFor(() => expect(within(cardView).getByText('Post 1')).toBeInTheDocument());
@@ -118,7 +182,11 @@ describe('TablePage Component', () => {
 
     test('sort buttons visible on mobile', async () => {
       window.innerWidth = 600;
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
       await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
 
@@ -129,7 +197,11 @@ describe('TablePage Component', () => {
 
     test('sort buttons hidden on desktop', async () => {
       window.innerWidth = 1200;
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
 
@@ -142,7 +214,11 @@ describe('TablePage Component', () => {
   describe('Responsive Layout', () => {
     test('renders card layout on mobile', async () => {
       window.innerWidth = 600;
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
       const cardView = screen.getByTestId('card-view');
       await waitFor(() => expect(within(cardView).getByText('Post 1')).toBeInTheDocument());
@@ -162,7 +238,11 @@ describe('TablePage Component', () => {
   describe('Modal Interactions', () => {
     test('view modal opens correctly', async () => {
       window.innerWidth = 1200;
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
       const tableView = screen.getByTestId('table-view');
       await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
@@ -178,7 +258,11 @@ describe('TablePage Component', () => {
     });
 
     test('edit modal opens and submits updated post', async () => {
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
       const tableView = screen.getByTestId('table-view');
       await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
@@ -205,7 +289,11 @@ describe('TablePage Component', () => {
     });
 
     test('add modal opens and submits new post at the top', async () => {
-      render(<TablePage />);
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
       await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
       const tableView = screen.getByTestId('table-view');
       await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
@@ -237,6 +325,28 @@ describe('TablePage Component', () => {
       const firstRow = within(tableView).getAllByRole('row')[1];
       expect(within(firstRow).getByText('New Post')).toBeInTheDocument();
       expect(within(firstRow).getByText('New Body')).toBeInTheDocument();
+    });
+  });
+  describe('Search Filtering', () => {
+    test('filters posts by search text', async () => {
+      mockUsePostStore.mockReturnValue({
+        favorites: [],
+        toggleFavorite: jest.fn(),
+        searchText: 'Post 1',
+        setSearchText: jest.fn(),
+      });
+      render(
+        <MemoryRouter initialEntries={['/VW-project']}>
+          <PostsPage />
+        </MemoryRouter>
+      );
+      await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+      const tableView = screen.getByTestId('table-view');
+      await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
+
+      expect(within(tableView).getByText('Post 1')).toBeInTheDocument();
+      expect(within(tableView).getByText('Post 11')).toBeInTheDocument();
+      expect(within(tableView).queryByText('Post 2')).not.toBeInTheDocument();
     });
   });
 });

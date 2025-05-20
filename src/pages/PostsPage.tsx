@@ -15,7 +15,8 @@ import Button from '../components/shared/Button';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { usePostStore } from '../store/postStore';
 import SortButtons from '../components/DataTable/SortButtons';
-import styles from './../styles/TablePage.module.css';
+import { mobileBreakpoint } from '../utils/constants';
+import styles from './../styles/PostsPage.module.css';
 
 // Lazy load components
 const Modal = lazy(() => import('../components/DataTable/Modal'));
@@ -33,7 +34,7 @@ const PostsPage: React.FC = () => {
   const { favorites, toggleFavorite, searchText } = usePostStore();
   const location = useLocation();
   const isFavoritesPage = location.pathname.includes('/favorites');
-  const isMobile = window.innerWidth <= 991;
+  const isMobile = window.innerWidth < mobileBreakpoint;
 
   // Fetch data on mount
   useEffect(() => {
