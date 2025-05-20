@@ -14,6 +14,7 @@ import TableComponent from './TableComponent';
 import Button from '../shared/Button';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import { usePostStore } from '../../store/postStore';
+import SortingButtons from './SortingButtons';
 
 // Lazy load components
 const Modal = lazy(() => import('./Modal'));
@@ -180,47 +181,7 @@ const DataTableContainer: React.FC = () => {
           Add Post
         </Button>
       </div>
-      {isMobile ? (
-        <div className="sort-buttons">
-          {/* Non-null assertion used as 'id', 'title', 'body' are guaranteed to exist in columns */}
-          <Button
-            variant="outline primary"
-            onClick={() => table.getColumn('id')!.toggleSorting()}
-            aria-pressed={table.getColumn('id')!.getIsSorted() !== false}
-          >
-            Sort by ID{' '}
-            {table.getColumn('id')!.getIsSorted() === 'asc'
-              ? '↑'
-              : table.getColumn('id')!.getIsSorted() === 'desc'
-                ? '↓'
-                : ''}
-          </Button>
-          <Button
-            variant="outline primary"
-            onClick={() => table.getColumn('title')!.toggleSorting()}
-            aria-pressed={table.getColumn('title')!.getIsSorted() !== false}
-          >
-            Sort by Title{' '}
-            {table.getColumn('title')!.getIsSorted() === 'asc'
-              ? '↑'
-              : table.getColumn('title')!.getIsSorted() === 'desc'
-                ? '↓'
-                : ''}
-          </Button>
-          <Button
-            variant="outline primary"
-            onClick={() => table.getColumn('body')!.toggleSorting()}
-            aria-pressed={table.getColumn('body')!.getIsSorted() !== false}
-          >
-            Sort by Body{' '}
-            {table.getColumn('body')!.getIsSorted() === 'asc'
-              ? '↑'
-              : table.getColumn('body')!.getIsSorted() === 'desc'
-                ? '↓'
-                : ''}
-          </Button>
-        </div>
-      ) : null}
+      {isMobile ? <SortingButtons table={table} /> : null}
       <TableComponent
         table={table}
         isEmpty={!filteredData.length}
