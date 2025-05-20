@@ -1,7 +1,11 @@
-import DataTable from './components/DataTable/DataTableContainer';
+import DataTableContainer from './components/DataTable/DataTableContainer';
+import { Routes, Route } from 'react-router-dom';
 
-function App() {
-  return <DataTable />;
-}
+const App = () => (
+    <Routes>
+      <Route path="VW-project" element={<DataTableContainer />} />
+      <Route path="VW-project/favorites" element={<div>favorites page</div>} />
+    </Routes>
+);
 
 export default App;
