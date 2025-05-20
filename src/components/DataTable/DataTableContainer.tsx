@@ -11,9 +11,9 @@ import { Post, ModalType } from '../../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
 import './DataTable.css';
 import TableComponent from './TableComponent';
-import SearchBar from '../shared/SearchBar';
 import Button from '../shared/Button';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import { usePostStore } from '../../store/postStore';
 
 // Lazy load components
 const Modal = lazy(() => import('./Modal'));
@@ -25,9 +25,10 @@ const DataTableContainer: React.FC = () => {
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
   const [modalType, setModalType] = useState<ModalType>(ModalType.VIEW);
   const [error, setError] = useState<string | null>(null);
-  const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState<boolean>(true);
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  const { searchText } = usePostStore();
 
   const isMobile = window.innerWidth <= 991;
 
@@ -155,8 +156,8 @@ const DataTableContainer: React.FC = () => {
 
   return (
     <main className="container">
-      <h1>DataTable</h1>
-      {error ? (
+      <h1>All posts</h1>
+      {error && !loading ? (
         <Suspense fallback={<LoadingSpinner />}>
           <ErrorAlert
             message={error}
@@ -166,13 +167,6 @@ const DataTableContainer: React.FC = () => {
         </Suspense>
       ) : null}
       <div className="controls">
-        <SearchBar
-          value={searchText}
-          onChange={setSearchText}
-          label="Search Posts"
-          name="search"
-          hideLabel
-        />
         <Button variant="secondary" onClick={() => openModal(ModalType.ADD)}>
           Add Post
         </Button>
