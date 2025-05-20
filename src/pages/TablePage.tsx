@@ -7,20 +7,20 @@ import {
   ColumnDef,
   SortingState,
 } from '@tanstack/react-table';
-import { Post, ModalType } from '../../types/shared';
-import { fetchPosts, deletePost, editPost, addPost } from '../../utils/api';
-import './DataTable.css';
-import TableComponent from './TableComponent';
-import Button from '../shared/Button';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import { usePostStore } from '../../store/postStore';
-import SortingButtons from './SortingButtons';
+import { Post, ModalType } from '../types/shared';
+import { fetchPosts, deletePost, editPost, addPost } from '../utils/api';
+import TableComponent from '../components/DataTable/TableComponent';
+import Button from '../components/shared/Button';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
+import { usePostStore } from '../store/postStore';
+import SortingButtons from '../components/DataTable/SortingButtons';
+import './../components/DataTable/DataTable.css';
 
 // Lazy load components
-const Modal = lazy(() => import('./Modal'));
-const ErrorAlert = lazy(() => import('../shared/ErrorAlert'));
+const Modal = lazy(() => import('../components/DataTable/Modal'));
+const ErrorAlert = lazy(() => import('../components/shared/ErrorAlert'));
 
-const DataTableContainer: React.FC = () => {
+const TablePage: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
@@ -205,4 +205,4 @@ const DataTableContainer: React.FC = () => {
   );
 };
 
-export default DataTableContainer;
+export default TablePage;

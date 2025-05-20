@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor, within, cleanup } from '@testing-library/react';
-import DataTableContainer from '../components/DataTable/DataTableContainer';
+import TablePage from '../pages/TablePage';
 import * as api from '../utils/api';
 import { samplePosts } from '../utils/samplePost';
 
@@ -21,19 +21,19 @@ afterEach(() => {
 });
 
 test('displays loading state initially', async () => {
-  render(<DataTableContainer />);
+  render(<TablePage />);
   expect(screen.getByText('Loading posts...')).toBeInTheDocument();
   await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
 });
 
-test('renders DataTable component', async () => {
-  render(<DataTableContainer />);
+test('renders TablePage component', async () => {
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
   const tableView = screen.getByTestId('table-view');
   await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
 
-  expect(screen.getByText('DataTable')).toBeInTheDocument();
+  expect(screen.getByText('All posts')).toBeInTheDocument();
   expect(screen.getByPlaceholderText('Search by any field...')).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /Add Post/i })).toBeInTheDocument();
   expect(within(tableView).getByText('Post 1')).toBeInTheDocument();
@@ -43,7 +43,7 @@ test('renders DataTable component', async () => {
 });
 
 test('delete post removes it from the table', async () => {
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
   const tableView = screen.getByTestId('table-view');
@@ -60,7 +60,7 @@ test('delete post removes it from the table', async () => {
 });
 
 test('search filters the table', async () => {
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
   const tableView = screen.getByTestId('table-view');
@@ -77,7 +77,7 @@ test('search filters the table', async () => {
 });
 
 test('sorting by ID descending with column header', async () => {
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
   const tableView = screen.getByTestId('table-view');
@@ -95,7 +95,7 @@ test('sorting by ID descending with column header', async () => {
 
 test('renders card layout on mobile', async () => {
   window.innerWidth = 600;
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
   const cardView = screen.getByTestId('card-view');
@@ -116,7 +116,7 @@ test('displays error message on failed delete post on desktop', async () => {
   window.innerWidth = 1200;
   jest.spyOn(api, 'deletePost').mockRejectedValueOnce(new Error('API error'));
 
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
   const tableView = screen.getByTestId('table-view');
@@ -140,7 +140,7 @@ test('displays error message on failed delete post on desktop', async () => {
 
 test('sorting by ID descending on desktop', async () => {
   window.innerWidth = 1200;
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
   const tableView = screen.getByTestId('table-view');
@@ -158,7 +158,7 @@ test('sorting by ID descending on desktop', async () => {
 
 test('sorting by ID descending on mobile', async () => {
   window.innerWidth = 600;
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
   const cardView = screen.getByTestId('card-view');
@@ -176,7 +176,7 @@ test('sorting by ID descending on mobile', async () => {
 
 test('sort buttons visible on mobile', async () => {
   window.innerWidth = 600;
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
   await waitFor(() => expect(screen.getByTestId('card-view')).toBeInTheDocument());
@@ -188,7 +188,7 @@ test('sort buttons visible on mobile', async () => {
 
 test('sort buttons hidden on desktop', async () => {
   window.innerWidth = 1200;
-  render(<DataTableContainer />);
+  render(<TablePage />);
 
   await waitFor(() => expect(screen.queryByText('Loading posts...')).not.toBeInTheDocument());
   await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
@@ -196,4 +196,91 @@ test('sort buttons hidden on desktop', async () => {
   expect(screen.queryByRole('button', { name: /Sort by ID/i })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /Sort by Title/i })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /Sort by Body/i })).not.toBeInTheDocument();
+});
+
+/* Modal Tests */
+test('view modal opens correctly', async () => {
+  render(<TablePage />);
+
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+  const tableView = screen.getByTestId('table-view');
+  await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
+
+  const viewButtons = within(tableView).getAllByRole('button', { name: /View/i });
+  fireEvent.click(viewButtons[0]);
+
+  await waitFor(() => expect(screen.getByText('Post Details')).toBeInTheDocument());
+
+  const modal = screen.getByRole('dialog');
+  const modalScope = within(modal);
+  expect(modalScope.getByText('Post 1')).toBeInTheDocument();
+  expect(modalScope.getByText('Body 1')).toBeInTheDocument();
+});
+
+test('edit modal opens and submits updated post', async () => {
+  render(<TablePage />);
+
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+  const tableView = screen.getByTestId('table-view');
+  await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
+
+  const editButtons = within(tableView).getAllByRole('button', { name: /Edit/i });
+  fireEvent.click(editButtons[0]);
+
+  await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+
+  const titleInput = screen.getByLabelText('Title');
+  const bodyInput = screen.getByLabelText('Body');
+  const updateButton = screen.getByRole('button', { name: /Update/i });
+
+  fireEvent.change(titleInput, { target: { value: 'Updated Post' } });
+  fireEvent.change(bodyInput, { target: { value: 'Updated Body' } });
+  fireEvent.click(updateButton);
+
+  await waitFor(() => expect(screen.queryByText('Edit Post')).not.toBeInTheDocument());
+
+  expect(api.editPost).toHaveBeenCalledWith(1, {
+    title: 'Updated Post',
+    body: 'Updated Body',
+    id: 1,
+    userId: 1,
+  });
+});
+
+test('add modal opens and submits new post at the top', async () => {
+  render(<TablePage />);
+
+  await waitFor(() => expect(screen.getByTestId('table-view')).toBeInTheDocument());
+  const tableView = screen.getByTestId('table-view');
+  await waitFor(() => expect(within(tableView).getByText('Post 1')).toBeInTheDocument());
+
+  const addButton = screen.getByRole('button', { name: /Add Post/i });
+  fireEvent.click(addButton);
+
+  await waitFor(() => {
+    const modal = screen.getByRole('dialog');
+    expect(modal).toBeInTheDocument();
+    expect(within(modal).getByText('Add Post')).toBeInTheDocument();
+  });
+
+  const titleInput = screen.getByLabelText('Title');
+  const bodyInput = screen.getByLabelText('Body');
+  const createButton = screen.getByRole('button', { name: /Create/i });
+
+  fireEvent.change(titleInput, { target: { value: 'New Post' } });
+  fireEvent.change(bodyInput, { target: { value: 'New Body' } });
+  fireEvent.click(createButton);
+
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+  expect(api.addPost).toHaveBeenCalledWith({
+    title: 'New Post',
+    body: 'New Body',
+    userId: 1,
+    id: 0,
+  });
+
+  const firstRow = within(tableView).getAllByRole('row')[1];
+  expect(within(firstRow).getByText('New Post')).toBeInTheDocument();
+  expect(within(firstRow).getByText('New Body')).toBeInTheDocument();
 });
