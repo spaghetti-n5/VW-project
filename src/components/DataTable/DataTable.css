@@ -20,7 +20,7 @@ h1 {
   border: 1px solid var(--danger-color);
   border-radius: 4px;
   font-size: 0.9rem;
-  color: var(--text-color);
+  color: var(--danger-color);
 }
 
 .error-actions {
@@ -99,6 +99,7 @@ th.sortable {
   border: 1px solid #ccc;
   border-radius: 4px;
   margin: 0 !important; /* override default margin */
+  font-size: 0.8rem;
 }
 
 /* Modal styles */

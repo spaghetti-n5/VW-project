@@ -28,7 +28,7 @@ const DataTableContainer: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { searchText } = usePostStore();
+  const { favorites, toggleFavorite, searchText } = usePostStore();
 
   const isMobile = window.innerWidth <= 991;
 
@@ -129,11 +129,20 @@ const DataTableContainer: React.FC = () => {
             <Button variant="contrast" onClick={() => handleDelete(row.original.id)}>
               Delete
             </Button>
+            <Button
+              variant={favorites.includes(row.original.id) ? 'secondary' : 'outline'}
+              onClick={() => toggleFavorite(row.original.id)}
+              aria-label={
+                favorites.includes(row.original.id) ? 'Remove from favorites' : 'Add to favorites'
+              }
+            >
+              {favorites.includes(row.original.id) ? '★' : '☆'}
+            </Button>
           </div>
         ),
       },
     ],
-    []
+    [favorites, toggleFavorite]
   );
 
   // Table instance creation
