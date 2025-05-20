@@ -19,7 +19,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
   };
 
   return (
-    <dialog open={isOpen} className={styles.modal}>
+    <dialog open={isOpen} className={styles.modal} data-testid="modal">
       <article>
         <h2>
           {modalType === ModalType.ADD

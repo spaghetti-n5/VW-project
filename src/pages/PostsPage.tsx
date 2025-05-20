@@ -134,7 +134,7 @@ const PostsPage: React.FC = () => {
               <Button
                 variant="contrast"
                 onClick={() => toggleFavorite(row.original.id)}
-                aria-label="Remove from favorites"
+                ariaLabel="Remove from favorites"
               >
                 ★
               </Button>
@@ -153,7 +153,7 @@ const PostsPage: React.FC = () => {
               <Button
                 variant={favorites.includes(row.original.id) ? 'secondary' : 'outline'}
                 onClick={() => toggleFavorite(row.original.id)}
-                aria-label={
+                ariaLabel={
                   favorites.includes(row.original.id) ? 'Remove from favorites' : 'Add to favorites'
                 }
               >
