@@ -3,16 +3,15 @@ import { lazy, Suspense } from 'react';
 import LoadingSpinner from './components/shared/LoadingSpinner';
 
 // Lazy load components
-const TablePage = lazy(() => import('./pages/TablePage'));
-const FavoritesPage = lazy(() => import('./pages/FavoritesPage'));
+const PostsPage = lazy(() => import('./pages/PostsPage'));
 const Header = lazy(() => import('./components/shared/Header'));
 
 const App = () => (
   <Suspense fallback={<LoadingSpinner />}>
     <Header />
     <Routes>
-      <Route path="VW-project" element={<TablePage />} />
-      <Route path="VW-project/favorites" element={<FavoritesPage />} />
+      <Route path="VW-project" element={<PostsPage />} />
+      <Route path="VW-project/favorites" element={<PostsPage />} />
     </Routes>
   </Suspense>
 );

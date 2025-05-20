@@ -7,6 +7,7 @@ import {
   ColumnDef,
   SortingState,
 } from '@tanstack/react-table';
+import { useLocation } from 'react-router-dom';
 import { Post, ModalType } from '../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../utils/api';
 import TableComponent from '../components/DataTable/TableComponent';
@@ -14,13 +15,14 @@ import Button from '../components/shared/Button';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { usePostStore } from '../store/postStore';
 import SortButtons from '../components/DataTable/SortButtons';
-import styles from './../styles/TablePage.module.css';
+import { mobileBreakpoint } from '../utils/constants';
+import styles from './../styles/PostsPage.module.css';
 
 // Lazy load components
 const Modal = lazy(() => import('../components/DataTable/Modal'));
 const ErrorAlert = lazy(() => import('../components/shared/ErrorAlert'));
 
-const TablePage: React.FC = () => {
+const PostsPage: React.FC = () => {
   const [data, setData] = useState<Post[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState<Post>({ id: 0, title: '', body: '' });
@@ -30,8 +32,9 @@ const TablePage: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const { favorites, toggleFavorite, searchText } = usePostStore();
-
-  const isMobile = window.innerWidth <= 991;
+  const location = useLocation();
+  const isFavoritesPage = location.pathname.includes('/favorites');
+  const isMobile = window.innerWidth < mobileBreakpoint;
 
   // Fetch data on mount
   useEffect(() => {
@@ -50,15 +53,21 @@ const TablePage: React.FC = () => {
     loadPosts();
   }, []);
 
+  // Filter posts by favorites (for Favorites page)
+  const favoriteData = useMemo(() => {
+    if (!isFavoritesPage) return data;
+    return data.filter((post) => favorites.includes(post.id));
+  }, [data, favorites, isFavoritesPage]);
+
   // Global search filter
   const filteredData = useMemo(() => {
-    if (!searchText) return data;
-    return data.filter((post) =>
+    if (!searchText) return favoriteData;
+    return favoriteData.filter((post) =>
       Object.values(post).some((val) =>
         String(val).toLowerCase().includes(searchText.toLowerCase())
       )
     );
-  }, [data, searchText]);
+  }, [favoriteData, searchText]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -70,7 +79,7 @@ const TablePage: React.FC = () => {
     }
   };
 
-  // Modal handler
+  // Modal handlers
   const openModal = (type: ModalType, post: Post = { id: 0, title: '', body: '' }) => {
     setModalType(type);
     setCurrentPost(post);
@@ -97,7 +106,7 @@ const TablePage: React.FC = () => {
     }
   };
 
-  // Define columns of the table
+  // Define columns
   const columns = useMemo<ColumnDef<Post>[]>(
     () => [
       {
@@ -119,54 +128,61 @@ const TablePage: React.FC = () => {
       {
         id: 'actions',
         header: 'Actions',
-        cell: ({ row }) => (
-          <div className={styles.actionButtons}>
-            <Button variant="outline" onClick={() => openModal(ModalType.VIEW, row.original)}>
-              View
-            </Button>
-            <Button variant="secondary" onClick={() => openModal(ModalType.EDIT, row.original)}>
-              Edit
-            </Button>
-            <Button variant="contrast" onClick={() => handleDelete(row.original.id)}>
-              Delete
-            </Button>
-            <Button
-              variant={favorites.includes(row.original.id) ? 'secondary' : 'outline'}
-              onClick={() => toggleFavorite(row.original.id)}
-              aria-label={
-                favorites.includes(row.original.id) ? 'Remove from favorites' : 'Add to favorites'
-              }
-            >
-              {favorites.includes(row.original.id) ? '★' : '☆'}
-            </Button>
-          </div>
-        ),
+        cell: ({ row }) =>
+          isFavoritesPage ? (
+            <div className={styles.actionButtons}>
+              <Button
+                variant="contrast"
+                onClick={() => toggleFavorite(row.original.id)}
+                aria-label="Remove from favorites"
+              >
+                ★
+              </Button>
+            </div>
+          ) : (
+            <div className={styles.actionButtons}>
+              <Button variant="outline" onClick={() => openModal(ModalType.VIEW, row.original)}>
+                View
+              </Button>
+              <Button variant="secondary" onClick={() => openModal(ModalType.EDIT, row.original)}>
+                Edit
+              </Button>
+              <Button variant="contrast" onClick={() => handleDelete(row.original.id)}>
+                Delete
+              </Button>
+              <Button
+                variant={favorites.includes(row.original.id) ? 'secondary' : 'outline'}
+                onClick={() => toggleFavorite(row.original.id)}
+                aria-label={
+                  favorites.includes(row.original.id) ? 'Remove from favorites' : 'Add to favorites'
+                }
+              >
+                {favorites.includes(row.original.id) ? '★' : '☆'}
+              </Button>
+            </div>
+          ),
       },
     ],
-    [favorites, toggleFavorite]
+    [favorites, toggleFavorite, isFavoritesPage]
   );
 
   // Table instance creation
   const table = useReactTable({
     data: filteredData,
     columns,
-    state: {
-      sorting,
-    },
+    state: { sorting },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
-      pagination: {
-        pageSize: 10,
-      },
+      pagination: { pageSize: 10 },
     },
   });
 
   return (
     <main className={styles.container}>
-      <h1 className={styles.title}>All posts</h1>
+      <h1 className={styles.title}>{isFavoritesPage ? 'Favorites posts' : 'All posts'}</h1>
       {!loading && error ? (
         <Suspense fallback={<LoadingSpinner />}>
           <ErrorAlert
@@ -176,11 +192,13 @@ const TablePage: React.FC = () => {
           />
         </Suspense>
       ) : null}
-      <div className={styles.controls}>
-        <Button variant="secondary" onClick={() => openModal(ModalType.ADD)}>
-          Add Post
-        </Button>
-      </div>
+      {!isFavoritesPage ? (
+        <div className={styles.controls}>
+          <Button variant="secondary" onClick={() => openModal(ModalType.ADD)}>
+            Add Post
+          </Button>
+        </div>
+      ) : null}
       {isMobile ? <SortButtons table={table} /> : null}
       <TableComponent
         table={table}
@@ -188,21 +206,23 @@ const TablePage: React.FC = () => {
         loading={loading}
         isMobile={isMobile}
       />
-      <Suspense fallback={<LoadingSpinner />}>
-        <Modal
-          modalType={modalType}
-          isOpen={isModalOpen}
-          post={currentPost}
-          onClose={() => {
-            setIsModalOpen(false);
-            setCurrentPost({ id: 0, title: '', body: '' });
-          }}
-          onSubmit={handleModalSubmit}
-          onChange={setCurrentPost}
-        />
-      </Suspense>
+      {!isFavoritesPage ? (
+        <Suspense fallback={<LoadingSpinner />}>
+          <Modal
+            modalType={modalType}
+            isOpen={isModalOpen}
+            post={currentPost}
+            onClose={() => {
+              setIsModalOpen(false);
+              setCurrentPost({ id: 0, title: '', body: '' });
+            }}
+            onSubmit={handleModalSubmit}
+            onChange={setCurrentPost}
+          />
+        </Suspense>
+      ) : null}
     </main>
   );
 };
 
-export default TablePage;
+export default PostsPage;
