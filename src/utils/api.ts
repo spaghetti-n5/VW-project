@@ -2,7 +2,7 @@ import { Post } from '../types/shared';
 /**
  * Base URL for the posts API endpoint.
  */
-const POSTS_API_URL = 'https://jsonplaceholder.typicode.com/posts';
+export const POSTS_API_URL = 'https://jsonplaceholder.typicode.com/posts';
 
 /**
  * Fetches all posts from the API.
@@ -11,6 +11,9 @@ const POSTS_API_URL = 'https://jsonplaceholder.typicode.com/posts';
 export async function fetchPosts(): Promise<Post[]> {
   try {
     const response = await fetch(POSTS_API_URL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -25,10 +28,13 @@ export async function fetchPosts(): Promise<Post[]> {
  */
 export async function deletePost(id: number): Promise<void> {
   try {
-    await fetch(`${POSTS_API_URL}/${id}`, {
+    const response = await fetch(`${POSTS_API_URL}/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
   } catch (error) {
     console.error(`Error deleting post with ID ${id}:`, error);
     throw error;
@@ -48,6 +54,9 @@ export async function editPost(id: number, post: Omit<Post, 'id'>): Promise<Post
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(post),
     });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
     console.error(`Error editing post with ID ${id}:`, error);
@@ -68,6 +77,9 @@ export const addPost = async (post: Omit<Post, 'id'>): Promise<Post> => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(post),
     });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
     console.error('Error adding post:', error);
