@@ -1,22 +1,26 @@
 import { NavLink } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import { usePostStore } from './../../store/postStore';
-import './../../styles/Header.css';
+import styles from './../../styles/Header.module.css';
 
 const Header = () => {
   const { searchText, setSearchText } = usePostStore();
   return (
-    <nav className="header">
+    <nav className={styles.header}>
       <ul>
         <li>
-          <NavLink to="/VW-project/" end className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink
+            to="/VW-project/"
+            end
+            className={({ isActive }) => (isActive ? styles.active : '')}
+          >
             Home
           </NavLink>
         </li>
         <li>
           <NavLink
             to="/VW-project/favorites"
-            className={({ isActive }) => (isActive ? 'active' : '')}
+            className={({ isActive }) => (isActive ? styles.active : '')}
           >
             Favorites
           </NavLink>

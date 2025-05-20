@@ -1,0 +1,47 @@
+.pagination {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+  margin: 1rem 0;
+}
+
+.pagination div {
+  display: flex;
+  font-size: 0.7rem;
+  align-items: center;
+}
+
+.pagination span {
+  min-width: 100px;
+}
+
+.pagination button {
+  margin-right: 0.3rem;
+  min-width: 80px;
+}
+
+.pagination select {
+  padding: 0.3rem;
+  font-size: 0.85rem;
+  margin: 0;
+  font-size: 0.7rem;
+  height: 2rem;
+  min-width: 100px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+/* Mobile card layout (below 992px) */
+@media screen and (max-width: 991px) {
+  .pagination {
+    flex-direction: column;
+  }
+}

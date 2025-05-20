@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import './../../styles/Button.css';
+import styles from './../../styles/Button.module.css';
 
 interface ButtonProps {
   variant?:
@@ -7,8 +7,8 @@ interface ButtonProps {
     | 'contrast'
     | 'outline'
     | 'outline secondary'
-    | 'outline contrast'
-    | string; // variants based on pico.css
+    | 'outline primary'
+    | 'outline contrast';
   children: ReactNode;
   onClick?: () => void;
   disabled?: boolean;
@@ -17,7 +17,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({ variant, children, onClick, disabled = false }) => (
   <button
     type="button"
-    className={variant ? `button ${variant}` : 'button'}
+    className={`${styles.button} ${variant ? variant : ''}`}
     onClick={onClick}
     disabled={disabled}
     aria-disabled={disabled}

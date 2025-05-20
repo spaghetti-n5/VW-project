@@ -26,7 +26,7 @@ test('renders SearchBar with hidden label', () => {
     <SearchBar value="" onChange={() => {}} label="Search Posts" name="search" hideLabel={true} />
   );
   const label = screen.getByText('Search Posts');
-  expect(label).toHaveClass('visually-hidden');
+  expect(label).toHaveClass('searchLabel visuallyHidden');
 });
 
 test('calls onChange when input value changes', () => {

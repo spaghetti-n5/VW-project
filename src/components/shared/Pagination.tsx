@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/react-table';
 import Button from './Button';
-import './../../styles/TablePage.css';
+import styles from './../../styles/Pagination.module.css';
 
 interface PaginationProps<T> {
   table: Table<T>;
@@ -8,7 +8,7 @@ interface PaginationProps<T> {
 
 const Pagination = <T,>({ table }: PaginationProps<T>) => {
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       <div>
         <Button
           variant="outline"

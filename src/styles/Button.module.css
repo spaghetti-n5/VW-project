@@ -5,8 +5,3 @@
   transition: background-color 0.2s ease;
   margin: 0;
 }
-
-.danger {
-  border-color: #dc3545;
-  color: #dc3545;
-}

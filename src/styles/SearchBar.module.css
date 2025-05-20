@@ -1,0 +1,23 @@
+.searchLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.visuallyHidden {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.searchInput {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 0 !important; /* override default margin */
+  font-size: 0.8rem;
+}

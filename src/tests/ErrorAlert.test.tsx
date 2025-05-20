@@ -33,5 +33,5 @@ test('applies correct classes to buttons', () => {
   const retryButton = screen.getByRole('button', { name: /Retry/i });
   const dismissButton = screen.getByRole('button', { name: /Dismiss/i });
   expect(retryButton).toHaveClass('outline');
-  expect(dismissButton).toHaveClass('button outline danger');
+  expect(dismissButton).toHaveClass('button outline secondary');
 });
