@@ -13,8 +13,8 @@ import TableComponent from '../components/DataTable/TableComponent';
 import Button from '../components/shared/Button';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { usePostStore } from '../store/postStore';
-import SortingButtons from '../components/DataTable/SortingButtons';
-import './../styles/TablePage.css';
+import SortButtons from '../components/DataTable/SortButtons';
+import styles from './../styles/TablePage.module.css';
 
 // Lazy load components
 const Modal = lazy(() => import('../components/DataTable/Modal'));
@@ -120,7 +120,7 @@ const TablePage: React.FC = () => {
         id: 'actions',
         header: 'Actions',
         cell: ({ row }) => (
-          <div className="action-buttons">
+          <div className={styles.actionButtons}>
             <Button variant="outline" onClick={() => openModal(ModalType.VIEW, row.original)}>
               View
             </Button>
@@ -165,8 +165,8 @@ const TablePage: React.FC = () => {
   });
 
   return (
-    <main className="container">
-      <h1>All posts</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>All posts</h1>
       {!loading && error ? (
         <Suspense fallback={<LoadingSpinner />}>
           <ErrorAlert
@@ -176,12 +176,12 @@ const TablePage: React.FC = () => {
           />
         </Suspense>
       ) : null}
-      <div className="controls">
+      <div className={styles.controls}>
         <Button variant="secondary" onClick={() => openModal(ModalType.ADD)}>
           Add Post
         </Button>
       </div>
-      {isMobile ? <SortingButtons table={table} /> : null}
+      {isMobile ? <SortButtons table={table} /> : null}
       <TableComponent
         table={table}
         isEmpty={!filteredData.length}

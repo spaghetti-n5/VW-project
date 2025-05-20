@@ -1,4 +1,4 @@
-import './../../styles/TablePage.css';
+import styles from './../../styles/SearchBar.module.css';
 
 interface SearchBarProps {
   value: string;
@@ -20,7 +20,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div>
       {label ? (
-        <label htmlFor={name} className={`search-label ${hideLabel ? 'visually-hidden' : ''}`}>
+        <label
+          htmlFor={name}
+          className={`${styles.searchLabel} ${hideLabel ? styles.visuallyHidden : ''}`}
+        >
           {label}
         </label>
       ) : null}
@@ -29,7 +32,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="search-input"
+        className={styles.searchInput}
         name={name}
         id={name}
         aria-label={label || placeholder}

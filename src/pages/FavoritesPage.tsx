@@ -13,8 +13,8 @@ import TableComponent from '../components/DataTable/TableComponent';
 import Button from '../components/shared/Button';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { fetchPosts } from '../utils/api';
-import SortingButtons from '../components/DataTable/SortingButtons';
-import './../styles/TablePage.css';
+import SortButtons from '../components/DataTable/SortButtons';
+import styles from './../styles/TablePage.module.css';
 
 const ErrorAlert = lazy(() => import('../components/shared/ErrorAlert'));
 
@@ -116,8 +116,8 @@ const FavoritesPage: React.FC = () => {
   });
 
   return (
-    <main className="container">
-      <h1>Favorites posts</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>Favorites posts</h1>
       {!loading && error ? (
         <Suspense fallback={<LoadingSpinner />}>
           <ErrorAlert
@@ -127,7 +127,7 @@ const FavoritesPage: React.FC = () => {
           />
         </Suspense>
       ) : null}
-      {isMobile ? <SortingButtons table={table} /> : null}
+      {isMobile ? <SortButtons table={table} /> : null}
       <TableComponent
         table={table}
         isEmpty={!filteredData.length}

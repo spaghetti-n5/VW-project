@@ -1,0 +1,74 @@
+.title {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0 1rem;
+}
+
+/* Table wrapper for overflow handling */
+.tableWrapper {
+  overflow-x: auto;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tableView {
+  flex-grow: 1;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.controls {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Sortable column headers */
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+/* Mobile card layout (below 992px) */
+@media screen and (max-width: 991px) {
+  .card {
+    margin-bottom: 1rem;
+  }
+  .cardField {
+    margin-bottom: 0.5rem;
+  }
+  .cardField strong {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .cardField span.body-text {
+    max-width: 100%;
+    white-space: normal;
+  }
+  .cardField [role='group'] {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}

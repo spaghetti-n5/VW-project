@@ -1,21 +1,21 @@
-nav.header {
+.header {
   border-bottom: 1px solid var(--pico-secondary-background);
   padding: 0 0.3rem;
   font-size: 0.9rem;
 }
 
-nav ul {
+.header ul {
   gap: 1rem;
   margin: 0 !important;
 }
 
-nav a:hover {
+.header a:hover {
   background: var(--pico-primary-background);
   color: var(--pico-primary-inverse);
   text-decoration: none;
 }
 
-nav a.active {
+.header a.active {
   background: var(--pico-secondary-background);
   color: var(--pico-secondary-inverse);
 }

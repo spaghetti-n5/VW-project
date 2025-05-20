@@ -1,6 +1,6 @@
 import { ModalType, Post } from '../../types/shared';
 import Button from '../shared/Button';
-import './../../styles/TablePage.css';
+import styles from './../../styles/Modal.module.css';
 
 interface ModalProps {
   isOpen: boolean;
@@ -19,7 +19,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
   };
 
   return (
-    <dialog open={isOpen} className="modal">
+    <dialog open={isOpen} className={styles.modal}>
       <article>
         <h2>
           {modalType === ModalType.ADD
@@ -42,7 +42,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
               value={post.title}
               onChange={(e) => onChange({ ...post, title: e.target.value })}
               required
-              className="modal-input"
+              className={styles.modalInput}
             />
             <label htmlFor="body">Body</label>
             <textarea
@@ -50,7 +50,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, post, onClose, onChange, modalTyp
               value={post.body}
               onChange={(e) => onChange({ ...post, body: e.target.value })}
               required
-              className="modal-textarea"
+              className={styles.modalTextarea}
             />
           </div>
         )}
