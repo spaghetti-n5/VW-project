@@ -28,6 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </label>
       ) : null}
       <input
+        data-testid="search-input"
         type="search"
         placeholder={placeholder}
         value={value}
