@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import { usePostStore } from './../../store/postStore';
-import './Header.css';
+import './../../styles/Header.css';
 
 const Header = () => {
   const { searchText, setSearchText } = usePostStore();

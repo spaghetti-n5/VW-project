@@ -1,7 +1,7 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import { Post } from '../../types/shared';
 import Pagination from '../shared/Pagination';
-import './DataTable.css';
+import './../../styles/TablePage.css';
 
 interface TableComponentProps {
   table: Table<Post>;

@@ -1,4 +1,4 @@
-import './LoadingSpinner.css';
+import './../../styles/LoadingSpinner.css';
 
 const LoadingSpinner: React.FC = () => (
   <div className="spinner" role="status" aria-label="Loading">

@@ -1,7 +1,7 @@
 .button {
   padding: 6px 12px;
   font-size: 14px;
-  height: 32px;
+  height: 2rem;
   transition: background-color 0.2s ease;
   margin: 0;
 }

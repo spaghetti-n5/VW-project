@@ -14,7 +14,7 @@ import Button from '../components/shared/Button';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { usePostStore } from '../store/postStore';
 import SortingButtons from '../components/DataTable/SortingButtons';
-import './../components/DataTable/DataTable.css';
+import './../styles/TablePage.css';
 
 // Lazy load components
 const Modal = lazy(() => import('../components/DataTable/Modal'));
@@ -167,7 +167,7 @@ const TablePage: React.FC = () => {
   return (
     <main className="container">
       <h1>All posts</h1>
-      {error && !loading ? (
+      {!loading && error ? (
         <Suspense fallback={<LoadingSpinner />}>
           <ErrorAlert
             message={error}

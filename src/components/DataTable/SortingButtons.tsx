@@ -1,7 +1,7 @@
 import { Table } from '@tanstack/react-table';
 import { Post } from '../../types/shared';
 import Button from '../shared/Button';
-import './DataTable.css';
+import './../../styles/TablePage.css';
 
 interface SortingButtonsProps {
   table: Table<Post>;

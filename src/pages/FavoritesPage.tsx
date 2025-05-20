@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -9,12 +9,14 @@ import {
 } from '@tanstack/react-table';
 import { Post } from '../types/shared';
 import { usePostStore } from '../store/postStore';
-import './../components/DataTable/DataTable.css';
 import TableComponent from '../components/DataTable/TableComponent';
 import Button from '../components/shared/Button';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { fetchPosts } from '../utils/api';
 import SortingButtons from '../components/DataTable/SortingButtons';
+import './../styles/TablePage.css';
+
+const ErrorAlert = lazy(() => import('../components/shared/ErrorAlert'));
 
 const FavoritesPage: React.FC = () => {
   const { favorites, toggleFavorite, searchText } = usePostStore();
@@ -115,24 +117,23 @@ const FavoritesPage: React.FC = () => {
 
   return (
     <main className="container">
-      <h1>Favorite Posts</h1>
-      {error ? (
-        <div>{error}</div>
-      ) : loading ? (
-        <LoadingSpinner />
-      ) : favoriteData.length === 0 ? (
-        <p>No favorite posts yet.</p>
-      ) : (
-        <>
-          {isMobile ? <SortingButtons table={table} /> : null}
-          <TableComponent
-            table={table}
-            isEmpty={!filteredData.length}
-            loading={loading}
-            isMobile={isMobile}
+      <h1>Favorites posts</h1>
+      {!loading && error ? (
+        <Suspense fallback={<LoadingSpinner />}>
+          <ErrorAlert
+            message={error}
+            onRetry={() => fetchPosts()}
+            onDismiss={() => setError(null)}
           />
-        </>
-      )}
+        </Suspense>
+      ) : null}
+      {isMobile ? <SortingButtons table={table} /> : null}
+      <TableComponent
+        table={table}
+        isEmpty={!filteredData.length}
+        loading={loading}
+        isMobile={isMobile}
+      />
     </main>
   );
 };

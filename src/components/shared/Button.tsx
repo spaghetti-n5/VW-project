@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import './Button.css';
+import './../../styles/Button.css';
 
 interface ButtonProps {
   variant?:
