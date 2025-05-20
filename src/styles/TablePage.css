@@ -1,13 +1,6 @@
-:root {
-  --danger-color: #ff4d4f;
-  --text-color: #1a1a1a;
-  --error-bg: #fff1f0;
-}
-
 h1 {
   font-size: 1.5rem;
   margin: 1rem 0;
-  color: var(--text-color);
   font-weight: 500;
 }
 
@@ -22,7 +15,7 @@ h1 {
   border: 1px solid var(--danger-color);
   border-radius: 4px;
   font-size: 0.9rem;
-  color: var(--text-color);
+  color: var(--danger-color);
 }
 
 .error-actions {
@@ -30,20 +23,24 @@ h1 {
   gap: 10px;
 }
 
+main.container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
 /* Table wrapper for overflow handling */
 .table-wrapper {
   overflow-x: auto;
-  margin-bottom: 1rem;
   font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-/* Truncation for body text in table and cards could be added 
-.body-text {
-  max-width: 300px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-} */
+.table-view {
+  flex-grow: 1;
+}
 
 /* Sortable column headers */
 th.sortable {
@@ -101,60 +98,68 @@ th.sortable {
   border: 1px solid #ccc;
   border-radius: 4px;
   margin: 0 !important; /* override default margin */
+  font-size: 0.8rem;
 }
 
 /* Modal styles */
 .modal h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: var(--text-color);
   font-weight: 500;
 }
 
 .modal h3 {
   font-size: 1rem;
-  color: var(--text-color);
 }
 
 .modal p {
   font-size: 0.9rem;
-  color: var(--text-color);
 }
 
 .modal label {
   font-size: 0.9rem;
-  color: var(--text-color);
 }
 
 .modal-input,
 .modal-textarea {
   font-size: 0.9rem;
   background: var(--background);
-  color: var(--text-color);
 }
 
 /* Pagination styles */
 .pagination {
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  flex-wrap: wrap;
+  z-index: 10;
+  margin: 1rem 0;
 }
 
 .pagination div {
   display: flex;
-  flex-wrap: wrap;
+  font-size: 0.7rem;
+  align-items: center;
+}
+
+.pagination span {
+  min-width: 100px;
 }
 
 .pagination button {
   margin-right: 0.3rem;
+  min-width: 80px;
 }
 
 .pagination select {
   padding: 0.3rem;
   font-size: 0.85rem;
   margin: 0;
+  font-size: 0.7rem;
+  height: 2rem;
+  min-width: 100px;
 }
 
 .empty-state {
@@ -186,6 +191,10 @@ th.sortable {
   }
   .sort-buttons {
     display: flex;
+  }
+
+  .pagination {
+    flex-direction: column;
   }
 }
 

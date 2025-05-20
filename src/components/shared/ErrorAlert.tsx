@@ -1,5 +1,5 @@
 import Button from './Button';
-import '../DataTable/DataTable.css';
+import './../../styles/TablePage.css';
 
 interface ErrorAlertProps {
   message: string;

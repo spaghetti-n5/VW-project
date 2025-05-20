@@ -1,1 +1,12 @@
 @import '@picocss/pico/css/pico.min.css';
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+:root {
+  --danger-color: #ff4d4f;
+  --error-bg: #fff1f0;
+}

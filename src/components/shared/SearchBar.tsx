@@ -1,4 +1,4 @@
-import './../DataTable/DataTable.css';
+import './../../styles/TablePage.css';
 
 interface SearchBarProps {
   value: string;

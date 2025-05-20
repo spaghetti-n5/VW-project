@@ -1,6 +1,6 @@
 import { ModalType, Post } from '../../types/shared';
 import Button from '../shared/Button';
-import './DataTable.css';
+import './../../styles/TablePage.css';
 
 interface ModalProps {
   isOpen: boolean;

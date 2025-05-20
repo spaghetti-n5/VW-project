@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/react-table';
 import Button from './Button';
-import '../DataTable/DataTable.css';
+import './../../styles/TablePage.css';
 
 interface PaginationProps<T> {
   table: Table<T>;
