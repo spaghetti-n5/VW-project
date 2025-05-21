@@ -1033,6 +1033,8 @@ dist/assets/index-D1KrFZC0.js        285.42 kB │ gzip: 89.01 kB
 
 Core Web Vitals are a subset of web performance metrics from Google that help developers understand how users experience a web page. These metrics focus on three primary areas of user experience: the speed, interactivity, and visual stability of a webpage.
 
+<img src="./assets/CWV.png" alt="CWV" width="300" />
+
 ### Lighthouse
 
 Lighthouse is a powerful tool developed by Google for auditing the quality of web pages, especially useful for performance and accessibility checks.
@@ -1040,6 +1042,14 @@ Lighthouse is a powerful tool developed by Google for auditing the quality of we
 **Accessibility:** Use of ARIA roles, color contrast, keyboard navigation
 **Best Practices:** Use of HTTPS, valid image sizes, JavaScript errors
 **SEO:** Meta tags, link structure, robots.txt
+
+Desktop:
+
+<img src="./assets/LighthouseDesktop.png" alt="LighthouseDesktop" width="300" />
+
+Mobile:
+
+<img src="./assets/LighthouseMobile.png" alt="LighthouseMobile" width="300" />
 
 ## Improvements
 
