@@ -2,9 +2,11 @@
 
 Author: Eleonora Baret
 
+Technical documentation: [here](https://github.com/spaghetti-n5/VW-project/blob/main/TechDoc.md)
+
 ## Project description
 
-The VW-project is a single-page application (SPA) developed by spaghetti-n5 and hosted via Github Pages at https://spaghetti-n5.github.io/VW-project/.
+The VW-project is a single-page application (SPA) developed by spaghetti-n5 and hosted at https://spaghetti-n5.github.io/VW-project/
 
 It’s a prototype project built with React, TypeScript, Vite, and TanStack Table, designed to showcase modern web development skills.
 
@@ -17,7 +19,7 @@ It emphasizes performance optimizations, accessibility (WCAG 2.1 Level AA), and 
 ### Tech Stack:
 
 - **Frontend:** React, TypeScript, React Router (for routing).
-- **Build Tool:**: Vite (with esbuild and Rollup for fast development and optimized builds).
+- **Build Tool:** Vite (with esbuild and Rollup for fast development and optimized builds).
 - **Styling:** Pico.css (for minimal, WCAG-compliant CSS) and modular CSS (\*.module.css).
 - **Table Library:** TanStack Table (for data grid functionality).
 - **State Management:** Custom Zustand store (postStore) for favorites and search.
@@ -30,7 +32,7 @@ It emphasizes performance optimizations, accessibility (WCAG 2.1 Level AA), and 
 
 - Displays a table of posts with columns for ID, Title, Body, and Actions (View, Edit, Delete, Favorite).
 - Supports adding, editing, and deleting posts via a modal.
-- Allows favoriting posts, with a dedicated “Favorites” view.
+- Allows to add favorite posts, with a dedicated “Favorites” view.
 
 #### Favorites
 
@@ -107,11 +109,15 @@ The app will be available at http://localhost:5173/VW-project/
 ## Eslint and Prettier configuration to ensure code quality
 
 Eslint scripts:
+
 `npm run lint`: checks for issues without modifying files.
+
 `npm run lint:fix`: checks and applies fixes where possible. It runs ESLint with the `--fix` flag to automatically correct fixable linting issues (e.g., formatting, simple React errors) in the project’s source files.
 
 Prettier scripts:
+
 `npm run format`: it scans specified files and automatically formats them according to Prettier’s rules (defined in .prettierrc or defaults)
+
 `npm run check-format`: it scans specified files and checks if they conform to Prettier’s formatting rules without modifying them. It outputs a report in the terminal displaying a lists of files that deviate from the expected format and it exits with a non-zero status code if any files are incorrectly formatted.
 
 ## CI/CD pipelines
@@ -183,13 +189,17 @@ The Pagination component enables users to navigate through table data (e.g., pos
 
 The Pagination component was designed with specific goals to align with the VW-project’s requirements for simplicity, reusability, and a modern, user-friendly UI.
 
-1. Easy integration with TanStack Table: use @tanstack/react-table’s Table<T> interface to manage pagination state and logic.
+1. **Easy integration with TanStack Table:** use @tanstack/react-table’s Table<T> interface to manage pagination state and logic.
+
 2. The root `<div className={styles.pagination}>` uses CSS Modules for layout, while Pico.css styles `<Button>` and `<select>` elements, creating a clean, professional look.
-3. Simple Page Size Options: Hardcode page size options [5, 10, 20] in the `<select>` element. Common page sizes (5, 10, 20) balance usability and performance for typical datasets (e.g., posts), avoiding overwhelming users with too many options. Hardcoding avoids complex configuration, fitting the project’s minimalist approach. The array can be updated or made configurable if needed (e.g., via props).
-4. Two-Section Layout: Structure the component with two `<div>` sections: one for navigation buttons and one for page info and size selector. I made this decision for clarity reasons: separating navigation (First, Previous, Next, Last) from status (Page X of Y) and controls (Show N) improves readability and user focus.
-5. Responsive Design: The layout (likely flexbox in Pagination.module.css) adapts to different screen sizes, ensuring usability on mobile and desktop.
-   Modularity: Allows independent styling of each section via CSS Modules.
-6. Generic Type for Reusability: Use a generic type PaginationProps<T> to accept any Table<T> instance. It allows Pagination to work with any table data type (e.g., Post for posts, or future types like User), making it reusable across the app or other projects. Ensures TypeScript enforces correct data types, reducing errors when integrating with different tables.
+
+3. **Simple Page Size Options:** Hardcode page size options [5, 10, 20] in the `<select>` element. Common page sizes (5, 10, 20) balance usability and performance for typical datasets (e.g., posts), avoiding overwhelming users with too many options. Hardcoding avoids complex configuration, fitting the project’s minimalist approach. The array can be updated or made configurable if needed (e.g., via props).
+
+4. **Two-Section Layout:** Structure the component with two `<div>` sections: one for navigation buttons and one for page info and size selector. I made this decision for clarity reasons: separating navigation (First, Previous, Next, Last) from status (Page X of Y) and controls (Show N) improves readability and user focus.
+
+5. **Responsive Design:** The layout (likely flexbox in Pagination.module.css) adapts to different screen sizes, ensuring usability on mobile and desktop.
+
+6. **Generic Type for Reusability:** Use a generic type PaginationProps<T> to accept any Table<T> instance. It allows Pagination to work with any table data type (e.g., Post for posts, or future types like User), making it reusable across the app or other projects. Ensures TypeScript enforces correct data types, reducing errors when integrating with different tables.
 
 #### Reusability
 
@@ -231,8 +241,6 @@ return (
 
 I can reuse the component in a new page of the same repo for users or inventory, by passing a different table instance.
 It could also be reused in another project needing table pagination only needing @tanstack/react-table, and a Button component.
-
-It' currently reused in PostsPage for both All Posts and Favorites views, filtering data dynamically.
 
 ```tsx
 import { usePostStore } from "../store/postStore";
@@ -365,6 +373,7 @@ interface ButtonProps {
   disabled?: boolean;
   ariaLabel?: string;
   ariaPressed?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -374,9 +383,10 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   ariaLabel,
   ariaPressed,
+  type = "button",
 }) => (
   <button
-    type="button"
+    type={type}
     className={`${styles.button} ${variant ? variant : ""}`}
     onClick={onClick}
     disabled={disabled}
@@ -395,7 +405,7 @@ export default Button;
 
 The Button component was crafted to balance simplicity, flexibility, and accessibility within the VW-project’s requirements.
 
-**TypeScript and Type-Safe Props**:
+1. **TypeScript and Type-Safe Props**:
 
 Use TypeScript with a ButtonProps interface to define props, including a union type for variant and optional props like disabled and custom ariaLabel.
 
@@ -403,21 +413,22 @@ Use TypeScript with a ButtonProps interface to define props, including a union t
   The **variant union type** ('secondary' | 'contrast' | ...) enforces valid styles, and `React.FC<ButtonProps>` provides type inference for props.
 - **Styling with Pico.css and CSS Modules:** combine Pico.css for baseline button styling and CSS Modules (Button.module.css) for custom styles, applied via `styles.button` and variant.
 
-**Accessible Button Attributes:**
-Include aria-disabled and aria-label props, with type="button" and disabled handling.
+2. **Accessible Button Attributes:**
+
+Include aria-disabled and aria-label props, with type="button" default and disabled handling.
 
 - **_Accessibility:_** `aria-disabled={disabled}` ensures screen readers correctly interpret disabled states, as used in Pagination’s navigation buttons.
 - **_Semantic HTML:_** add **type="button"** when button is used for JavaScript actions (e.g., opening modals, toggling content, navigation) and not for form submission. This avoids unintended behavior if the button is placed inside a `<form>`, where the default **type="submit"** might cause the form to submit unexpectedly.
 - **_User Experience:_** disabled prop visually and functionally disables buttons.
 
-**Variant System:**
+3. **Variant System:**
 
 Define a variant prop with specific options (secondary, contrast, outline, etc.) instead of fully dynamic classes.
 
 - **_Consistency:_** Predefined variants ensure buttons align with the project’s design system
 - **_Simplicity:_** Limits variants to a manageable set, reducing complexity for a small project.
 
-**Minimal Prop Set:**
+4. **Minimal Prop Set:**
 
 Restrict props to variant, children, onClick, disabled, and ariaLabel, omitting advanced features like size or icon.
 
@@ -448,7 +459,7 @@ It depends only on react and Button.module.css, with optional Pico.css for styli
 
 2. Extensibility for New Features
 
-Add props like size (small, large), icon, or type (submit, reset) to support more use
+Add props like size (small, large), icon to support more usecases:
 
 ```tsx
 interface ButtonProps {
@@ -524,19 +535,6 @@ Cons:
 - Limited Interactivity: Can’t handle hover or focus events without modification (only css classes :hover are used)
 - UX Constraints: Advanced features (e.g., tooltips on hover) need extra logic.
 
-##### Single Button Type vs. Form Support
-
-Hardcode **_type="button"_** instead of supporting submit or reset for forms.
-
-Pros:
-
-- Prevents accidental form submissions, suitable for standalone buttons in Pagination.
-- Aligns with current use cases (e.g., navigation, toggling favorites).
-
-Cons:
-
-- Extensibility: Can’t use directly in forms (e.g., submitting a new post) without **_type="submit"_**, requires prop addition for form support
-
 The Button component is a versatile, accessible, and lightweight solution for VW-project, balancing simplicity with customization. Its design decisions—TypeScript props, Pico.css/CSS Modules styling, and accessibility features—ensure it meets the project’s needs for a consistent, VW-themed UI. Trade-offs like limited variants and props prioritize ease of use and fast prototyping, with extensibility for future needs.
 
 ---
@@ -601,21 +599,23 @@ export default SearchBar;
 
 The SearchBar component was designed to meet the VW-project’s requirements for a simple, accessible, and reusable search input, particularly for filtering posts in PostsPage.
 
-**TypeScript and Type-Safe Props**
+1. **TypeScript and Type-Safe Props**
 
 Use TypeScript with a SearchBarProps interface to define props, including required value and onChange, and optional placeholder, label, name, and hideLabel.
 
-- **_Type Safety_**: Ensures props are correctly typed (e.g., value: string, onChange: (value: string) => void), preventing errors in a TypeScript project.
+2. **_Type Safety_**:
+
+Ensures props are correctly typed (e.g., value: string, onChange: (value: string) => void), preventing errors in a TypeScript project.
 
 - **_Flexibility_**: Optional props allow customization (e.g., custom placeholder or hidden labels) while maintaining a minimal API.
 
 - **_Controlled Component_**: value and onChange make the input controlled, syncing with usePostStore’s searchText for real-time filtering.
 
-**Styling with CSS Modules and Pico.css**
+3. **Styling with CSS Modules and Pico.css**
 
 Use CSS Modules `(SearchBar.module.css)` for scoped styles (styles.searchLabel, styles.searchInput) and rely on Pico.css for baseline input styling.
 
-**Accessible Input and Label**
+4. **Accessible Input and Label**
 
 Include label, name, id, htmlFor, and aria-label for accessibility, with a hideLabel prop to visually hide the label.
 
@@ -624,7 +624,7 @@ Include label, name, id, htmlFor, and aria-label for accessibility, with a hideL
 - **_Semantic HTML:_** `type="search"` signals a search input, improving browser and assistive technology support.
 - **_Testing:_** `data-testid="search-input"` enables easy test targeting (e.g., in Jest/React Testing Library).
 
-**Controlled Input Design**
+5. **Controlled Input Design**
 
 Implement a controlled input with value and onChange props, omitting uncontrolled features (e.g., defaultValue).
 
@@ -632,7 +632,7 @@ Implement a controlled input with value and onChange props, omitting uncontrolle
 - Ensures the input’s value is always managed by the parent component, reducing bugs.
 - Avoids complexity of uncontrolled inputs
 
-**Default Placeholder and Minimal Props**
+6. **Default Placeholder and Minimal Props**
 
 Provide a default placeholder and limit props to essentials (value, onChange, etc.), omitting advanced features like onFocus or clearButton.
 
@@ -710,22 +710,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onClear, icon, ...props }) => (
 ```
 
 #### Trade-offs Made During Development
-
-##### Controlled Input vs. Uncontrolled
-
-Use controlled input (value, onChange) instead of uncontrolled (defaultValue).
-
-Pros:
-
-- State Syncing: Syncs with usePostStore’s searchText, enabling real-time filtering.
-- Predictability: Ensures the input reflects the parent’s state, reducing bugs.
-
-Cons:
-
-- Parent Responsibility: Requires the parent to manage state, adding minor complexity.
-- No Default Value: Uncontrolled inputs are simpler for static forms but less dynamic.
-
-_Improvements_: add defaultValue prop for uncontrolled use cases, though not needed for VW-project.
 
 ##### No Clear Button vs. Enhanced UX
 
@@ -1045,13 +1029,281 @@ I also performed keyboard navigation tests, for example:
 
 ## Self review and improvements
 
-- To simulate persistence of the posts (edit/delete/create), save the updated data to localStorage. On mount, check localStorage before fetching from JSONPlaceholder.
-- Debouncing Search: Add a debounce mechanism to setSearchText to reduce re-renders on rapid typing.
-- Reset Action: Add a resetFavorites action to clear favorites for user convenience.
-- Add Cypress tests in CI pipeline
-- Update icon in tab navigation
-- Update LoadingSpinner to use a nice animation
-- Error Bundler
-- Extract API query to separate component, so it can be reused
-- Husky pre commit check
-- PR preview deployment
+1. ### Simulate Persistence of Posts with localStorage
+
+Save edited, deleted, or created posts to localStorage and check it before fetching from JSONPlaceholder on mount to simulate persistence, given JSONPlaceholder’s mock nature.
+
+_Current State:_
+
+- Posts are stored in local React state (data in PostsPage.tsx via useState) and fetched from JSONPlaceholder on mount (fetchPosts in useEffect).
+  Changes (edit/delete/create) update the local data state but are lost on refresh because JSONPlaceholder doesn’t persist data server-side, and no client-side storage is used for posts.
+- Favorites are persisted in localStorage via Zustand (usePostStore), but posts themselves are not.
+
+_Gaps:_
+
+- No localStorage integration for posts, so CRUD actions reset on refresh.
+- No logic to prioritize localStorage data over JSONPlaceholder on mount.
+
+**Proposed Improvement:**
+
+- Modify `PostsPage.tsx` to save data to localStorage after CRUD actions.
+- On mount, check localStorage for saved posts; fetch from JSONPlaceholder only if empty.
+- Update handleModalSubmit and handleDelete to persist changes.
+
+2. ### Debouncing Search
+   Add a debounce mechanism to _setSearchText_ to reduce re-renders during rapid typing in the SearchBar.
+
+_Current State:_
+
+- The SearchBar updates searchText in the Zustand store (setSearchText) on every keystroke (onChange={(e) => onChange(e.target.value)}).
+- This triggers re-renders of TableComponent for each character, potentially causing performance issues with large datasets or slow devices.
+
+_Gaps:_
+
+- Excessive re-renders on rapid typing degrade performance.
+- No delay to batch search updates.
+
+**Proposed Improvement:**
+
+Use a useDebounce hook to delay setSearchText by 300ms, reducing re-renders.
+Apply debouncing in SearchBar’s onChange handler.
+
+```tsx
+import { useState, useEffect } from "react";
+
+export function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+```
+
+```tsx
+const debouncedValue = useDebounce(inputValue, 300);
+
+useEffect(() => {
+  onChange(debouncedValue);
+}, [debouncedValue, onChange]);
+```
+
+3. ### Reset Favorites Action
+   Add a resetFavorites action to clear all favorited posts for user convenience.
+
+_Current State:_
+
+- Favorites are stored in Zustand (usePostStore) as an array of post IDs, persisted in localStorage.
+- Users can toggle favorites individually but have no way to clear all favorites at once.
+
+_Gaps_:
+
+- Lack of a bulk reset option reduces user control over favorites.
+- No UI element (e.g., button) to trigger the reset.
+
+**Proposed Improvement:**
+
+- Add resetFavorites to usePostStore.
+- Add a “Clear Favorites” button in the /favorites view (PostsPage.tsx).
+
+4. ### Update Icon in Tab Navigation
+   Update the favicon or tab icon to improve branding and visual appeal.
+
+_Current State:_
+
+- The app uses a default Vite favicon (public/favicon.ico)
+
+_Gaps_:
+
+- No custom favicon reflecting the VW-project.
+
+**_Proposed Improvement:_**
+
+- Add a custom favicon (e.g., a logo or “VW” icon) to public/.
+- Update index.html to reference it.
+
+5. ### Update LoadingSpinner to Use a Nice Animation
+
+   The spinner’s design is minimal, enhance the LoadingSpinner with a visually appealing animation.
+
+6. ### Error Bundler
+   Implement an error bundler to centralize and manage errors
+
+_Current State:_
+
+- Errors are handled individually in PostsPage.tsx (e.g., setError for fetchPosts, handleModalSubmit, handleDelete).
+- No centralized error handling mechanism (e.g., error boundary, global error state).
+
+_Gaps_:
+
+- Error handling is fragmented, making it hard to manage or log errors consistently.
+- No React error boundary for component-level errors (e.g., rendering failures)
+
+**_Proposed Improvement:_**
+
+- Add a React ErrorBoundary component to catch rendering errors.
+
+```tsx
+import { Component, ReactNode } from "react";
+import ErrorAlert from "./ErrorAlert";
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: string | null;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  state: ErrorBoundaryState = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error: error.message };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <ErrorAlert
+          message={this.state.error || "Something went wrong."}
+          onRetry={() => this.setState({ hasError: false, error: null })}
+          onDismiss={() => this.setState({ hasError: false, error: null })}
+        />
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export default ErrorBoundary;
+```
+
+```tsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PostsPage from "./pages/PostsPage";
+import ErrorBoundary from "./components/shared/ErrorBoundary";
+
+function App() {
+  return (
+    <BrowserRouter basename="/VW-project">
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<PostsPage />} />
+          <Route path="/favorites" element={<PostsPage />} />
+        </Routes>
+      </ErrorBoundary>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+7. ### Extract API Query to Separate Component
+
+Extract API queries into custom hook for modularity.
+
+_Current State:_
+
+- API calls (fetchPosts, addPost, editPost, deletePost) are defined in utils/api.ts and used directly in PostsPage.tsx.
+  No reusable component or hook encapsulates API logic, leading to duplication if used elsewhere (e.g., future pages).
+
+_Gaps_:
+
+- API logic is tightly coupled to PostsPage, reducing reusability.
+- Error and loading states are managed per component.
+
+**_Proposed Improvement:_**
+
+```tsx
+// costum hook for fetching data
+import { useState, useEffect } from "react";
+
+const useFetch = (url) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, { signal });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Fetch aborted");
+        } else {
+          console.error("Error fetching data:", error);
+          setError(error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [url]);
+
+  return { data, loading, error };
+};
+
+export default useFetch;
+```
+
+8. ### Add Cypress Tests in CI Pipeline
+   Integrate Cypress end-to-end (E2E) tests into the CI pipeline to ensure functionality.
+
+_Current State:_
+
+- Unit tests exist are added to CI pipeline
+
+_Issues:_
+
+- No E2E tests to simulate user interactions (e.g., CRUD, filtering, favoriting).
+- No CI pipeline to run tests automatically on push/PR.
+
+**Proposed Improvement:**
+
+- Add Cypress with tests for all key flows (e.g., create post, sort table, reset favorites).
+- Set up a GitHub Actions workflow to run Cypress tests on push/PR.
+
+9. ### Husky Pre-Commit Check
+   Add Husky to run linting, prittier and tests before commits to ensure code quality.
+
+_Current State:_
+
+- No Husky or pre-commit hooks are mentioned, suggesting manual linting/testing.
+
+_Gaps:_
+
+- No automated checks to catch errors before commits.
+- Risk of pushing broken code (blocked on PR CI checks)
+
+10. ### PR Preview Deployment
+    Enable preview deployments for pull requests to test changes before merging.
+
+_Current State:_
+
+- No PR preview setup for testing changes in a staging environment.
+
+_Gaps:_
+
+- No way to preview PRs without merging or local testing.
