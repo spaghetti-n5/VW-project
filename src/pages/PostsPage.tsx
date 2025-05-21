@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense, useCallback } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -81,12 +81,12 @@ const PostsPage: React.FC = () => {
   };
 
   // Modal handlers
-  const openModal = (type: ModalType, post: Post = { id: 0, title: '', body: '' }) => {
+  const openModal = useCallback((type: ModalType, post: Post = { id: 0, title: '', body: '' }) => {
     setModalType(type);
     setCurrentPost(post);
     setIsModalOpen(true);
     setError(null);
-  };
+  }, []);
 
   const handleModalSubmit = async (post: Post) => {
     try {
