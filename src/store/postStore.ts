@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface PostStore {
   favorites: number[];
@@ -7,14 +8,19 @@ interface PostStore {
   toggleFavorite: (postId: number) => void;
 }
 
-export const usePostStore = create<PostStore>((set) => ({
-  favorites: [],
-  searchText: '',
-  setSearchText: (searchText) => set({ searchText }),
-  toggleFavorite: (postId) =>
-    set((state) => ({
-      favorites: state.favorites.includes(postId)
-        ? state.favorites.filter((id) => id !== postId)
-        : [...state.favorites, postId],
-    })),
-}));
+export const usePostStore = create<PostStore>()(
+  persist(
+    (set) => ({
+      favorites: [],
+      searchText: '',
+      setSearchText: (searchText) => set({ searchText }),
+      toggleFavorite: (postId) =>
+        set((state) => ({
+          favorites: state.favorites.includes(postId)
+            ? state.favorites.filter((id) => id !== postId)
+            : [...state.favorites, postId],
+        })),
+    }),
+    { name: 'post-store' }
+  )
+);
