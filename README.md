@@ -373,7 +373,7 @@ interface ButtonProps {
   disabled?: boolean;
   ariaLabel?: string;
   ariaPressed?: boolean;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -383,7 +383,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   ariaLabel,
   ariaPressed,
-  type = 'button',
+  type = "button",
 }) => (
   <button
     type={type}
@@ -412,7 +412,6 @@ Use TypeScript with a ButtonProps interface to define props, including a union t
 - **_ReactNode for Children:_** Supports diverse content (e.g., text, icons, or JSX), as seen in Pagination’s text labels ("First," "Next").
   The **variant union type** ('secondary' | 'contrast' | ...) enforces valid styles, and `React.FC<ButtonProps>` provides type inference for props.
 - **Styling with Pico.css and CSS Modules:** combine Pico.css for baseline button styling and CSS Modules (Button.module.css) for custom styles, applied via `styles.button` and variant.
-
 
 2. **Accessible Button Attributes:**
 
@@ -604,14 +603,13 @@ The SearchBar component was designed to meet the VW-project’s requirements for
 
 Use TypeScript with a SearchBarProps interface to define props, including required value and onChange, and optional placeholder, label, name, and hideLabel.
 
-2. **_Type Safety_**: 
+2. **_Type Safety_**:
 
 Ensures props are correctly typed (e.g., value: string, onChange: (value: string) => void), preventing errors in a TypeScript project.
 
-  - **_Flexibility_**: Optional props allow customization (e.g., custom placeholder or hidden labels) while maintaining a minimal API.
+- **_Flexibility_**: Optional props allow customization (e.g., custom placeholder or hidden labels) while maintaining a minimal API.
 
-  - **_Controlled Component_**: value and onChange make the input controlled, syncing with usePostStore’s searchText for real-time filtering.
-
+- **_Controlled Component_**: value and onChange make the input controlled, syncing with usePostStore’s searchText for real-time filtering.
 
 3. **Styling with CSS Modules and Pico.css**
 
@@ -1035,13 +1033,13 @@ I also performed keyboard navigation tests, for example:
 
 Save edited, deleted, or created posts to localStorage and check it before fetching from JSONPlaceholder on mount to simulate persistence, given JSONPlaceholder’s mock nature.
 
-*Current State:*
+_Current State:_
 
 - Posts are stored in local React state (data in PostsPage.tsx via useState) and fetched from JSONPlaceholder on mount (fetchPosts in useEffect).
-Changes (edit/delete/create) update the local data state but are lost on refresh because JSONPlaceholder doesn’t persist data server-side, and no client-side storage is used for posts.
+  Changes (edit/delete/create) update the local data state but are lost on refresh because JSONPlaceholder doesn’t persist data server-side, and no client-side storage is used for posts.
 - Favorites are persisted in localStorage via Zustand (usePostStore), but posts themselves are not.
 
-*Gaps:*
+_Gaps:_
 
 - No localStorage integration for posts, so CRUD actions reset on refresh.
 - No logic to prioritize localStorage data over JSONPlaceholder on mount.
@@ -1053,14 +1051,14 @@ Changes (edit/delete/create) update the local data state but are lost on refresh
 - Update handleModalSubmit and handleDelete to persist changes.
 
 2. ### Debouncing Search
-Add a debounce mechanism to *setSearchText* to reduce re-renders during rapid typing in the SearchBar.
+   Add a debounce mechanism to _setSearchText_ to reduce re-renders during rapid typing in the SearchBar.
 
-*Current State:*
+_Current State:_
 
 - The SearchBar updates searchText in the Zustand store (setSearchText) on every keystroke (onChange={(e) => onChange(e.target.value)}).
 - This triggers re-renders of TableComponent for each character, potentially causing performance issues with large datasets or slow devices.
 
-*Gaps:*
+_Gaps:_
 
 - Excessive re-renders on rapid typing degrade performance.
 - No delay to batch search updates.
@@ -1071,7 +1069,7 @@ Use a useDebounce hook to delay setSearchText by 300ms, reducing re-renders.
 Apply debouncing in SearchBar’s onChange handler.
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -1090,20 +1088,20 @@ export function useDebounce<T>(value: T, delay: number): T {
 ```tsx
 const debouncedValue = useDebounce(inputValue, 300);
 
-  useEffect(() => {
-    onChange(debouncedValue);
-  }, [debouncedValue, onChange]);
-  ```
+useEffect(() => {
+  onChange(debouncedValue);
+}, [debouncedValue, onChange]);
+```
 
 3. ### Reset Favorites Action
-Add a resetFavorites action to clear all favorited posts for user convenience.
+   Add a resetFavorites action to clear all favorited posts for user convenience.
 
-*Current State:*
+_Current State:_
 
 - Favorites are stored in Zustand (usePostStore) as an array of post IDs, persisted in localStorage.
 - Users can toggle favorites individually but have no way to clear all favorites at once.
 
-*Gaps*:
+_Gaps_:
 
 - Lack of a bulk reset option reduces user control over favorites.
 - No UI element (e.g., button) to trigger the reset.
@@ -1114,43 +1112,45 @@ Add a resetFavorites action to clear all favorited posts for user convenience.
 - Add a “Clear Favorites” button in the /favorites view (PostsPage.tsx).
 
 4. ### Update Icon in Tab Navigation
-Update the favicon or tab icon to improve branding and visual appeal.
+   Update the favicon or tab icon to improve branding and visual appeal.
 
-*Current State:*
+_Current State:_
 
 - The app uses a default Vite favicon (public/favicon.ico)
 
-*Gaps*:
+_Gaps_:
 
 - No custom favicon reflecting the VW-project.
 
-***Proposed Improvement:***
+**_Proposed Improvement:_**
 
 - Add a custom favicon (e.g., a logo or “VW” icon) to public/.
 - Update index.html to reference it.
 
 5. ### Update LoadingSpinner to Use a Nice Animation
-The spinner’s design is minimal, enhance the LoadingSpinner with a visually appealing animation.
+
+   The spinner’s design is minimal, enhance the LoadingSpinner with a visually appealing animation.
 
 6. ### Error Bundler
-Implement an error bundler to centralize and manage errors
+   Implement an error bundler to centralize and manage errors
 
-*Current State:*
+_Current State:_
 
 - Errors are handled individually in PostsPage.tsx (e.g., setError for fetchPosts, handleModalSubmit, handleDelete).
 - No centralized error handling mechanism (e.g., error boundary, global error state).
 
-*Gaps*:
+_Gaps_:
 
 - Error handling is fragmented, making it hard to manage or log errors consistently.
 - No React error boundary for component-level errors (e.g., rendering failures)
 
-***Proposed Improvement:***
+**_Proposed Improvement:_**
+
 - Add a React ErrorBoundary component to catch rendering errors.
 
 ```tsx
-import { Component, ReactNode } from 'react';
-import ErrorAlert from './ErrorAlert';
+import { Component, ReactNode } from "react";
+import ErrorAlert from "./ErrorAlert";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -1172,7 +1172,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (this.state.hasError) {
       return (
         <ErrorAlert
-          message={this.state.error || 'Something went wrong.'}
+          message={this.state.error || "Something went wrong."}
           onRetry={() => this.setState({ hasError: false, error: null })}
           onDismiss={() => this.setState({ hasError: false, error: null })}
         />
@@ -1186,9 +1186,9 @@ export default ErrorBoundary;
 ```
 
 ```tsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PostsPage from './pages/PostsPage';
-import ErrorBoundary from './components/shared/ErrorBoundary';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PostsPage from "./pages/PostsPage";
+import ErrorBoundary from "./components/shared/ErrorBoundary";
 
 function App() {
   return (
@@ -1210,21 +1210,21 @@ export default App;
 
 Extract API queries into custom hook for modularity.
 
-*Current State:*
+_Current State:_
 
 - API calls (fetchPosts, addPost, editPost, deletePost) are defined in utils/api.ts and used directly in PostsPage.tsx.
-No reusable component or hook encapsulates API logic, leading to duplication if used elsewhere (e.g., future pages).
+  No reusable component or hook encapsulates API logic, leading to duplication if used elsewhere (e.g., future pages).
 
-*Gaps*:
+_Gaps_:
 
 - API logic is tightly coupled to PostsPage, reducing reusability.
 - Error and loading states are managed per component.
 
-***Proposed Improvement:***
+**_Proposed Improvement:_**
 
 ```tsx
 // costum hook for fetching data
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useFetch = (url) => {
   const [data, setData] = useState(null);
@@ -1239,15 +1239,15 @@ const useFetch = (url) => {
       try {
         const response = await fetch(url, { signal });
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const result = await response.json();
         setData(result);
       } catch (error) {
-        if (error.name === 'AbortError') {
-          console.log('Fetch aborted');
+        if (error.name === "AbortError") {
+          console.log("Fetch aborted");
         } else {
-          console.error('Error fetching data:', error);
+          console.error("Error fetching data:", error);
           setError(error);
         }
       } finally {
@@ -1269,13 +1269,13 @@ export default useFetch;
 ```
 
 8. ### Add Cypress Tests in CI Pipeline
-Integrate Cypress end-to-end (E2E) tests into the CI pipeline to ensure functionality.
+   Integrate Cypress end-to-end (E2E) tests into the CI pipeline to ensure functionality.
 
-*Current State:*
+_Current State:_
 
 - Unit tests exist are added to CI pipeline
 
-*Issues:*
+_Issues:_
 
 - No E2E tests to simulate user interactions (e.g., CRUD, filtering, favoriting).
 - No CI pipeline to run tests automatically on push/PR.
@@ -1286,23 +1286,24 @@ Integrate Cypress end-to-end (E2E) tests into the CI pipeline to ensure function
 - Set up a GitHub Actions workflow to run Cypress tests on push/PR.
 
 9. ### Husky Pre-Commit Check
-Add Husky to run linting, prittier and tests before commits to ensure code quality.
+   Add Husky to run linting, prittier and tests before commits to ensure code quality.
 
-*Current State:*
+_Current State:_
 
 - No Husky or pre-commit hooks are mentioned, suggesting manual linting/testing.
 
-*Gaps:*
+_Gaps:_
 
 - No automated checks to catch errors before commits.
 - Risk of pushing broken code (blocked on PR CI checks)
 
 10. ### PR Preview Deployment
-Enable preview deployments for pull requests to test changes before merging.
+    Enable preview deployments for pull requests to test changes before merging.
 
-*Current State:*
+_Current State:_
+
 - No PR preview setup for testing changes in a staging environment.
 
-*Gaps:*
+_Gaps:_
 
 - No way to preview PRs without merging or local testing.
