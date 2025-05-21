@@ -949,11 +949,11 @@ Lighthouse is a powerful tool developed by Google for auditing the quality of we
 
 Desktop:
 
-<img src="./assets/LighthouseDesktop.png" alt="LighthouseDesktop" width="300" />
+<img src="./assets/lightDeskt.png" alt="LighthouseDesktop" width="300" />
 
 Mobile:
 
-<img src="./assets/LighthouseMobile.png" alt="LighthouseMobile" width="300" />
+<img src="./assets/lightMobile.png" alt="LighthouseMobile" width="300" />
 
 ## Accessbility
 
