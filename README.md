@@ -1,4 +1,4 @@
- # VW project
+# VW project
 
 VW project uses a setup made of React, Typescript and Vite and it's deployed in Github Pages: https://spaghetti-n5.github.io/VW-project/
 
@@ -87,7 +87,7 @@ In the context of the VW-project repository, the use of Pico.css and CSS Modules
 #### Why did I chosoe this approach for styling?
 
 The first idea for the styling was to use a UI / CSS Framework, specifically Ant Design. Ant Design is a popular React UI library offering a comprehensive set of pre-built components (e.g., tables, buttons, modals) with a polished, enterprise-grade design.
-After deeply analyze the approach I decided that Ant Design wasn’t a good choice for VW-project due to its large bundle size, complex components, limited customization, and mismatch with the headless table needs met by TanStack Table. 
+After deeply analyze the approach I decided that Ant Design wasn’t a good choice for VW-project due to its large bundle size, complex components, limited customization, and mismatch with the headless table needs met by TanStack Table.
 
 It would add unnecessary overhead, complicate testing, and detract from the project’s minimalist, custom, and fast prototyping-focused goals. The chosen stack (Pico.css, CSS Modules, and TanStack Table) offers a lightweight, flexible, and type-safe solution. This combination ensures VW-project remains fast, maintainable, and distinctive, showcasing modern web development skills.
 
@@ -142,7 +142,7 @@ React Testing Library is a lightweight library for testing React components by s
 - Use `npm run test:watch` during local development when actively writing or debugging React components, practicing TDD, or focusing on specific tests. It provides real-time feedback as you edit code, leveraging Jest’s watch mode for interactivity
 - Use `npm run test:coverage` to calculate the test coverage of the repo
 
-```bash 
+```bash
 ----------------------|---------|----------|---------|---------|-----------------------------------
 File                  | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 ----------------------|---------|----------|---------|---------|-----------------------------------
@@ -241,7 +241,8 @@ Branch protection is setup to avoid merging if the CI checks are failing
 
 ## AI Tool Usage
 
-GitHub copilot: 
+GitHub copilot:
+
 - integrated in my code editor, provides useful helps while compiling imports, functions.
 - Sometimes I find it a bit overwhelming
 
@@ -259,7 +260,6 @@ The Pagination component is a reusable React component designed for the VW-proje
 
 Link to the component folder: [Pagination](https://github.com/spaghetti-n5/VW-project/blob/main/src/components/shared/Pagination.tsx)
 
-
 The Pagination component enables users to navigate through table data (e.g., posts in PostsPage) and adjust the number of rows displayed per page. It is used in the VW-project to enhance the user experience of data-heavy interfaces, such as the All Posts (/VW-project) and Favorites (/VW-project/favorites) pages. The component is styled with Pico.css and CSS Modules (Pagination.module.css) and works seamlessly with the project’s TypeScript, Zustand, and TanStack Table stack.
 
 #### Design Decisions
@@ -271,10 +271,11 @@ The Pagination component was designed with specific goals to align with the VW-p
 3. Simple Page Size Options: Hardcode page size options [5, 10, 20] in the `<select>` element. Common page sizes (5, 10, 20) balance usability and performance for typical datasets (e.g., posts), avoiding overwhelming users with too many options. Hardcoding avoids complex configuration, fitting the project’s minimalist approach. The array can be updated or made configurable if needed (e.g., via props).
 4. Two-Section Layout: Structure the component with two `<div>` sections: one for navigation buttons and one for page info and size selector. I made this decision for clarity reasons: separating navigation (First, Previous, Next, Last) from status (Page X of Y) and controls (Show N) improves readability and user focus.
 5. Responsive Design: The layout (likely flexbox in Pagination.module.css) adapts to different screen sizes, ensuring usability on mobile and desktop.
-Modularity: Allows independent styling of each section via CSS Modules.
+   Modularity: Allows independent styling of each section via CSS Modules.
 6. Generic Type for Reusability: Use a generic type PaginationProps<T> to accept any Table<T> instance. It allows Pagination to work with any table data type (e.g., Post for posts, or future types like User), making it reusable across the app or other projects. Ensures TypeScript enforces correct data types, reducing errors when integrating with different tables.
 
 #### Reusability
+
 The Pagination component is designed for high reusability within the VW-project and beyond. Here’s how it can be reused and integrated:
 
 1. It offers a generic integration with any table as well as cross-project portability.
@@ -282,12 +283,19 @@ The Pagination component is designed for high reusability within the VW-project 
 The generic Table<T> prop allows **Pagination** to work with any TanStack Table instance, regardless of data type (e.g., Post, User, Product).
 
 ```tsx
-import { useReactTable, getCoreRowModel, getPaginationRowModel } from '@tanstack/react-table';
-import Pagination from './Pagination';
-import { Post } from '../types';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getPaginationRowModel,
+} from "@tanstack/react-table";
+import Pagination from "./Pagination";
+import { Post } from "../types";
 
-const columns = [{ accessorKey: 'title', header: 'Title' }];
-const data: Post[] = [{ id: 1, title: 'Post 1' }, { id: 2, title: 'Post 2' }];
+const columns = [{ accessorKey: "title", header: "Title" }];
+const data: Post[] = [
+  { id: 1, title: "Post 1" },
+  { id: 2, title: "Post 2" },
+];
 
 const table = useReactTable({
   data,
@@ -310,13 +318,15 @@ It could also be reused in another project needing table pagination only needing
 It' currently reused in PostsPage for both All Posts and Favorites views, filtering data dynamically.
 
 ```tsx
-import { usePostStore } from '../store/postStore';
-import Pagination from './Pagination';
+import { usePostStore } from "../store/postStore";
+import Pagination from "./Pagination";
 
 const PostsPage = () => {
   const { favorites, searchText } = usePostStore();
   const table = useReactTable({
-    data: posts.filter((post) => favorites.includes(post.id) || post.title.includes(searchText)),
+    data: posts.filter(
+      (post) => favorites.includes(post.id) || post.title.includes(searchText),
+    ),
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -328,7 +338,7 @@ const PostsPage = () => {
 
 2. Extensibility for Additional Features
 
-The component can be extended with props or logic for new features (e.g., custom page sizes, jump-to-page input). For example for adding a  “Go to Page” input for larger datasets.
+The component can be extended with props or logic for new features (e.g., custom page sizes, jump-to-page input). For example for adding a “Go to Page” input for larger datasets.
 
 ```tsx
 interface PaginationProps<T> {
@@ -344,21 +354,28 @@ const Pagination = <T,>({ table, pageSizes = [5, 10, 20] }: PaginationProps<T>) 
 #### Trade-offs Made During Development
 
 ##### Hardcoded Page Sizes vs. Configurable Option
+
 Fixed page sizes [5, 10, 20] instead of a configurable pageSizes prop.
 
 Pros:
+
 - Simplifies the component’s API, reducing complexity
 - Covers common use cases for small-to-medium datasets (e.g., posts).
 - Aligns with minimalist design, avoiding over-engineering.
 
 Cons:
+
 - Less flexible for tables requiring different page sizes (e.g., 50, 100).
 - Requires code changes to update options, reducing reusability for edge cases.
 
 Add a pageSizes prop if needed:
 
 ```tsx
-pageSizes.map((size) => <option key={size} value={size}>Show {size}</option>)
+pageSizes.map((size) => (
+  <option key={size} value={size}>
+    Show {size}
+  </option>
+));
 ```
 
 ##### No Additional Controls vs. Enhanced Features
@@ -366,10 +383,12 @@ pageSizes.map((size) => <option key={size} value={size}>Show {size}</option>)
 It's a basic pagination (First, Previous, Next, Last, page size) without features like a “Go to Page” input or page number buttons.
 
 Pros:
+
 - Keeps the component focused and easy to use/test, as seen in Pagination.test.ts.
 - Fewer elements reduce rendering time for small datasets.
 
 Cons:
+
 - Less Usable for Large Datasets: Navigating many pages (e.g., 100) is slower without direct page access.
 - Limited UX: Users can’t jump to a specific page quickly.
 
@@ -382,6 +401,7 @@ Add a `<input>` for page jumping or dynamic page number buttons if needed:
   onChange={(e) => table.setPageIndex(Number(e.target.value) - 1)}
 />
 ```
+
 It's acceptable for VW-project’s scope, as post datasets are likely small, but could be extended for larger apps.
 
 ##### Reliance on TanStack Table vs. Custom Pagination
@@ -389,19 +409,22 @@ It's acceptable for VW-project’s scope, as post datasets are likely small, but
 It use TanStack Table’s pagination logic instead of custom state management (e.g., with useState or Zustand).
 
 Pros:
+
 - Robust Logic: TanStack Table handles edge cases (e.g., getCanPreviousPage), reducing bugs.
 - Integration: Syncs with PostsPage table state, leveraging usePostStore for filtering.
 - Testable: Mockable methods (e.g., mockTable.setPageSize) simplify testing, as in Pagination.test.ts.
 
 Cons:
+
 - Dependency: Adds @tanstack/react-table (~10-15KB), though lightweight.
 - Learning Curve: Requires understanding TanStack Table’s API, though minimal for pagination.
 
-The Pagination component is a robust, reusable solution for VW-project, balancing simplicity, functionality, and customizability. Its design decisions—using TanStack Table, Button, Pico.css, CSS Modules, and a generic type—ensure it meets the project’s needs for a lightweight, type-safe, and VW-themed table UI. 
+The Pagination component is a robust, reusable solution for VW-project, balancing simplicity, functionality, and customizability. Its design decisions—using TanStack Table, Button, Pico.css, CSS Modules, and a generic type—ensure it meets the project’s needs for a lightweight, type-safe, and VW-themed table UI.
 
-While trade-offs like hardcoded page sizes and basic controls limit flexibility, they align with the project’s minimalist, prototyping goals. 
+While trade-offs like hardcoded page sizes and basic controls limit flexibility, they align with the project’s minimalist, prototyping goals.
 
 ---
+
 ### Button component
 
 The Button component is designed to deliver a consistent, customizable, and accessible button UI for various actions in the VW-project. It supports multiple styling variants (e.g., outline, secondary), integrates with the project’s styling stack (Pico.css and CSS Modules), and ensures type safety with TypeScript.
@@ -409,17 +432,17 @@ The Button component is designed to deliver a consistent, customizable, and acce
 Link to the component folder: [Button](https://github.com/spaghetti-n5/VW-project/blob/main/src/components/shared/Button.tsx)
 
 ```tsx
-import { ReactNode } from 'react';
-import styles from './../../styles/Button.module.css';
+import { ReactNode } from "react";
+import styles from "./../../styles/Button.module.css";
 
 interface ButtonProps {
   variant?:
-    | 'secondary'
-    | 'contrast'
-    | 'outline'
-    | 'outline secondary'
-    | 'outline primary'
-    | 'outline contrast';
+    | "secondary"
+    | "contrast"
+    | "outline"
+    | "outline secondary"
+    | "outline primary"
+    | "outline contrast";
   children: ReactNode;
   onClick?: () => void;
   disabled?: boolean;
@@ -435,7 +458,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => (
   <button
     type="button"
-    className={`${styles.button} ${variant ? variant : ''}`}
+    className={`${styles.button} ${variant ? variant : ""}`}
     onClick={onClick}
     disabled={disabled}
     aria-disabled={disabled}
@@ -456,36 +479,38 @@ The Button component was crafted to balance simplicity, flexibility, and accessi
 
 Use TypeScript with a ButtonProps interface to define props, including a union type for variant and optional props like disabled and custom ariaLabel.
 
-- ***ReactNode for Children:*** Supports diverse content (e.g., text, icons, or JSX), as seen in Pagination’s text labels ("First," "Next").
-The **variant union type** ('secondary' | 'contrast' | ...) enforces valid styles, and `React.FC<ButtonProps>` provides type inference for props.
+- **_ReactNode for Children:_** Supports diverse content (e.g., text, icons, or JSX), as seen in Pagination’s text labels ("First," "Next").
+  The **variant union type** ('secondary' | 'contrast' | ...) enforces valid styles, and `React.FC<ButtonProps>` provides type inference for props.
 - **Styling with Pico.css and CSS Modules:** combine Pico.css for baseline button styling and CSS Modules (Button.module.css) for custom styles, applied via `styles.button` and variant.
 
-**Accessible Button Attributes:** 
+**Accessible Button Attributes:**
 Include aria-disabled and aria-label props, with type="button" and disabled handling.
 
-- ***Accessibility:*** `aria-disabled={disabled}` ensures screen readers correctly interpret disabled states, as used in Pagination’s navigation buttons.
-- ***Semantic HTML:*** add **type="button"** when button is used for JavaScript actions (e.g., opening modals, toggling content, navigation) and not for form submission. This avoids unintended behavior if the button is placed inside a `<form>`, where the default **type="submit"** might cause the form to submit unexpectedly.
-- ***User Experience:*** disabled prop visually and functionally disables buttons.
+- **_Accessibility:_** `aria-disabled={disabled}` ensures screen readers correctly interpret disabled states, as used in Pagination’s navigation buttons.
+- **_Semantic HTML:_** add **type="button"** when button is used for JavaScript actions (e.g., opening modals, toggling content, navigation) and not for form submission. This avoids unintended behavior if the button is placed inside a `<form>`, where the default **type="submit"** might cause the form to submit unexpectedly.
+- **_User Experience:_** disabled prop visually and functionally disables buttons.
 
 **Variant System:**
 
 Define a variant prop with specific options (secondary, contrast, outline, etc.) instead of fully dynamic classes.
-- ***Consistency:*** Predefined variants ensure buttons align with the project’s design system 
-- ***Simplicity:*** Limits variants to a manageable set, reducing complexity for a small project.
+
+- **_Consistency:_** Predefined variants ensure buttons align with the project’s design system
+- **_Simplicity:_** Limits variants to a manageable set, reducing complexity for a small project.
 
 **Minimal Prop Set:**
 
 Restrict props to variant, children, onClick, disabled, and ariaLabel, omitting advanced features like size or icon.
-- ***Simplicity:*** A focused prop set suits the project’s minimalist goals, avoiding over-engineering for a learning-focused app.
-- ***Usability:*** Covers core button needs (styling, click handling, accessibility).
-- ***Extensibility:*** Props can be added later (e.g., size, type) if needed without breaking existing usage.
+
+- **_Simplicity:_** A focused prop set suits the project’s minimalist goals, avoiding over-engineering for a learning-focused app.
+- **_Usability:_** Covers core button needs (styling, click handling, accessibility).
+- **_Extensibility:_** Props can be added later (e.g., size, type) if needed without breaking existing usage.
 
 #### Reusability
 
 1. The Button component is highly reusable within the VW-project and portable to other React projects.
 
 ```tsx
-import Button from './Button';
+import Button from "./Button";
 
 const PostsPage = () => (
   <div>
@@ -498,12 +523,12 @@ const PostsPage = () => (
   </div>
 );
 ```
-It depends only on react and Button.module.css, with optional Pico.css for styling, making it easy to copy to other React projects.
 
+It depends only on react and Button.module.css, with optional Pico.css for styling, making it easy to copy to other React projects.
 
 2. Extensibility for New Features
 
-Add props like size (small, large), icon, or type (submit, reset) to support more use 
+Add props like size (small, large), icon, or type (submit, reset) to support more use
 
 ```tsx
 interface ButtonProps {
@@ -529,7 +554,6 @@ const Button: React.FC<ButtonProps> = ({ size, icon, type = 'button', ...props }
 );
 ```
 
-
 #### Trade-offs Made During Development
 
 ##### Limited Variants vs. Fully Dynamic Classes
@@ -537,15 +561,18 @@ const Button: React.FC<ButtonProps> = ({ size, icon, type = 'button', ...props }
 Predefined variant options (secondary, outline, etc.) instead of allowing arbitrary class names.
 
 Pros:
+
 - Consistency: Ensures buttons align with Pico.css’s design system
 - Reduces complexity
 - Type Safety: Union type enforces valid variants, preventing errors.
 
 Cons:
+
 - New variants require updating ButtonProps, unlike passing custom classes.
 - Adding variants (e.g., danger) needs code changes.
 
 Allow a className prop for custom styles:
+
 ```tsx
 className={`${styles.button} ${variant || ''} ${className || ''}`}
 ```
@@ -555,48 +582,55 @@ className={`${styles.button} ${variant || ''} ${className || ''}`}
 Restrict props to core functionality (variant, children, etc.) instead of adding size, icon, or loading states.
 
 Pros:
+
 - Fits the project’s prototyping goals, focusing on core React/TypeScript skills.
 - Fewer props reduce complexity and testing effort.
 
 Cons:
+
 - Limited Features: Can’t support sized variants without updates and future needs (e.g., loading spinners) require prop additions.
 
 ##### No Custom Event Handlers vs. Advanced Interactions
+
 Only onClick for event handling, omitting onMouseEnter, onFocus, etc.
 
 Pros:
+
 - Simplicity: onClick suffices for Pagination (e.g., table.nextPage()) and typical actions.
 - Performance: Fewer props reduce component overhead.
 
 Cons:
+
 - Limited Interactivity: Can’t handle hover or focus events without modification (only css classes :hover are used)
 - UX Constraints: Advanced features (e.g., tooltips on hover) need extra logic.
 
 ##### Single Button Type vs. Form Support
 
-Hardcode ***type="button"*** instead of supporting submit or reset for forms.
+Hardcode **_type="button"_** instead of supporting submit or reset for forms.
 
 Pros:
+
 - Prevents accidental form submissions, suitable for standalone buttons in Pagination.
 - Aligns with current use cases (e.g., navigation, toggling favorites).
 
 Cons:
-- Extensibility: Can’t use directly in forms (e.g., submitting a new post) without ***type="submit"***, requires prop addition for form support
 
+- Extensibility: Can’t use directly in forms (e.g., submitting a new post) without **_type="submit"_**, requires prop addition for form support
 
-The Button component is a versatile, accessible, and lightweight solution for VW-project, balancing simplicity with customization. Its design decisions—TypeScript props, Pico.css/CSS Modules styling, and accessibility features—ensure it meets the project’s needs for a consistent, VW-themed UI. Trade-offs like limited variants and props prioritize ease of use and fast prototyping, with extensibility for future needs. 
+The Button component is a versatile, accessible, and lightweight solution for VW-project, balancing simplicity with customization. Its design decisions—TypeScript props, Pico.css/CSS Modules styling, and accessibility features—ensure it meets the project’s needs for a consistent, VW-themed UI. Trade-offs like limited variants and props prioritize ease of use and fast prototyping, with extensibility for future needs.
 
 ---
+
 ### SearchBar Component
 
-The SearchBar component enables users to filter table data (e.g., posts in PostsPage) by entering search queries, which are managed via props (value, onChange) and synced with the application’s state (e.g., searchText in usePostStore). 
+The SearchBar component enables users to filter table data (e.g., posts in PostsPage) by entering search queries, which are managed via props (value, onChange) and synced with the application’s state (e.g., searchText in usePostStore).
 
 It supports accessibility through ARIA attributes and customizable labels, making it suitable for data-driven interfaces in the VW-project. The component’s design aligns with the project’s minimalist aesthetic, leveraging CSS Modules for scoped styling and Pico.css for semantic enhancements.
 
 Link to the component folder: [SearchBar](https://github.com/spaghetti-n5/VW-project/blob/main/src/components/shared/SearchBar.tsx)
 
 ```tsx
-import styles from './../../styles/SearchBar.module.css';
+import styles from "./../../styles/SearchBar.module.css";
 
 interface SearchBarProps {
   value: string;
@@ -610,7 +644,7 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
-  placeholder = 'Search by any field...',
+  placeholder = "Search by any field...",
   label,
   name,
   hideLabel = false,
@@ -620,7 +654,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       {label ? (
         <label
           htmlFor={name}
-          className={`${styles.searchLabel} ${hideLabel ? styles.visuallyHidden : ''}`}
+          className={`${styles.searchLabel} ${hideLabel ? styles.visuallyHidden : ""}`}
         >
           {label}
         </label>
@@ -645,17 +679,17 @@ export default SearchBar;
 
 #### Design Decisions
 
-The SearchBar component was designed to meet the VW-project’s requirements for a simple, accessible, and reusable search input, particularly for filtering posts in PostsPage. 
+The SearchBar component was designed to meet the VW-project’s requirements for a simple, accessible, and reusable search input, particularly for filtering posts in PostsPage.
 
 **TypeScript and Type-Safe Props**
 
 Use TypeScript with a SearchBarProps interface to define props, including required value and onChange, and optional placeholder, label, name, and hideLabel.
 
-- ***Type Safety***: Ensures props are correctly typed (e.g., value: string, onChange: (value: string) => void), preventing errors in a TypeScript project.
+- **_Type Safety_**: Ensures props are correctly typed (e.g., value: string, onChange: (value: string) => void), preventing errors in a TypeScript project.
 
-- ***Flexibility***: Optional props allow customization (e.g., custom placeholder or hidden labels) while maintaining a minimal API.
+- **_Flexibility_**: Optional props allow customization (e.g., custom placeholder or hidden labels) while maintaining a minimal API.
 
-- ***Controlled Component***: value and onChange make the input controlled, syncing with usePostStore’s searchText for real-time filtering.
+- **_Controlled Component_**: value and onChange make the input controlled, syncing with usePostStore’s searchText for real-time filtering.
 
 **Styling with CSS Modules and Pico.css**
 
@@ -665,14 +699,15 @@ Use CSS Modules `(SearchBar.module.css)` for scoped styles (styles.searchLabel, 
 
 Include label, name, id, htmlFor, and aria-label for accessibility, with a hideLabel prop to visually hide the label.
 
-- ***Accessibility:*** htmlFor and id link the `<label>` to the `<input>`, aiding screen readers. `aria-label={label || placeholder}` ensures a fallback for unlabeled inputs.
-- ***Flexibility:*** hideLabel with styles.visuallyHidden (a common CSS utility) hides the label visually while keeping it accessible, useful for minimalist UIs.
-- ***Semantic HTML:*** `type="search"` signals a search input, improving browser and assistive technology support.
-- ***Testing:*** `data-testid="search-input"` enables easy test targeting (e.g., in Jest/React Testing Library).
+- **_Accessibility:_** htmlFor and id link the `<label>` to the `<input>`, aiding screen readers. `aria-label={label || placeholder}` ensures a fallback for unlabeled inputs.
+- **_Flexibility:_** hideLabel with styles.visuallyHidden (a common CSS utility) hides the label visually while keeping it accessible, useful for minimalist UIs.
+- **_Semantic HTML:_** `type="search"` signals a search input, improving browser and assistive technology support.
+- **_Testing:_** `data-testid="search-input"` enables easy test targeting (e.g., in Jest/React Testing Library).
 
 **Controlled Input Design**
 
 Implement a controlled input with value and onChange props, omitting uncontrolled features (e.g., defaultValue).
+
 - Controlled inputs sync with usePostStore’s searchText, enabling real-time filtering of posts in PostsPage.
 - Ensures the input’s value is always managed by the parent component, reducing bugs.
 - Avoids complexity of uncontrolled inputs
@@ -692,8 +727,8 @@ The SearchBar component is designed for high reusability within the VW-project a
 1.  The component’s flexible props support filtering in various contexts (posts, users, or other data tables).
 
 ```tsx
-import SearchBar from './SearchBar';
-import { usePostStore } from '../store/postStore';
+import SearchBar from "./SearchBar";
+import { usePostStore } from "../store/postStore";
 
 const PostsPage = () => {
   const { searchText, setSearchText } = usePostStore();
@@ -712,7 +747,7 @@ const PostsPage = () => {
 It depends only on react and SearchBar.module.css, with optional Pico.css for styling, making it easy to copy to other React projects.
 
 2. Extensibility for New Features
-Add props like onClear, onFocus, or icon to support advanced search functionality.
+   Add props like onClear, onFocus, or icon to support advanced search functionality.
 
 ```tsx
 interface SearchBarProps {
@@ -731,7 +766,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onClear, icon, ...props }) => (
     {props.label && (
       <label
         htmlFor={props.name}
-        className={`${styles.searchLabel} ${props.hideLabel ? styles.visuallyHidden : ''}`}
+        className={`${styles.searchLabel} ${props.hideLabel ? styles.visuallyHidden : ""}`}
       >
         {props.label}
       </label>
@@ -757,45 +792,52 @@ const SearchBar: React.FC<SearchBarProps> = ({ onClear, icon, ...props }) => (
 #### Trade-offs Made During Development
 
 ##### Controlled Input vs. Uncontrolled
+
 Use controlled input (value, onChange) instead of uncontrolled (defaultValue).
 
 Pros:
- - State Syncing: Syncs with usePostStore’s searchText, enabling real-time filtering.
+
+- State Syncing: Syncs with usePostStore’s searchText, enabling real-time filtering.
 - Predictability: Ensures the input reflects the parent’s state, reducing bugs.
 
 Cons:
+
 - Parent Responsibility: Requires the parent to manage state, adding minor complexity.
 - No Default Value: Uncontrolled inputs are simpler for static forms but less dynamic.
 
-*Improvements*: add defaultValue prop for uncontrolled use cases, though not needed for VW-project.
+_Improvements_: add defaultValue prop for uncontrolled use cases, though not needed for VW-project.
 
 ##### No Clear Button vs. Enhanced UX
 
 Omit a clear button or reset functionality.
 
 Pros:
+
 - Reduces component complexity
 - Performance: Fewer elements improve rendering speed.
 - Scope: Sufficient for PostsPage’s basic filtering needs.
 
 Cons:
+
 - UX Limitation: Users must manually clear the input, less convenient for frequent searches.
 - Extensibility: Requires prop addition for clear functionality.
 
-*Improvements*: add onClear prop and clear button (see “Reusability” example).
+_Improvements_: add onClear prop and clear button (see “Reusability” example).
 
-#####  No Advanced Input Features vs. Rich Functionality
+##### No Advanced Input Features vs. Rich Functionality
 
-Limit to basic *type="search"* input without features like autocomplete, debounce, or icon support.
+Limit to basic _type="search"_ input without features like autocomplete, debounce, or icon support.
 
 Pros:
+
 - Simplicity: Focuses on core search functionality, reducing development time.
 
 Cons:
+
 - Limited UX: Lacks advanced features (e.g., search suggestions) for larger apps.
 - Scalability: Requires updates for complex search requirements.
 
-The SearchBar component is a lightweight, accessible, and reusable solution for VW-project, enabling efficient data filtering in PostsPage. Its design decisions—TypeScript props, CSS Modules/Pico.css styling, controlled input, and accessibility features—align with the project’s minimalist, type-safe, and user-friendly goals. Trade-offs like omitting a clear button or advanced features (autocomplete, debounce) prioritize simplicity and fast development, with extensibility for future enhancements. 
+The SearchBar component is a lightweight, accessible, and reusable solution for VW-project, enabling efficient data filtering in PostsPage. Its design decisions—TypeScript props, CSS Modules/Pico.css styling, controlled input, and accessibility features—align with the project’s minimalist, type-safe, and user-friendly goals. Trade-offs like omitting a clear button or advanced features (autocomplete, debounce) prioritize simplicity and fast development, with extensibility for future enhancements.
 
 ## Performance optimizations
 
@@ -826,10 +868,14 @@ Users may not interact with these components immediately. Lazy loading reduces t
 
 Vite’s Rollup-based build process performs tree shaking to eliminate unused code from dependencies and the app’s codebase, ensuring only imported functionality is included in the bundle.
 
-**Why Necessary:** Libraries include features not used in VW-project (e.g., advanced table filtering). Without tree shaking, unused code inflates the bundle, slowing load times. 
+**Why Necessary:** Libraries include features not used in VW-project (e.g., advanced table filtering). Without tree shaking, unused code inflates the bundle, slowing load times.
 
 ```tsx
-import { useReactTable, getCoreRowModel, getSortedRowModel } from '@tanstack/react-table';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+} from "@tanstack/react-table";
 // Only used exports are bundled; others (e.g., getFilteredRowModel) are removed
 ```
 
@@ -848,8 +894,8 @@ const filteredData = useMemo(() => {
   if (!searchText) return favoriteData;
   return favoriteData.filter((post) =>
     Object.values(post).some((val) =>
-      String(val).toLowerCase().includes(searchText.toLowerCase())
-    )
+      String(val).toLowerCase().includes(searchText.toLowerCase()),
+    ),
   );
 }, [favoriteData, searchText]);
 ```
@@ -864,12 +910,15 @@ The openModal handler is memoized with useCallback to prevent re-creation across
 - Scales for tables with many rows (e.g., 100+ posts), ensuring fast rendering.
 
 ```tsx
-const openModal = useCallback((type: ModalType, post: Post = { id: 0, title: '', body: '' }) => {
-  setModalType(type);
-  setCurrentPost(post);
-  setIsModalOpen(true);
-  setError(null);
-}, []);
+const openModal = useCallback(
+  (type: ModalType, post: Post = { id: 0, title: "", body: "" }) => {
+    setModalType(type);
+    setCurrentPost(post);
+    setIsModalOpen(true);
+    setError(null);
+  },
+  [],
+);
 ```
 
 5. #### Optimized Data Fetching
@@ -889,7 +938,7 @@ useEffect(() => {
       const posts = await fetchPosts();
       setData(posts);
     } catch (error) {
-      setError('Failed to fetch posts. Please try again.');
+      setError("Failed to fetch posts. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -908,7 +957,9 @@ useEffect(() => {
 
 ```tsx
 const isMobile = window.innerWidth < mobileBreakpoint;
-{isMobile ? <SortButtons table={table} /> : null}
+{
+  isMobile ? <SortButtons table={table} /> : null;
+}
 ```
 
 7. #### Efficient Table Configuration with TanStack Table
@@ -946,6 +997,7 @@ Vite powers the build process with esbuild for fast development and Rollup for o
 ### Why These Optimizations Matter
 
 These optimizations were essential to:
+
 - Enhance User Experience: Fast load times, smooth filtering, and mobile-friendly
 - Support Scalability: Optimizations prepare the app for larger datasets or features without performance degradation.
 - Optimize Mobile Performance: Smaller bundles and mobile-specific rendering cater to low-end devices and slow networks (e.g., 3G/4G).
@@ -961,6 +1013,7 @@ These optimizations were essential to:
 ### Metrics
 
 #### Vite build
+
 Running `npm run build` display a summary of the different build chucks:
 
 ```bash
@@ -980,14 +1033,13 @@ dist/assets/index-D1KrFZC0.js        285.42 kB │ gzip: 89.01 kB
 
 Core Web Vitals are a subset of web performance metrics from Google that help developers understand how users experience a web page. These metrics focus on three primary areas of user experience: the speed, interactivity, and visual stability of a webpage.
 
-### Lighthouse 
+### Lighthouse
+
 Lighthouse is a powerful tool developed by Google for auditing the quality of web pages, especially useful for performance and accessibility checks.
-**Performance:** Page load speed, render times, Largest Contentful Paint	
+**Performance:** Page load speed, render times, Largest Contentful Paint
 **Accessibility:** Use of ARIA roles, color contrast, keyboard navigation
 **Best Practices:** Use of HTTPS, valid image sizes, JavaScript errors
-**SEO:** Meta tags, link structure, robots.txt	
-
-
+**SEO:** Meta tags, link structure, robots.txt
 
 ## Improvements
 

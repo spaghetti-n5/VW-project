@@ -164,7 +164,7 @@ const PostsPage: React.FC = () => {
           ),
       },
     ],
-    [favorites, toggleFavorite, isFavoritesPage]
+    [favorites, toggleFavorite, isFavoritesPage, openModal]
   );
 
   // Table instance creation
