@@ -1,4 +1,5 @@
-import { ModalType, Post } from '../../types/shared';
+import { ModalType } from '../../types/shared';
+import type { Post } from '../../types/shared';
 import Button from '../shared/Button';
 import styles from './../../styles/Modal.module.css';
 

@@ -8,7 +8,8 @@ import {
   SortingState,
 } from '@tanstack/react-table';
 import { useLocation } from 'react-router-dom';
-import { Post, ModalType } from '../types/shared';
+import type { Post } from '../types/shared';
+import { ModalType } from '../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../utils/api';
 import TableComponent from '../components/DataTable/TableComponent';
 import Button from '../components/shared/Button';
