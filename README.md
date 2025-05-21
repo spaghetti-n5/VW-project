@@ -1,30 +1,96 @@
 # VW project
 
-VW project uses a setup made of React, Typescript and Vite and it's deployed in Github Pages: https://spaghetti-n5.github.io/VW-project/
-
 Author: Eleonora Baret
+
+## Project description
+
+The VW-project is a single-page application (SPA) developed by spaghetti-n5 and hosted via Github Pages at https://spaghetti-n5.github.io/VW-project/.
+
+It’s a prototype project built with React, TypeScript, Vite, and TanStack Table, designed to showcase modern web development skills.
+
+The app displays a data table of posts fetched from a mock API (JSONPlaceholder), allowing users to view, filter, sort, favorite, edit, and delete posts.
+
+It serves as a data-driven app for managing posts with a focus on clean code, scalability, and user experience.
+
+It emphasizes performance optimizations, accessibility (WCAG 2.1 Level AA), and responsive design.
+
+### Tech Stack:
+
+- **Frontend:** React, TypeScript, React Router (for routing).
+- **Build Tool:**: Vite (with esbuild and Rollup for fast development and optimized builds).
+- **Styling:** Pico.css (for minimal, WCAG-compliant CSS) and modular CSS (\*.module.css).
+- **Table Library:** TanStack Table (for data grid functionality).
+- **State Management:** Custom Zustand store (postStore) for favorites and search.
+- **API:** Mock API (e.g., JSONPlaceholder for posts).
+- **Deployment:** GitHub Pages (https://spaghetti-n5.github.io/VW-project/).
+
+### Key Features:
+
+#### Post Management:
+
+- Displays a table of posts with columns for ID, Title, Body, and Actions (View, Edit, Delete, Favorite).
+- Supports adding, editing, and deleting posts via a modal.
+- Allows favoriting posts, with a dedicated “Favorites” view.
+
+#### Favorites
+
+- Allows to store favorites, a table with all the favorites posts are displayed in the dedicated route `/favorites`.
+- In this view the user has only the option to view the table, and toggle the favorites.
+
+#### Filtering and Sorting:
+
+- Search bar to filter posts by any field (e.g., title, body, id).
+- Sorting by ID, Title, or Body (ascending/descending).
+- Mobile-specific sorting controls (SortButtons).
+
+#### Routing:
+
+- Two routes: `/VW-project` (All Posts) and `/VW-project/favorites` (Favorites).
+- Navigation via Header links.
+
+#### Performance Optimizations:
+
+- Selective lazy loading for non-critical components (Modal, ErrorAlert).
+- Code splitting and tree shaking via Vite.
+- Memoization (useMemo, useCallback) for efficient rendering.
+- Single API fetch on mount with error handling.
+
+#### Accessibility:
+
+WCAG 2.1 Level AA compliant with ARIA roles, keyboard navigation, screen reader support.
+
+#### Responsive Design:
+
+- Mobile-friendly layout with conditional rendering (mobileBreakpoint).
+
+### How to Use
+
+1. Visit [VW-project](https://spaghetti-n5.github.io/VW-project/)
+2. Browse posts in the table, use the search bar to filter, or sort by clicking column headers.
+3. Add or edit posts via the modal
+4. Add favorite posts with the ★ button; click the header link _Favorites_ to display your favorites
 
 ## How to run the project locally
 
-#### Prerequisites
+### Prerequisites
 
 - Node.js: Version 16.x or higher.
 - npm: Package manager for dependencies.
 
-#### Clone the Repository:
+### Clone the Repository:
 
 ```bash
 git clone https://github.com/spaghetti-n5/VW-project.git
 cd VW-project
 ```
 
-#### Install Dependencies:
+### Install Dependencies:
 
 ```bash
 npm install
 ```
 
-#### Start the Development Server:
+### Start the Development Server:
 
 ```bash
 npm run dev
@@ -32,163 +98,13 @@ npm run dev
 
 The app will be available at http://localhost:5173/VW-project/
 
-## Technology Stack
-
-- React: Core library for building the user interface.
-- TypeScript: Adds static types for improved code quality and developer experience.
-- TanStack Table: Powers dynamic tables with pagination and sorting.
-- pico.css and CSS modules: Ensures maintainable, component-scoped styling.
-- Zustand: Manages application state, e.g., favorite posts and search filters.
-- React Router: Handles client-side routing for multi-page navigation.
-- Jest & React Testing Library: Facilitates unit and integration testing.
-- Cypress: E2E testing
-- Vite: build tool and development server
-- JSONPlaceholder API: Mock backend for testing CRUD operations.
-
-## Vite
-
-Vite is a modern build tool and development server designed for speed and simplicity, particularly for frameworks like React. It's ideal for single-page apps or static sites.
-I decided to use Vite for these main reasons:
-
-- Vite uses ES modules in the browser, serving code without bundling during development. This results in near-instant server startup and hot module replacement (HMR), even for large projects. HMR (live reloading of changed modules) is faster because Vite only updates the specific module that changed, rather than rebuilding an entire bundle.
-- Compared to Webpack-based tools like Create React App (CRA), Vite’s dev server is significantly faster, improving developer productivity.
-- Vite uses Rollup under the hood for production builds, producing highly optimized, tree-shaken bundles with minimal code.
-- It supports code-splitting, lazy-loading, and CSS optimization out of the box, ensuring fast load times in production.
-- Vite natively supports ESM, TypeScript, JSX, and modern JavaScript features, aligning perfectly with React’s ecosystem.
-- It handles CSS modules, PostCSS, and SCSS with minimal setup, streamlining styling workflows.
-- Vite is lightweight and avoids the bloat of older tools, reducing dependency overhead and simplifying project maintenance.
-
-To run the project locally:
-`npm install`: install dependencies
-`npm run dev`: start the local development server
-
-Other useful scripts:
-`npm run preview`: starts a local server to preview the production build of your app, simulating how it will behave when deployed.
-`npm run build`: compiles and bundles your app’s code into optimized static assets for production deployment.
-
-## TanStack Table
-
-TanStack Table (formerly React Table) is a powerful, lightweight, and flexible library for building dynamic tables in JavaScript applications, particularly React-based ones.
-It provides "headless" architecture, meaning it provides logic (e.g., pagination, sorting) without dictating UI, allowing to style and structure the table as needed.
-
-- It provides hooks like **useReactTable** for managing table state, which provides sorting and pagination features out of the box. It offers sorting, column resizing, and row selection, global or column filters. It provides `getPaginationRowModel` and methods like `table.nextPage`, `table.setPageSize` to navigate posts and adjust page sizes.
-- TanStack Table is ~10-15KB (minified), much lighter than full-featured libraries, reducing the app’s bundle size.
-- Uses React’s virtual DOM efficiently, only re-rendering when table state changes.
-- TanStack Table’s strong TypeScript support ensures robust development.
-
-## CSS modules and pico.css
-
-In the context of the VW-project repository, the use of Pico.css and CSS Modules as styling solutions was a strategic choice that aligns with the project's goals of building a lightweight, maintainable, and modern web application.
-
-**Pico.css** is a minimal, classless CSS framework designed to provide clean, semantic, and responsive styling with minimal setup. Unlike heavier frameworks like Bootstrap or Tailwind, Pico.css applies styles directly to HTML elements based on semantic markup, requiring no additional classes for basic styling. It’s lightweight (~10KB minified), customizable, and ideal for small-to-medium projects or prototypes.
-
-**CSS Modules** is a CSS scoping mechanism that locally scopes styles to components, preventing style conflicts in JavaScript applications. By importing CSS files (e.g., Pagination.module.css) as modules, styles are transformed into unique class names (e.g., .pagination_abc123), ensuring encapsulation.
-
-#### Why did I chosoe this approach for styling?
-
-The first idea for the styling was to use a UI / CSS Framework, specifically Ant Design. Ant Design is a popular React UI library offering a comprehensive set of pre-built components (e.g., tables, buttons, modals) with a polished, enterprise-grade design.
-After deeply analyze the approach I decided that Ant Design wasn’t a good choice for VW-project due to its large bundle size, complex components, limited customization, and mismatch with the headless table needs met by TanStack Table.
-
-It would add unnecessary overhead, complicate testing, and detract from the project’s minimalist, custom, and fast prototyping-focused goals. The chosen stack (Pico.css, CSS Modules, and TanStack Table) offers a lightweight, flexible, and type-safe solution. This combination ensures VW-project remains fast, maintainable, and distinctive, showcasing modern web development skills.
-
-**Pico.css** offers simplicity and Lightweight Design.
-The VW-project is portfolio project (aligned with spaghetti-n5/JS-exercises), prioritizing simplicity and fast development. Pico.css’s minimal footprint (~10KB vs. Bootstrap’s ~150KB) reduces bundle size, improving load times for users.
-
-Benefits:
-Pico.css styles native HTML elements without requiring classes, reducing markup complexity. It does not need for extensive configuration or learning a complex API, allowing rapid prototyping of components. It encourages clean HTML, using Semantic Markup, aligning with modern web standards and accessibility. It offers theming capability out of the box.
-
-**CSS Modules** offer scoped and Maintainable Styling
-In a React application with multiple components (Pagination, Button, PostsPage), style conflicts can arise if global CSS is used. CSS Modules ensures styles are scoped to specific components, enhancing maintainability.
-
-Benefits:
-Each component has its own CSS file (e.g., Pagination.module.css), making it easy to update or refactor styles without affecting the entire app.
-TypeScript Integration: CSS Modules work seamlessly with TypeScript, providing type-safe style imports (e.g., import styles from './Pagination.module.css'), reducing runtime errors.
-It works natively with Create React App, Vite, or Webpack, automatically scoping styles during the build process.
-
-## Zustand
-
-Zustand is a lightweight, modern state management library for React applications. It provides a simple, scalable, and performant way to manage global state without the complexity of larger libraries like Redux.
-Zustand is ideal for projects requiring straightforward global state management, such as toggling UI states, managing form inputs, or tracking user preferences.
-
-- **Simple API**: Uses a single create function to define a store with state and actions.
-- **Hook-Based**: Integrates seamlessly with React via custom hooks, allowing components to subscribe to specific state slices.
-- **No Boilerplate**: Avoids complex setup (e.g., reducers, actions, or middleware) for faster development.
-- **TypeScript Support**: Offers excellent type inference and safety, especially for TypeScript projects.
-- **Middleware**: Supports extensions like persistence or immer for complex state updates.
-- **Performant**: Minimizes re-renders by allowing components to select only the state they need.
-
-In the project the store is declared with `PostStore` Interface: it defines the store’s shape using TypeScript, ensuring type safety:
-
-- **favorites**: number[]: An array of post IDs marked as favorites. Enables users to save preferred posts for quick access, displayed on a dedicated Favorites page.
-- **searchText**: string: A string for filtering posts (e.g., in a search bar). upports real-time search functionality, allowing users to find posts by title, body, or other criteria.
-- **setSearchText**: (searchText: string) => void: A function to update searchText.
-- **toggleFavorite**: (postId: number) => void: A function to add or remove a post ID from favorites.
-
-#### Why using Zustand as global store?
-
-- Zustand allows components to access and update favorites and searchText without prop drilling, simplifying the app’s architecture.
-- Changes to the store (e.g., adding a favorite) automatically re-render subscribed components, ensuring a responsive UI.
-- Zustand’s minimal API avoids the complexity of Redux, making it ideal for managing small-to-medium state like favorites and search.
-- Persistence (Improvement): While not implemented here, Zustand supports middleware to persist favorites to local storage, preserving user preferences across sessions.
-
-## Jest and React testing library
-
-Jest is a JavaScript testing framework designed for simplicity and performance, particularly suited for React applications. Provides a full suite of testing tools: test runner, assertions, mocks, spies, and code coverage reports.
-Supports unit, integration, and snapshot testing, covering your React components and logic.
-
-React Testing Library is a lightweight library for testing React components by simulating user interactions, focusing on behavior over implementation. It integrates smoothly with Jest, as Jest provides the test runner and assertions while RTL handles DOM interactions.
+### How to run tests locally
 
 - Use `npm run test` to run your tests locally
 - Use `npm run test:watch` during local development when actively writing or debugging React components, practicing TDD, or focusing on specific tests. It provides real-time feedback as you edit code, leveraging Jest’s watch mode for interactivity
 - Use `npm run test:coverage` to calculate the test coverage of the repo
 
-```bash
-----------------------|---------|----------|---------|---------|-----------------------------------
-File                  | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
-----------------------|---------|----------|---------|---------|-----------------------------------
-All files             |   93.84 |     81.7 |   90.32 |   93.51 |
- components/DataTable |   91.66 |    78.78 |   86.66 |   91.42 |
-  Modal.tsx           |     100 |      100 |     100 |     100 |
-  SortButtons.tsx     |      75 |    58.33 |      50 |      75 | 26-38
-  TableComponent.tsx  |   93.75 |       80 |     100 |   93.75 | 18
- components/shared    |     100 |     90.9 |     100 |     100 |
-  Button.tsx          |     100 |    66.66 |     100 |     100 | 27
-  ErrorAlert.tsx      |     100 |      100 |     100 |     100 |
-  LoadingSpinner.tsx  |     100 |      100 |     100 |     100 |
-  Pagination.tsx      |     100 |      100 |     100 |     100 |
-  SearchBar.tsx       |     100 |      100 |     100 |     100 |
- pages                |    90.1 |    78.12 |   86.66 |   89.15 |
-  PostsPage.tsx       |    90.1 |    78.12 |   86.66 |   89.15 | 46-47,102-103,136,155,190,216-217
- types                |     100 |      100 |     100 |     100 |
-  shared.ts           |     100 |      100 |     100 |     100 |
- utils                |     100 |      100 |     100 |     100 |
-  api.ts              |     100 |      100 |     100 |     100 |
-  constants.ts        |     100 |      100 |     100 |     100 |
-  samplePost.ts       |     100 |      100 |     100 |     100 |
-----------------------|---------|----------|---------|---------|--
-```
-
-## Cypress
-
-Cypress is an open-source, JavaScript-based end-to-end (E2E) testing framework for web applications. It enables developers to write automated tests that simulate user interactions in a browser, such as clicking buttons, filling forms, and navigating pages. Key features include:
-
-- Real Browser Testing: Runs tests in actual browsers (e.g., Chrome, Firefox) for accurate results.
-- Time Travel: Allows debugging by capturing snapshots of the app state at each test step.
-- Automatic Waiting: Handles asynchronous operations without manual waits.
-- Easy Setup: Integrates with JavaScript frameworks like React, Vue, and Angular.
-- Rich UI: Provides an interactive dashboard for test execution and debugging.
-
-#### Useful command:
-
-`npm run cy:open`: Opens the Cypress Test Runner GUI in interactive mode. Lets you manually select and run tests in a browser (Chrome, Firefox..). It is iseful during local development and debugging as it provides visual feedback.
-
-`npm cy:run`: Runs Cypress tests headlessly (in the background, no GUI). The output is shown in the terminal, and results (videos/screenshots) are stored in the `/cypress/videos` or `/screenshots` directories. It's useful in CI/CD pipelines or automated test scripts.
-
 ## Eslint and Prettier configuration to ensure code quality
-
-ESLint is a static code analysis tool that identifies and enforces coding standards, catching potential errors and enforcing best practices.
-Prettier is an opinionated code formatter that automatically formats code for consistent style, reducing manual styling effort.
-They provide a robust, automated solution for maintaining high-quality, consistent code in your React + Vite project, enhancing collaboration, reducing bugs, and streamlining development and deployment workflows.
 
 Eslint scripts:
 `npm run lint`: checks for issues without modifying files.
@@ -196,7 +112,7 @@ Eslint scripts:
 
 Prettier scripts:
 `npm run format`: it scans specified files and automatically formats them according to Prettier’s rules (defined in .prettierrc or defaults)
-`npm run check-format`: it scans specified files and checks if they conform to Prettier’s formatting rules without modifying them. It outputs a report in the terminal displaying a lists of files that deviate from the expected format and it exits with a non-zero status code if any files are incorrectly formatted, making it ideal for CI/CD.
+`npm run check-format`: it scans specified files and checks if they conform to Prettier’s formatting rules without modifying them. It outputs a report in the terminal displaying a lists of files that deviate from the expected format and it exits with a non-zero status code if any files are incorrectly formatted.
 
 ## CI/CD pipelines
 
@@ -237,7 +153,8 @@ The job `build-and-deploy` performs the following steps:
 
 ### Github setup
 
-Branch protection is setup to avoid merging if the CI checks are failing
+- Branch protection is setup to avoid merging if the CI checks are failing
+- Merge is only allowed by Pull Requests
 
 ## AI Tool Usage
 
@@ -447,6 +364,7 @@ interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   ariaLabel?: string;
+  ariaPressed?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -455,6 +373,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   ariaLabel,
+  ariaPressed,
 }) => (
   <button
     type="button"
@@ -463,6 +382,7 @@ const Button: React.FC<ButtonProps> = ({
     disabled={disabled}
     aria-disabled={disabled}
     aria-label={ariaLabel}
+    aria-pressed={ariaPressed}
   >
     {children}
   </button>
@@ -645,7 +565,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
   placeholder = "Search by any field...",
-  label,
+  label = "Search",
   name,
   hideLabel = false,
 }) => {
@@ -668,7 +588,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         className={styles.searchInput}
         name={name}
         id={name}
-        aria-label={label || placeholder}
+        aria-label={label}
       />
     </div>
   );
@@ -699,7 +619,7 @@ Use CSS Modules `(SearchBar.module.css)` for scoped styles (styles.searchLabel, 
 
 Include label, name, id, htmlFor, and aria-label for accessibility, with a hideLabel prop to visually hide the label.
 
-- **_Accessibility:_** htmlFor and id link the `<label>` to the `<input>`, aiding screen readers. `aria-label={label || placeholder}` ensures a fallback for unlabeled inputs.
+- **_Accessibility:_** htmlFor and id link the `<label>` to the `<input>`, aiding screen readers. `aria-label={label}` with default "search" value ensures a fallback for unlabeled inputs.
 - **_Flexibility:_** hideLabel with styles.visuallyHidden (a common CSS utility) hides the label visually while keeping it accessible, useful for minimalist UIs.
 - **_Semantic HTML:_** `type="search"` signals a search input, improving browser and assistive technology support.
 - **_Testing:_** `data-testid="search-input"` enables easy test targeting (e.g., in Jest/React Testing Library).
@@ -1051,13 +971,87 @@ Mobile:
 
 <img src="./assets/LighthouseMobile.png" alt="LighthouseMobile" width="300" />
 
-## Improvements
+## Accessbility
 
+The VW-project is designed to meet basic accessibility standards, adhering to WCAG 2.1 Level AA guidelines to ensure usability for all users, including those with disabilities. This document details the accessibility features implemented across the application’s components (PostsPage, Header, Button, SearchBar, TableComponent, Modal, SortButtons), their purpose, and the tools used to verify compliance.
+
+### ARIA Roles and Attributes
+
+Provide semantic meaning to dynamic content, ensuring screen readers can interpret the UI correctly.
+
+**TableComponent:**
+
+Desktop view:
+
+- `<table>` has _role="grid"_, correctly identifying it as a data grid.
+- `<thead>` and `<tbody>` use _role="rowgroup"_, grouping rows semantically.
+- `<tr>` uses _role="row"_, `<th>` uses _role="columnheader"_, and `<td>` uses _role="gridcell"_, providing clear structure.
+- _aria-sort="ascending|descending|none"_ on `<th>` indicates sorting state for screen readers.
+- _aria-labelledby="posts-table"_ links to a table label
+
+The same logic has been applied to the mobile view
+
+**Modal:**
+
+- uses semantic HTML `<dialog>` (_role="dialog"_ for clarity) _aria-modal="true"_ and link _aria-labelledby_ to h2, _aria-describedby_ for form instructions or errors
+- Focus is trapped within the modal, starting on the “Close” or “Cancel” button and cycling through inputs/buttons. If we don't apply fucus trap, users can Tab outside the modal to the browser or underlying content, violating WCAG 2.1’s requirement for modal focus containment. Set initial focus to the “Close” or “Cancel” button when the modal opens.
+- `Escape` key closes the modal, and focus returns to the triggering element (e.g., “Edit” button).
+- Use a `<form>` element with onSubmit to handle Enter key submission.
+
+**Button:**
+
+- `aria-label` for descriptive actions (e.g., “Add post 1 to favorites”).
+- `aria-disabled`: state indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.
+- `aria-pressed`: indicates the current "pressed" state of a toggle button
+
+**Header:**
+
+- uses semantic HTML `<navigation>`
+
+**Pagination**:
+
+- uses label with htmlFor for pagination `<select>`
+
+```tsx
+        <label className={globalStyles.visuallyHidden} htmlFor="page size">Page size:</label>
+        <select
+          id="page size"
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => table.setPageSize(Number(e.target.value))}
+        >
+          {[5, 10, 20].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+
+```
+
+#### How I tested accessibility compliance
+
+To verify accessibility compliance, I used Lighthouse (Chrome DevTools), tageting ≥ 90/100 score for WCAG 2.1 AA compliance.
+
+<img src="./assets/accessibility.png" alt="accessibility" width="300" />
+
+I also performed keyboard navigation tests, for example:
+
+- _Tab/Shift+Tab_ to open the modal “Edit” or “Add Post”.
+  Test:
+- _Tab/Shift+Tab_: Focus should cycle between “Cancel”, “Title” input, “Body” textarea, and “Create”/“Update” button (or just “Close” in view mode).
+- _Escape_: Should close the modal.
+- _Enter_: In the form, should submit if valid, if not shows errors.
+- Focus Return: After closing, focus should return to the triggering button (e.g., “Edit”).
+
+## Self review and improvements
+
+- To simulate persistence of the posts (edit/delete/create), save the updated data to localStorage. On mount, check localStorage before fetching from JSONPlaceholder.
 - Debouncing Search: Add a debounce mechanism to setSearchText to reduce re-renders on rapid typing.
 - Reset Action: Add a resetFavorites action to clear favorites for user convenience.
-- Persistence: Add Zustand’s persist middleware to save favorites to localStorage
 - Add Cypress tests in CI pipeline
 - Update icon in tab navigation
 - Update LoadingSpinner to use a nice animation
 - Error Bundler
 - Extract API query to separate component, so it can be reused
+- Husky pre commit check
+- PR preview deployment

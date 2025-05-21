@@ -25,9 +25,10 @@
 @media screen and (max-width: 1024px) {
   .card {
     margin-bottom: 1rem;
+    border: var(--pico-border-width) solid var(--pico-table-border-color);
   }
   .cardField {
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0;
   }
   .cardField strong {
     display: block;

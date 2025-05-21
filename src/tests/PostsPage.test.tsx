@@ -223,12 +223,22 @@ describe('PostsPage Component', () => {
       const cardView = screen.getByTestId('card-view');
       await waitFor(() => expect(within(cardView).getByText('Post 1')).toBeInTheDocument());
 
-      const cards = within(cardView).getAllByRole('article', { name: /card/i });
+      // Verify card view has role="grid" and caption
+      expect(cardView).toHaveAttribute('role', 'grid');
+      expect(cardView).toHaveAttribute('aria-labelledby', 'posts-table-mobile');
+      expect(screen.getByText('Posts table mobile')).toHaveClass('visuallyHidden');
+
+      // Verify 10 cards (rows)
+      const cards = within(cardView).getAllByRole('row');
       expect(cards.length).toBe(10);
+
+      // Verify first card content and actions
       const firstCard = cards[0];
       expect(within(firstCard).getByText('1')).toBeInTheDocument();
       expect(within(firstCard).getByText('Post 1')).toBeInTheDocument();
       expect(within(firstCard).getByText('Body 1')).toBeInTheDocument();
+
+      // Verify action buttons
       expect(within(firstCard).getByRole('button', { name: /View/i })).toBeInTheDocument();
       expect(within(firstCard).getByRole('button', { name: /Edit/i })).toBeInTheDocument();
       expect(within(firstCard).getByRole('button', { name: /Delete/i })).toBeInTheDocument();

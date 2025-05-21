@@ -12,7 +12,8 @@ const SortButtons: React.FC<SortButtonsProps> = ({ table }) => (
     <Button
       variant="outline primary"
       onClick={() => table.getColumn('id')!.toggleSorting()}
-      aria-pressed={table.getColumn('id')!.getIsSorted() !== false}
+      ariaPressed={table.getColumn('id')!.getIsSorted() !== false}
+      ariaLabel="Sort by ID"
     >
       Sort by ID{' '}
       {table.getColumn('id')!.getIsSorted() === 'asc'
@@ -24,7 +25,8 @@ const SortButtons: React.FC<SortButtonsProps> = ({ table }) => (
     <Button
       variant="outline primary"
       onClick={() => table.getColumn('title')!.toggleSorting()}
-      aria-pressed={table.getColumn('title')!.getIsSorted() !== false}
+      ariaPressed={table.getColumn('title')!.getIsSorted() !== false}
+      ariaLabel="Sort by Title"
     >
       Sort by Title{' '}
       {table.getColumn('title')!.getIsSorted() === 'asc'
@@ -36,7 +38,8 @@ const SortButtons: React.FC<SortButtonsProps> = ({ table }) => (
     <Button
       variant="outline primary"
       onClick={() => table.getColumn('body')!.toggleSorting()}
-      aria-pressed={table.getColumn('body')!.getIsSorted() !== false}
+      ariaPressed={table.getColumn('body')!.getIsSorted() !== false}
+      ariaLabel="Sort by Body"
     >
       Sort by Body{' '}
       {table.getColumn('body')!.getIsSorted() === 'asc'

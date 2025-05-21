@@ -10,9 +10,11 @@ interface ButtonProps {
     | 'outline primary'
     | 'outline contrast';
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   ariaLabel?: string;
+  ariaPressed?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,14 +23,17 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   ariaLabel,
+  ariaPressed,
+  type = 'button',
 }) => (
   <button
-    type="button"
+    type={type}
     className={`${styles.button} ${variant ? variant : ''}`}
     onClick={onClick}
     disabled={disabled}
     aria-disabled={disabled}
     aria-label={ariaLabel}
+    aria-pressed={ariaPressed}
   >
     {children}
   </button>

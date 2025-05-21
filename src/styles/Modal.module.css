@@ -22,6 +22,12 @@
   background: var(--background);
 }
 
+.modalFooter {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
 /* Block background scrolling when modal is open */
 body:has(.modal[open]) {
   overflow: hidden;

@@ -142,13 +142,25 @@ const PostsPage: React.FC = () => {
             </div>
           ) : (
             <div className={styles.actionButtons}>
-              <Button variant="outline" onClick={() => openModal(ModalType.VIEW, row.original)}>
+              <Button
+                variant="outline"
+                onClick={() => openModal(ModalType.VIEW, row.original)}
+                ariaLabel="View"
+              >
                 View
               </Button>
-              <Button variant="secondary" onClick={() => openModal(ModalType.EDIT, row.original)}>
+              <Button
+                variant="secondary"
+                onClick={() => openModal(ModalType.EDIT, row.original)}
+                ariaLabel="Edit"
+              >
                 Edit
               </Button>
-              <Button variant="contrast" onClick={() => handleDelete(row.original.id)}>
+              <Button
+                variant="contrast"
+                onClick={() => handleDelete(row.original.id)}
+                ariaLabel="Delete"
+              >
                 Delete
               </Button>
               <Button
@@ -195,7 +207,7 @@ const PostsPage: React.FC = () => {
       ) : null}
       {!isFavoritesPage ? (
         <div className={styles.controls}>
-          <Button variant="secondary" onClick={() => openModal(ModalType.ADD)}>
+          <Button variant="secondary" onClick={() => openModal(ModalType.ADD)} ariaLabel="Add Post">
             Add Post
           </Button>
         </div>
