@@ -147,13 +147,15 @@ It would add unnecessary overhead, complicate testing, and detract from the proj
 **Pico.css** offers simplicity and Lightweight Design.
 The VW-project is portfolio project (aligned with spaghetti-n5/JS-exercises), prioritizing simplicity and fast development. Pico.css’s minimal footprint (~10KB vs. Bootstrap’s ~150KB) reduces bundle size, improving load times for users.
 
-Benefits:
+_Benefits:_
 Pico.css styles native HTML elements without requiring classes, reducing markup complexity. It does not need for extensive configuration or learning a complex API, allowing rapid prototyping of components. It encourages clean HTML, using Semantic Markup, aligning with modern web standards and accessibility. It offers theming capability out of the box.
+
+pico.css offers `dark-light themes` feature out of the box, synching with your browser theme preference.
 
 **CSS Modules** offer scoped and Maintainable Styling
 In a React application with multiple components (Pagination, Button, PostsPage), style conflicts can arise if global CSS is used. CSS Modules ensures styles are scoped to specific components, enhancing maintainability.
 
-Benefits:
+_Benefits:_
 Each component has its own CSS file (e.g., Pagination.module.css), making it easy to update or refactor styles without affecting the entire app.
 TypeScript Integration: CSS Modules work seamlessly with TypeScript, providing type-safe style imports (e.g., import styles from './Pagination.module.css'), reducing runtime errors.
 It works natively with Create React App, Vite, or Webpack, automatically scoping styles during the build process.
