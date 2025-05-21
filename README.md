@@ -369,10 +369,9 @@ Pros:
 - Keeps the component focused and easy to use/test, as seen in Pagination.test.ts.
 - Fewer elements reduce rendering time for small datasets.
 
-
 Cons:
-    - Less Usable for Large Datasets: Navigating many pages (e.g., 100) is slower without direct page access.
-    - Limited UX: Users can’t jump to a specific page quickly.
+- Less Usable for Large Datasets: Navigating many pages (e.g., 100) is slower without direct page access.
+- Limited UX: Users can’t jump to a specific page quickly.
 
 Add a `<input>` for page jumping or dynamic page number buttons if needed:
 
@@ -459,14 +458,12 @@ Use TypeScript with a ButtonProps interface to define props, including a union t
 
 - ***ReactNode for Children:*** Supports diverse content (e.g., text, icons, or JSX), as seen in Pagination’s text labels ("First," "Next").
 The **variant union type** ('secondary' | 'contrast' | ...) enforces valid styles, and `React.FC<ButtonProps>` provides type inference for props.
-
 - **Styling with Pico.css and CSS Modules:** combine Pico.css for baseline button styling and CSS Modules (Button.module.css) for custom styles, applied via `styles.button` and variant.
 
 **Accessible Button Attributes:** 
 Include aria-disabled and aria-label props, with type="button" and disabled handling.
 
 - ***Accessibility:*** `aria-disabled={disabled}` ensures screen readers correctly interpret disabled states, as used in Pagination’s navigation buttons.
-
 - ***Semantic HTML:*** add **type="button"** when button is used for JavaScript actions (e.g., opening modals, toggling content, navigation) and not for form submission. This avoids unintended behavior if the button is placed inside a `<form>`, where the default **type="submit"** might cause the form to submit unexpectedly.
 - ***User Experience:*** disabled prop visually and functionally disables buttons.
 
@@ -480,9 +477,7 @@ Define a variant prop with specific options (secondary, contrast, outline, etc.)
 
 Restrict props to variant, children, onClick, disabled, and ariaLabel, omitting advanced features like size or icon.
 - ***Simplicity:*** A focused prop set suits the project’s minimalist goals, avoiding over-engineering for a learning-focused app.
-
 - ***Usability:*** Covers core button needs (styling, click handling, accessibility).
-
 - ***Extensibility:*** Props can be added later (e.g., size, type) if needed without breaking existing usage.
 
 #### Reusability
@@ -586,12 +581,221 @@ Pros:
 - Aligns with current use cases (e.g., navigation, toggling favorites).
 
 Cons:
-
 - Extensibility: Can’t use directly in forms (e.g., submitting a new post) without ***type="submit"***, requires prop addition for form support
 
 
 The Button component is a versatile, accessible, and lightweight solution for VW-project, balancing simplicity with customization. Its design decisions—TypeScript props, Pico.css/CSS Modules styling, and accessibility features—ensure it meets the project’s needs for a consistent, VW-themed UI. Trade-offs like limited variants and props prioritize ease of use and fast prototyping, with extensibility for future needs. 
 
+---
+### SearchBar Component
+
+The SearchBar component enables users to filter table data (e.g., posts in PostsPage) by entering search queries, which are managed via props (value, onChange) and synced with the application’s state (e.g., searchText in usePostStore). 
+
+It supports accessibility through ARIA attributes and customizable labels, making it suitable for data-driven interfaces in the VW-project. The component’s design aligns with the project’s minimalist aesthetic, leveraging CSS Modules for scoped styling and Pico.css for semantic enhancements.
+
+Link to the component folder: [SearchBar](https://github.com/spaghetti-n5/VW-project/blob/main/src/components/shared/SearchBar.tsx)
+
+```tsx
+import styles from './../../styles/SearchBar.module.css';
+
+interface SearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  label?: string;
+  name?: string;
+  hideLabel?: boolean;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({
+  value,
+  onChange,
+  placeholder = 'Search by any field...',
+  label,
+  name,
+  hideLabel = false,
+}) => {
+  return (
+    <div>
+      {label ? (
+        <label
+          htmlFor={name}
+          className={`${styles.searchLabel} ${hideLabel ? styles.visuallyHidden : ''}`}
+        >
+          {label}
+        </label>
+      ) : null}
+      <input
+        data-testid="search-input"
+        type="search"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={styles.searchInput}
+        name={name}
+        id={name}
+        aria-label={label || placeholder}
+      />
+    </div>
+  );
+};
+
+export default SearchBar;
+```
+
+#### Design Decisions
+
+The SearchBar component was designed to meet the VW-project’s requirements for a simple, accessible, and reusable search input, particularly for filtering posts in PostsPage. 
+
+**TypeScript and Type-Safe Props**
+
+Use TypeScript with a SearchBarProps interface to define props, including required value and onChange, and optional placeholder, label, name, and hideLabel.
+
+- ***Type Safety***: Ensures props are correctly typed (e.g., value: string, onChange: (value: string) => void), preventing errors in a TypeScript project.
+
+- ***Flexibility***: Optional props allow customization (e.g., custom placeholder or hidden labels) while maintaining a minimal API.
+
+- ***Controlled Component***: value and onChange make the input controlled, syncing with usePostStore’s searchText for real-time filtering.
+
+**Styling with CSS Modules and Pico.css**
+
+Use CSS Modules `(SearchBar.module.css)` for scoped styles (styles.searchLabel, styles.searchInput) and rely on Pico.css for baseline input styling.
+
+**Accessible Input and Label**
+
+Include label, name, id, htmlFor, and aria-label for accessibility, with a hideLabel prop to visually hide the label.
+
+- ***Accessibility:*** htmlFor and id link the `<label>` to the `<input>`, aiding screen readers. `aria-label={label || placeholder}` ensures a fallback for unlabeled inputs.
+- ***Flexibility:*** hideLabel with styles.visuallyHidden (a common CSS utility) hides the label visually while keeping it accessible, useful for minimalist UIs.
+- ***Semantic HTML:*** `type="search"` signals a search input, improving browser and assistive technology support.
+- ***Testing:*** `data-testid="search-input"` enables easy test targeting (e.g., in Jest/React Testing Library).
+
+**Controlled Input Design**
+
+Implement a controlled input with value and onChange props, omitting uncontrolled features (e.g., defaultValue).
+- Controlled inputs sync with usePostStore’s searchText, enabling real-time filtering of posts in PostsPage.
+- Ensures the input’s value is always managed by the parent component, reducing bugs.
+- Avoids complexity of uncontrolled inputs
+
+**Default Placeholder and Minimal Props**
+
+Provide a default placeholder and limit props to essentials (value, onChange, etc.), omitting advanced features like onFocus or clearButton.
+
+- Default placeholder="Search by any field..." guides users, suitable for PostsPage’s filtering.
+- Minimal props align with the project’s goals, focusing on core functionality.
+- Props can be added (e.g., onClear) if needed without breaking existing usage.
+
+#### Reusability
+
+The SearchBar component is designed for high reusability within the VW-project and portable to other React projects.
+
+1.  The component’s flexible props support filtering in various contexts (posts, users, or other data tables).
+
+```tsx
+import SearchBar from './SearchBar';
+import { usePostStore } from '../store/postStore';
+
+const PostsPage = () => {
+  const { searchText, setSearchText } = usePostStore();
+  return (
+    <SearchBar
+      value={searchText}
+      onChange={setSearchText}
+      placeholder="Search posts..."
+      label="Search posts"
+      name="post-search"
+    />
+  );
+};
+```
+
+It depends only on react and SearchBar.module.css, with optional Pico.css for styling, making it easy to copy to other React projects.
+
+2. Extensibility for New Features
+Add props like onClear, onFocus, or icon to support advanced search functionality.
+
+```tsx
+interface SearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  label?: string;
+  name?: string;
+  hideLabel?: boolean;
+  onClear?: () => void;
+  icon?: ReactNode;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ onClear, icon, ...props }) => (
+  <div className={styles.searchContainer}>
+    {props.label && (
+      <label
+        htmlFor={props.name}
+        className={`${styles.searchLabel} ${props.hideLabel ? styles.visuallyHidden : ''}`}
+      >
+        {props.label}
+      </label>
+    )}
+    <div className={styles.inputWrapper}>
+      {icon && <span className={styles.icon}>{icon}</span>}
+      <input
+        data-testid="search-input"
+        type="search"
+        className={styles.searchInput}
+        {...props}
+      />
+      {props.value && onClear && (
+        <button onClick={onClear} className={styles.clearButton}>
+          Clear
+        </button>
+      )}
+    </div>
+  </div>
+);
+```
+
+#### Trade-offs Made During Development
+
+##### Controlled Input vs. Uncontrolled
+Use controlled input (value, onChange) instead of uncontrolled (defaultValue).
+
+Pros:
+ - State Syncing: Syncs with usePostStore’s searchText, enabling real-time filtering.
+- Predictability: Ensures the input reflects the parent’s state, reducing bugs.
+
+Cons:
+- Parent Responsibility: Requires the parent to manage state, adding minor complexity.
+- No Default Value: Uncontrolled inputs are simpler for static forms but less dynamic.
+
+*Improvements*: add defaultValue prop for uncontrolled use cases, though not needed for VW-project.
+
+##### No Clear Button vs. Enhanced UX
+
+Omit a clear button or reset functionality.
+
+Pros:
+- Reduces component complexity
+- Performance: Fewer elements improve rendering speed.
+- Scope: Sufficient for PostsPage’s basic filtering needs.
+
+Cons:
+- UX Limitation: Users must manually clear the input, less convenient for frequent searches.
+- Extensibility: Requires prop addition for clear functionality.
+
+*Improvements*: add onClear prop and clear button (see “Reusability” example).
+
+#####  No Advanced Input Features vs. Rich Functionality
+
+Limit to basic *type="search"* input without features like autocomplete, debounce, or icon support.
+
+Pros:
+- Simplicity: Focuses on core search functionality, reducing development time.
+
+Cons:
+- Limited UX: Lacks advanced features (e.g., search suggestions) for larger apps.
+- Scalability: Requires updates for complex search requirements.
+
+The SearchBar component is a lightweight, accessible, and reusable solution for VW-project, enabling efficient data filtering in PostsPage. Its design decisions—TypeScript props, CSS Modules/Pico.css styling, controlled input, and accessibility features—align with the project’s minimalist, type-safe, and user-friendly goals. Trade-offs like omitting a clear button or advanced features (autocomplete, debounce) prioritize simplicity and fast development, with extensibility for future enhancements. 
 
 ## Improvements
 
