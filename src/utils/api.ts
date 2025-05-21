@@ -1,4 +1,4 @@
-import { Post } from '../types/shared';
+import type { Post } from '../types/shared';
 /**
  * Base URL for the posts API endpoint.
  */

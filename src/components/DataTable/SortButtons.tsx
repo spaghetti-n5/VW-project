@@ -1,5 +1,5 @@
 import { Table } from '@tanstack/react-table';
-import { Post } from '../../types/shared';
+import type { Post } from '../../types/shared';
 import Button from '../shared/Button';
 import styles from './../../styles/SortButtons.module.css';
 

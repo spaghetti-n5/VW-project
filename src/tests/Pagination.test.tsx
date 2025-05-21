@@ -1,14 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Pagination from './../components/shared/Pagination';
 import { Table } from '@tanstack/react-table';
-
-// Define Post interface for clarity
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-  userId: number;
-}
+import type { Post } from './../types/shared';
 
 // Mock table for Pagination
 const mockTable: Partial<Table<Post>> = {

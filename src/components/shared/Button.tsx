@@ -10,7 +10,7 @@ interface ButtonProps {
     | 'outline primary'
     | 'outline contrast';
   children: ReactNode;
-  onClick?: () => void;
+  onClick: () => void;
   disabled?: boolean;
   ariaLabel?: string;
 }

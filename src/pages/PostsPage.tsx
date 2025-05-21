@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense, useCallback } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -8,7 +8,8 @@ import {
   SortingState,
 } from '@tanstack/react-table';
 import { useLocation } from 'react-router-dom';
-import { Post, ModalType } from '../types/shared';
+import type { Post } from '../types/shared';
+import { ModalType } from '../types/shared';
 import { fetchPosts, deletePost, editPost, addPost } from '../utils/api';
 import TableComponent from '../components/DataTable/TableComponent';
 import Button from '../components/shared/Button';
@@ -80,12 +81,12 @@ const PostsPage: React.FC = () => {
   };
 
   // Modal handlers
-  const openModal = (type: ModalType, post: Post = { id: 0, title: '', body: '' }) => {
+  const openModal = useCallback((type: ModalType, post: Post = { id: 0, title: '', body: '' }) => {
     setModalType(type);
     setCurrentPost(post);
     setIsModalOpen(true);
     setError(null);
-  };
+  }, []);
 
   const handleModalSubmit = async (post: Post) => {
     try {
@@ -163,7 +164,7 @@ const PostsPage: React.FC = () => {
           ),
       },
     ],
-    [favorites, toggleFavorite, isFavoritesPage]
+    [favorites, toggleFavorite, isFavoritesPage, openModal]
   );
 
   // Table instance creation

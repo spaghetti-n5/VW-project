@@ -1,5 +1,6 @@
 import { fetchPosts, deletePost, editPost, addPost } from '../utils/api';
-import { Post } from './../types/shared';
+import type { Post } from './../types/shared';
+import { POSTS_API_URL } from '../utils/api';
 
 // Mock data
 const mockPosts: Post[] = [
@@ -31,7 +32,7 @@ describe('API Functions', () => {
       const result = await fetchPosts();
 
       expect(result).toEqual(mockPosts);
-      expect(globalThis.fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts');
+      expect(globalThis.fetch).toHaveBeenCalledWith(POSTS_API_URL);
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
@@ -42,7 +43,7 @@ describe('API Functions', () => {
 
       await expect(fetchPosts()).rejects.toThrow('Network error');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts');
+      expect(globalThis.fetch).toHaveBeenCalledWith(POSTS_API_URL);
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching posts:', error);
     });
@@ -57,7 +58,7 @@ describe('API Functions', () => {
 
       await expect(fetchPosts()).rejects.toThrow('HTTP error! Status: 404');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts');
+      expect(globalThis.fetch).toHaveBeenCalledWith(POSTS_API_URL);
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching posts:', expect.any(Error));
     });
@@ -73,13 +74,10 @@ describe('API Functions', () => {
 
       await expect(deletePost(1)).resolves.toBeUndefined();
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/posts/1',
-        {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith(`${POSTS_API_URL}/1`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
@@ -90,13 +88,10 @@ describe('API Functions', () => {
 
       await expect(deletePost(1)).rejects.toThrow('Network error');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/posts/1',
-        {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith(`${POSTS_API_URL}/1`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledWith('Error deleting post with ID 1:', error);
     });
@@ -111,13 +106,10 @@ describe('API Functions', () => {
 
       await expect(deletePost(1)).rejects.toThrow('HTTP error! Status: 404');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/posts/1',
-        {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith(`${POSTS_API_URL}/1`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error deleting post with ID 1:',
@@ -137,14 +129,11 @@ describe('API Functions', () => {
       const result = await editPost(1, mockNewPost);
 
       expect(result).toEqual(mockPost);
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/posts/1',
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(mockNewPost),
-        }
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith(`${POSTS_API_URL}/1`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mockNewPost),
+      });
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
@@ -155,14 +144,11 @@ describe('API Functions', () => {
 
       await expect(editPost(1, mockNewPost)).rejects.toThrow('Network error');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/posts/1',
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(mockNewPost),
-        }
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith(`${POSTS_API_URL}/1`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mockNewPost),
+      });
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledWith('Error editing post with ID 1:', error);
     });
@@ -177,14 +163,11 @@ describe('API Functions', () => {
 
       await expect(editPost(1, mockNewPost)).rejects.toThrow('HTTP error! Status: 404');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/posts/1',
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(mockNewPost),
-        }
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith(`${POSTS_API_URL}/1`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mockNewPost),
+      });
       expect(globalThis.fetch).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error editing post with ID 1:',
@@ -204,7 +187,7 @@ describe('API Functions', () => {
       const result = await addPost(mockNewPost);
 
       expect(result).toEqual(mockPost);
-      expect(globalThis.fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts', {
+      expect(globalThis.fetch).toHaveBeenCalledWith(POSTS_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mockNewPost),
@@ -219,7 +202,7 @@ describe('API Functions', () => {
 
       await expect(addPost(mockNewPost)).rejects.toThrow('Network error');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts', {
+      expect(globalThis.fetch).toHaveBeenCalledWith(POSTS_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mockNewPost),
@@ -238,7 +221,7 @@ describe('API Functions', () => {
 
       await expect(addPost(mockNewPost)).rejects.toThrow('HTTP error! Status: 400');
 
-      expect(globalThis.fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts', {
+      expect(globalThis.fetch).toHaveBeenCalledWith(POSTS_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mockNewPost),
