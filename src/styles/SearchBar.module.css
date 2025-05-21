@@ -6,15 +6,6 @@
   color: #333;
 }
 
-.visuallyHidden {
-  position: absolute;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-}
-
 .searchInput {
   border: 1px solid #ccc;
   border-radius: 4px;

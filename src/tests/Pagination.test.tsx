@@ -76,10 +76,10 @@ describe('Pagination Component', () => {
   test('renders correctly', () => {
     render(<Pagination table={mockTable as Table<Post>} />);
 
-    expect(screen.getByRole('button', { name: 'First' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Last' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'First Page' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Previous Page' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next Page' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Last Page' })).toBeInTheDocument();
     expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
     expect(screen.getByRole('combobox')).toHaveValue('5');
     expect(screen.getByRole('option', { name: 'Show 5' })).toBeInTheDocument();
@@ -90,10 +90,10 @@ describe('Pagination Component', () => {
   test('disables First and Previous buttons on first page', () => {
     render(<Pagination table={mockTable as Table<Post>} />);
 
-    expect(screen.getByRole('button', { name: 'First' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Last' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'First Page' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Previous Page' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Next Page' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Last Page' })).not.toBeDisabled();
   });
 
   test('disables Next and Last buttons on last page', () => {
@@ -127,10 +127,10 @@ describe('Pagination Component', () => {
 
     render(<Pagination table={mockTable as Table<Post>} />);
 
-    expect(screen.getByRole('button', { name: 'First' })).not.toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Previous' })).not.toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Last' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'First Page' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Previous Page' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Next Page' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Last Page' })).toBeDisabled();
     expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
   });
 
@@ -140,16 +140,16 @@ describe('Pagination Component', () => {
 
     render(<Pagination table={mockTable as Table<Post>} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'First' }));
+    fireEvent.click(screen.getByRole('button', { name: 'First Page' }));
     expect(mockTable.setPageIndex).toHaveBeenCalledWith(0);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Previous Page' }));
     expect(mockTable.previousPage).toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next Page' }));
     expect(mockTable.nextPage).toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Last' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Last Page' }));
     expect(mockTable.setPageIndex).toHaveBeenCalledWith(1);
   });
 

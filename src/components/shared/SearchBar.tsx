@@ -1,4 +1,5 @@
 import styles from './../../styles/SearchBar.module.css';
+import globalStyles from './../../styles/PostsPage.module.css';
 
 interface SearchBarProps {
   value: string;
@@ -13,7 +14,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
   placeholder = 'Search by any field...',
-  label,
+  label = 'Search',
   name,
   hideLabel = false,
 }) => {
@@ -22,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       {label ? (
         <label
           htmlFor={name}
-          className={`${styles.searchLabel} ${hideLabel ? styles.visuallyHidden : ''}`}
+          className={`${styles.searchLabel} ${hideLabel ? globalStyles.visuallyHidden : ''}`}
         >
           {label}
         </label>
@@ -36,7 +37,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         className={styles.searchInput}
         name={name}
         id={name}
-        aria-label={label || placeholder}
+        aria-label={label}
       />
     </div>
   );

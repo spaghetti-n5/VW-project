@@ -18,7 +18,7 @@ test('renders SearchBar with visible label', () => {
   render(<SearchBar value="" onChange={() => {}} label="Search Posts" name="search" />);
   const label = screen.getByText('Search Posts');
   expect(label).toBeInTheDocument();
-  expect(label).not.toHaveClass('visually-hidden');
+  expect(label).not.toHaveClass('visuallyHidden');
 });
 
 test('renders SearchBar with hidden label', () => {
